@@ -1,0 +1,69 @@
+! initial-setup.txt — garage-icx-7150
+!
+! Same procedure as garage-icx-8200. Apply in this order on
+! Unleashed (T-series) FastIron:
+!   1. hostname + DNS re-assert
+!   2. ip dhcp-client disable
+!   3. no ip dhcp-client ve default
+!   4. interface ve 1 → static IP
+!   5. default route
+!   6. NTP, clock, banner, SSH, console timeout
+!
+! Apply (in chunks via the serial console):
+!   enable
+!   configure terminal
+!     (paste in chunks)
+!   end
+!   write memory
+
+! --- identity -----------------------------------------------------------
+hostname garage-icx-7150
+! No `ip domain-name` on Unleashed T-series. Domain comes from
+! `ip dns domain-list` (already set by Unleashed).
+
+! --- DNS (re-assert; lines may return "duplicated" — that's OK) -------
+ip dns server-address 10.1.0.1
+ip dns domain-list internal.greyrock.io
+
+! --- stop DHCP on the mgmt interface ------------------------------------
+ip dhcp-client disable
+no ip dhcp-client ve default
+
+! --- static mgmt IP (replaces the DHCP-assigned address) ---------------
+interface ve 1
+  ip address 10.1.0.11 255.255.255.0
+exit
+
+! --- default route -----------------------------------------------------
+ip route 0.0.0.0/0 10.1.0.1
+
+! --- NTP ----------------------------------------------------------------
+! Note: no `prefer` keyword in this firmware's `ntp` config — all
+! configured servers are equal.
+ntp
+  server time1.internal.greyrock.io
+  server time2.internal.greyrock.io
+  server time3.internal.greyrock.io
+  server time4.internal.greyrock.io
+exit
+
+! --- timezone + clock ---------------------------------------------------
+clock timezone us Eastern
+clock summer-time
+
+! --- login banner -------------------------------------------------------
+banner motd ^
+Greyrock Labs - garage-icx-7150 - Authorised access only
+^
+
+! --- SSH server ---------------------------------------------------------
+ip ssh version 2
+ip ssh password-authentication yes
+ip ssh authentication-retries 3
+ip ssh timeout 120
+
+! --- disable unneeded services ------------------------------------------
+! Telnet is off by default on Ruckus FastIron; no need to disable it.
+
+! --- console / serial hardening -----------------------------------------
+console timeout 10

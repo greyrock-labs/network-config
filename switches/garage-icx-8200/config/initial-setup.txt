@@ -1,43 +1,47 @@
 ! initial-setup.txt — garage-icx-8200
 !
-! Paste this into a Ruckus ICX session as admin (after `enable`):
+! Tested sequence (2026-06-24, firmware 10.0.10g_cd6T253, Unleashed).
+! Apply in this exact order — the firmware rejects some operations if
+! applied out of order (e.g. cannot set a static IP while DHCP is
+! running on the VE).
 !
+! Apply:
 !   enable
 !   configure terminal
 !     (paste this file)
 !   end
 !   write memory
 !
-! This file is safe to commit (no secrets). The enable password and
-! the SSH public-key step are handled separately by the user.
-!
-! Notes:
-! - `end` and `write memory` are NOT included in this file. Add them
-!   at the end of the pasted block so `end` is the last config-mode
-!   command and `write memory` runs from priv-exec.
-! - NTP is configured without authentication for now. We'll add NTP
-!   auth in a follow-up commit once the basic setup is verified.
-! - SSH password auth is intentionally ON for now so we can paste the
-!   public key over SSH. We'll switch to key-only auth in a follow-up.
+! No secrets in this file. Enable secret is not set yet.
 
 ! --- identity -----------------------------------------------------------
 hostname garage-icx-8200
-ip domain-name internal.greyrock.io
+! No `ip domain-name` command on Unleashed (T-series) firmware. The
+! DNS search domain is set via `ip dns domain-list`, which Unleashed
+! already configured. So hostname + domain-list = FQDN.
 
-! --- DNS resolver --------------------------------------------------------
-! Ruckus ICX uses `ip dns server-address` to set the resolver. If your
-! firmware rejects this, use `ip name-server 10.1.0.1` instead.
+! --- DNS (already set by Unleashed, re-assert to make them static) -----
 ip dns server-address 10.1.0.1
 ip dns domain-list internal.greyrock.io
 
-! --- mgmt interface (VLAN 1, static) ------------------------------------
-interface vlan 1
+! --- kill DHCP on the mgmt interface ------------------------------------
+! Order matters on Unleashed firmware:
+!   1. Disable DHCP client globally
+!   2. Remove the DHCP client from ve default
+!   3. THEN set the static IP (firmware rejects static IP while
+!      DHCP client is running on the VE)
+ip dhcp-client disable
+no ip dhcp-client ve default
+
+! --- static mgmt IP (replaces the DHCP-assigned 10.1.0.114) --------------
+interface ve 1
   ip address 10.1.0.10 255.255.255.0
-  no shutdown
 exit
 
-! --- default route ------------------------------------------------------
-ip default-gateway 10.1.0.1
+! --- default route -----------------------------------------------------
+! The Unleashed-installed default route is dynamic and disappears when
+! DHCP is killed — no `no` line needed. Just add the static one.
+ip route 0.0.0.0/0 10.1.0.1 1
 
 ! --- NTP ----------------------------------------------------------------
 ntp
@@ -60,7 +64,7 @@ banner motd ^
   --------------------------------------------------------------------
 ^
 
-! --- SSH server ---------------------------------------------------------
+! --- SSH server (password auth on for now; switch to key-only later) ---
 ip ssh version 2
 ip ssh password-authentication yes
 ip ssh authentication-retries 3

@@ -1,0 +1,104 @@
+! port-vlans.txt — garage-icx-8200
+!
+! VLAN scheme (Greyrock site):
+!   1     - Management (default)
+!   10    - Internal
+!   20    - Servers
+!   4000  - Guest
+!
+! Topology (home daisy chain):
+!   router -> office 8200 -> office 7150 -> game room 8200 ->
+!   game room 7150 -> garage 8200 -> garage 7150
+!
+! This switch (garage-icx-8200) ports:
+!   1/1/1 - Garage Rear Driveway AP    - tagged 1, 10, 4000
+!   1/1/2 - Garage Side Yard AP        - tagged 1, 10, 4000
+!   1/1/3 - Garage Side Driveway AP    - tagged 1, 10, 4000
+!   1/1/4 - Garage AP                  - tagged 1, 10, 4000
+!   1/1/5 - Kitchen AP                 - tagged 1, 10, 4000
+!   1/2/1 - Garage ICX 7150 (downlink) - trunk all VLANs
+!   1/2/2 - Game Room 8200 (uplink)    - trunk all VLANs
+!
+! Apply:
+!   enable
+!   configure terminal
+!     (paste this file)
+!   end
+!   write memory
+
+! --- VLAN database ------------------------------------------------------
+! VLAN 1 already exists by default.
+vlan 10 name Internal by port
+vlan 20 name Servers by port
+vlan 4000 name Guest by port
+
+! --- Assign AP ports to VLANs (tagged members) --------------------------
+! APs tag traffic for VLANs 10 and 4000. The mgmt VLAN (1) is the
+! PVID/native, so traffic for it goes untagged and that's how the AP
+! reaches the switch's mgmt IP.
+! Syntax verified from `?` help on 10.0.10g_cd6T253:
+!   - `tagged` keyword lives under the vlan context, not the port context
+!   - BPDU guard: `stp-bpdu-guard` under the port context
+!   - PoE: `inline` under the port context (verify with `inline ?` first)
+!   - Storm control: `broadcast <rate>` under the port context
+
+vlan 1
+  tagged ethernet 1/1/1 to 1/1/5
+  tagged ethernet 1/2/1
+  tagged ethernet 1/2/2
+exit
+
+vlan 10
+  tagged ethernet 1/1/1 to 1/1/5
+  tagged ethernet 1/2/1
+  tagged ethernet 1/2/2
+exit
+
+vlan 20
+  tagged ethernet 1/2/1
+  tagged ethernet 1/2/2
+exit
+
+vlan 4000
+  tagged ethernet 1/1/1 to 1/1/5
+  tagged ethernet 1/2/1
+  tagged ethernet 1/2/2
+exit
+
+! --- Per-port features --------------------------------------------------
+! 1/1/1 through 1/1/5: PoE, BPDU guard, broadcast storm control
+! 1/2/1, 1/2/2: trunk ports, no PoE, no BPDU guard (must accept peer BPDUs)
+
+interface ethernet 1/1/1
+  inline power
+  stp-bpdu-guard
+  broadcast limit 500
+exit
+
+interface ethernet 1/1/2
+  inline power
+  stp-bpdu-guard
+  broadcast limit 500
+exit
+
+interface ethernet 1/1/3
+  inline power
+  stp-bpdu-guard
+  broadcast limit 500
+exit
+
+interface ethernet 1/1/4
+  inline power
+  stp-bpdu-guard
+  broadcast limit 500
+exit
+
+interface ethernet 1/1/5
+  inline power
+  stp-bpdu-guard
+  broadcast limit 500
+exit
+
+! --- Save ---------------------------------------------------------------
+end
+write memory

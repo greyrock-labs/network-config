@@ -12,12 +12,12 @@ layout and workflow.
 ## How to orient yourself at the start of a session
 
 1. Read `README.md` for the repo layout and workflow.
-2. Read the per-switch `switches/<slot>/README.md` for the box we're working
-   on — role, mgmt IP, model, known quirks.
+2. Read the per-switch `switches/<hostname>/README.md` for the box we're
+   working on — role, mgmt IP, model, known quirks.
 3. Read recent entries in `/changes/` for the *why* behind the current state.
 4. Skim `topology/` for site-wide context (VLAN scheme, addressing, uplinks).
-5. Check the latest snapshot under `switches/<slot>/config/snapshots/` and the
-   current `running.txt` to see actual state.
+5. Check the latest snapshot under `switches/<hostname>/config/snapshots/`
+   and the current `running.txt` to see actual state.
 6. Confirm with the user which switch we're touching before issuing any
    write commands. Serial console goes to a physical cable — there's no
    "wrong host" guard rail.
@@ -39,14 +39,18 @@ layout and workflow.
 - **Confirm destructive actions.** Reboots, `write memory`, factory resets,
   stack renumbering, and firmware upgrades all deserve explicit confirmation.
   Don't just suggest them in a list of steps.
+- **The repo is a paste-driven workflow, not an automated one.** There's
+  no automation in this repo. Captures happen by the user running `show`
+  commands on the switch's SSH session and pasting the output back.
+  Configs are applied interactively in chunks.
 
 ## Serial console conventions
 
 - Default baud: **9600 8N1, no flow control** (Ruckus ICX factory default).
-- Use `picocom` for scripted sessions (in `scripts/`) and either `picocom`
-  or `cu` for interactive work.
+- `picocom` for interactive work, `cu` is also installed.
 - The user plugs in a USB-serial cable; the new device appears as
-  `/dev/cu.usbserial-XXXX`. Always confirm the path before opening.
+  `/dev/cu.usbserial-XXXX`. Always confirm the path with `ls /dev/cu.*`
+  before opening.
 - To exit picocom: `Ctrl-A Ctrl-X`.
 
 ## Ruckus ICX CLI quick reference (when in doubt, use `?` on the device)
@@ -65,12 +69,16 @@ layout and workflow.
 
 ## Workflow per change (the short version)
 
-1. Confirm which switch.
-2. `scripts/capture-config.sh <device> <slot> pre-<topic>` → commit snapshot.
-3. Make the change (manually on the serial console, with the user typing).
-4. `scripts/capture-config.sh <device> <slot> post-<topic>` → updates
-   `running.txt` and adds a new snapshot → commit.
-5. Write `changes/<date>-<slot>-<topic>.md` with the *why* → commit.
+1. Confirm which switch (hostname) and the change topic.
+2. (For non-trivial changes) Capture pre-snapshot: user runs
+   `show running-config` on the switch, pastes the output; save to
+   `switches/<hostname>/config/snapshots/<date>-pre-<topic>.txt`.
+3. Apply the change on the live switch (interactive, in chunks).
+4. Capture post-snapshot: paste `show running-config`, save to
+   `switches/<hostname>/config/snapshots/<date>-post-<topic>.txt` and
+   overwrite `running.txt` (scrubbed of secrets).
+5. Document the why in `changes/<date>-<hostname>-<topic>.md`.
+6. Commit and push to Forgejo.
 
 ## Things not to do
 
@@ -79,6 +87,8 @@ layout and workflow.
   `.gitignore` excludes `*.secret` etc. for future reference.
 - Don't push to a remote unless the user asks.
 - Don't rewrite history (force-push, rebase) without explicit permission.
-- Don't apply a config file without first verifying it's for the right
-  switch. Slot names and hostnames are not always 1:1.
+- Don't apply a config to a switch without first verifying it's the right
+  one. Slot names and hostnames are not always 1:1.
 - Don't suggest rebooting a switch as a first step. ICX rarely needs it.
+- Don't propose removing a switch from Unleashed (user is explicit about
+  this — applied to all 6 switches).

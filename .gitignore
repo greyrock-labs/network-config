@@ -12,14 +12,9 @@ Thumbs.db
 *.secret
 *.key
 *credentials*
-# Note: real config files (running.txt, startup.txt) are committed.
+# Note: real config files (running.txt) are committed.
 # If a config contains plaintext secrets, scrub them before committing.
 
 # Picocom / cu / minicom scratch files
 *.capture
 /tmp-*
-
-# Anything inside a logs/ directory that we don't want to commit verbatim.
-# Comment out if you want session logs versioned.
-switches/*/logs/*
-!switches/*/logs/.gitkeep

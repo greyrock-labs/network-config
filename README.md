@@ -1,6 +1,6 @@
 # network-config
 
-Versioned, offline mirror of the Ruckus ICX (and friends) switch fleet at Greyrock Labs.
+Versioned, offline mirror of the Ruckus ICX switch fleet at Greyrock Labs.
 
 ## What this repo is
 
@@ -27,54 +27,54 @@ Versioned, offline mirror of the Ruckus ICX (and friends) switch fleet at Greyro
 ```
 network-config/
 ├── switches/
-│   └── sw-XX/                  # one directory per switch, keyed by hostname
-│       ├── README.md           # role, model, mgmt IP, physical location
+│   └── <hostname>/            # one directory per switch, keyed by hostname
+│       ├── README.md          # role, model, mgmt IP, physical location
 │       ├── config/
-│       │   ├── running.txt     # latest `show running-config`
-│       │   ├── startup.txt     # latest `show startup-config`
-│       │   └── snapshots/      # dated historical captures
-│       └── logs/               # session logs, command transcripts
-├── topology/                   # site diagrams, VLAN schemes, addressing
-├── changes/                    # dated prose notes for each meaningful change
-├── scripts/                    # capture/apply helpers
-└── .claude/CLAUDE.md           # project-level context for Claude
+│       │   ├── running.txt    # latest `show running-config` (scrubbed of secrets)
+│       │   ├── initial-setup.txt  # the staged config that was applied
+│       │   └── snapshots/     # dated historical captures
+├── topology/                  # site diagrams, VLAN schemes, addressing
+├── changes/                   # dated prose notes for each meaningful change
+└── .claude/CLAUDE.md          # project-level context for Claude
 ```
 
 ## Workflow per change
 
 1. **Plan** — discuss the change; update `topology/` or per-switch README if
    the design shifts.
-2. **Pre-snapshot** — capture current `show run` to
-   `switches/sw-XX/config/snapshots/<date>-pre-<topic>.txt`. Commit it.
+2. **Pre-snapshot** (for non-trivial changes) — capture current `show run` to
+   `switches/<hostname>/config/snapshots/<date>-pre-<topic>.txt`. Commit.
 3. **Apply** — make the change on the live switch via the serial console
-   (or out-of-band mgmt when available).
-4. **Post-snapshot** — capture the new `show run` to
-   `switches/sw-XX/config/snapshots/<date>-post-<topic>.txt` and overwrite
+   (or SSH when available). Apply in chunks; verify each chunk.
+4. **Post-snapshot** — capture the new `show run`, save to
+   `switches/<hostname>/config/snapshots/<date>-post-<topic>.txt` and
    `running.txt`. Commit.
 5. **Document** — write `changes/<date>-<switch>-<topic>.md` describing what
-   changed and *why*. Commit.
+   changed and *why*. Commit. Push to Forgejo.
 
-If anything goes sideways, the pre-snapshot is your rollback: re-apply it via
-`scripts/apply-config.sh` or by hand.
+If anything goes sideways, the pre-snapshot is your rollback: re-apply by
+hand (the workflow is interactive, no automation scripts).
 
 ## Switches
 
-| Slot                | Hostname           | Role | Model      | Mgmt IP | Status       |
-| ------------------- | ------------------ | ---- | ---------- | ------- | ------------ |
-| garage-icx-8200     | garage-icx-8200    | TBD  | ICX 8200   | TBD     | unconfigured |
-| _sw-02_             | _TBD_              | _TBD_ | _TBD_     | _TBD_   | _new_        |
-| _sw-03_             | _TBD_              | _TBD_ | _TBD_     | _TBD_   | _new_        |
-| _sw-04_             | _TBD_              | _TBD_ | _TBD_     | _TBD_   | _new_        |
-| _sw-05_             | _TBD_              | _TBD_ | _TBD_     | _TBD_   | _new_        |
-| _sw-06_             | _TBD_              | _TBD_ | _TBD_     | _TBD_   | _new_        |
+| Hostname           | Role    | Model       | Mgmt IP     | Status        |
+| ------------------ | ------- | ----------- | ----------- | ------------- |
+| garage-icx-8200    | access  | ICX 8200    | 10.1.0.10   | configured    |
+| garage-icx-7150    | access  | ICX 7150    | 10.1.0.11   | configured    |
+| _TBD_              | access  | _TBD_       | _TBD_       | _new_         |
+| _TBD_              | access  | _TBD_       | _TBD_       | _new_         |
+| _TBD_              | access  | _TBD_       | _TBD_       | _new_         |
+| _TBD_              | access  | _TBD_       | _TBD_       | _new_         |
 
-Fill in as we go.
+All switches are access-layer and managed by Ruckus Unleashed. Fill in the
+remaining four as we go — see `topology/greyrock-home.md` for the daisy
+chain order.
 
 ## Working with Claude on this repo
 
 At the start of a session, say something like:
 
-> "Let's work on sw-03 in the network-config repo."
+> "Let's work on game-room-icx-7150 in the network-config repo."
 
 Claude will read this repo and orient itself. You shouldn't need to re-explain
 the layout, conventions, or current state.

@@ -1,0 +1,73 @@
+! initial-setup.txt — garage-icx-8200
+!
+! Paste this into a Ruckus ICX session as admin (after `enable`):
+!
+!   enable
+!   configure terminal
+!     (paste this file)
+!   end
+!   write memory
+!
+! This file is safe to commit (no secrets). The enable password and
+! the SSH public-key step are handled separately by the user.
+!
+! Notes:
+! - `end` and `write memory` are NOT included in this file. Add them
+!   at the end of the pasted block so `end` is the last config-mode
+!   command and `write memory` runs from priv-exec.
+! - NTP is configured without authentication for now. We'll add NTP
+!   auth in a follow-up commit once the basic setup is verified.
+! - SSH password auth is intentionally ON for now so we can paste the
+!   public key over SSH. We'll switch to key-only auth in a follow-up.
+
+! --- identity -----------------------------------------------------------
+hostname garage-icx-8200
+ip domain-name internal.greyrock.io
+
+! --- DNS resolver --------------------------------------------------------
+! Ruckus ICX uses `ip dns server-address` to set the resolver. If your
+! firmware rejects this, use `ip name-server 10.1.0.1` instead.
+ip dns server-address 10.1.0.1
+ip dns domain-list internal.greyrock.io
+
+! --- mgmt interface (VLAN 1, static) ------------------------------------
+interface vlan 1
+  ip address 10.1.0.10 255.255.255.0
+  no shutdown
+exit
+
+! --- default route ------------------------------------------------------
+ip default-gateway 10.1.0.1
+
+! --- NTP ----------------------------------------------------------------
+ntp
+  server time1.internal.greyrock.io
+  server time2.internal.greyrock.io
+  server time3.internal.greyrock.io
+  server time4.internal.greyrock.io
+  prefer time1.internal.greyrock.io
+exit
+
+! --- timezone + clock ---------------------------------------------------
+clock timezone us-eastern
+clock summer-time
+
+! --- login banner -------------------------------------------------------
+banner motd ^
+  --------------------------------------------------------------------
+  garage-icx-8200  --  Greyrock Labs internal network
+  Authorised access only. All activity is logged.
+  --------------------------------------------------------------------
+^
+
+! --- SSH server ---------------------------------------------------------
+ip ssh version 2
+ip ssh password-authentication yes
+ip ssh authentication-retries 3
+ip ssh timeout 60
+
+! --- disable unneeded services ------------------------------------------
+no ip telnet server
+
+! --- console / serial hardening -----------------------------------------
+console timeout 10

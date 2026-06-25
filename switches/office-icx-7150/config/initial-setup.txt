@@ -1,0 +1,69 @@
+! initial-setup.txt — office-icx-7150
+!
+! Standard Greyrock Labs initial setup. Same procedure as the
+! other 5 switches.
+!
+! Apply in this exact order on Unleashed (T-series) FastIron:
+!   1. ip dhcp-client disable
+!   2. no ip dhcp-client ve default
+!   3. hostname, DNS, static IP, default route
+!   4. NTP, clock, banner, SSH, console timeout
+!
+! Apply (in chunks via the serial console):
+!   enable
+!   configure terminal
+!     (paste in chunks)
+!   end
+!   write memory
+
+! --- kill DHCP on the mgmt interface ------------------------------------
+ip dhcp-client disable
+no ip dhcp-client ve default
+
+! --- identity + DNS ----------------------------------------------------
+hostname office-icx-7150
+! No `ip domain-name` on Unleashed T-series. Domain from
+! `ip dns domain-list` (already set).
+
+! --- DNS (re-assert; "duplicated" is OK) -------------------------------
+ip dns server-address 10.1.0.1
+ip dns domain-list internal.greyrock.io
+
+! --- static mgmt IP ----------------------------------------------------
+interface ve 1
+  ip address 10.1.0.15 255.255.255.0
+exit
+
+! --- default route -----------------------------------------------------
+ip route 0.0.0.0/0 10.1.0.1
+
+! --- NTP ----------------------------------------------------------------
+! Note: no `prefer` keyword in this firmware's `ntp` config — all
+! configured servers are equal.
+ntp
+  server time1.internal.greyrock.io
+  server time2.internal.greyrock.io
+  server time3.internal.greyrock.io
+  server time4.internal.greyrock.io
+exit
+
+! --- timezone + clock ---------------------------------------------------
+clock timezone us Eastern
+clock summer-time
+
+! --- login banner -------------------------------------------------------
+banner motd ^
+Greyrock Labs - office-icx-7150 - Authorised access only
+^
+
+! --- SSH server ---------------------------------------------------------
+ip ssh version 2
+ip ssh password-authentication yes
+ip ssh authentication-retries 3
+ip ssh timeout 120
+
+! --- disable unneeded services ------------------------------------------
+! Telnet is off by default on Ruckus FastIron; no need to disable it.
+
+! --- console / serial hardening -----------------------------------------
+console timeout 10

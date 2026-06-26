@@ -129,8 +129,8 @@ logging host 10.1.10.7 udp-port 6514
 
 
 !
-snmp-server community 2 <REDACTED-SNMP-COMMUNITY-1> ro
-snmp-server community 2 <REDACTED-SNMP-COMMUNITY-2> ro
+snmp-server community 2 <REDACTED-SNMP-COMMUNITY> ro
+snmp-server community 2 <REDACTED-SNMP-COMMUNITY> ro
 !
 cli timeout 0
 !

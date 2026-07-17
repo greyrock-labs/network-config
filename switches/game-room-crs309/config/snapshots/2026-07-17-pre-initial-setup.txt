@@ -1,0 +1,7 @@
+# 2026-05-24 09:08:15 by RouterOS 7.23
+# software id = JEPC-60YK
+#
+# model = CRS309-1G-8S+
+# serial number = HJX0AVXQW5W
+/system routerboard settings
+set enter-setup-on=delete-key

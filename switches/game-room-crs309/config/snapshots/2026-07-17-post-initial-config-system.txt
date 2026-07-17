@@ -1,0 +1,33 @@
+# /system ntp client print
+         enabled: yes
+            mode: unicast
+         servers: time1.internal.greyrock.io
+                  time2.internal.greyrock.io
+                  time3.internal.greyrock.io
+                  time4.internal.greyrock.io
+             vrf: main
+      freq-drift: 0 PPM
+          status: synchronized
+   synced-server: time4.internal.greyrock.io
+  synced-stratum: 1
+   system-offset: -9.612 ms
+
+# /system ntp client servers print
+Flags: X - DISABLED; D - DYNAMIC
+ 0    address=time1.internal.greyrock.io resolved-address=10.1.20.16 min-poll=6 max-poll=10 iburst=yes auth-key=none
+ 1    address=time2.internal.greyrock.io resolved-address=10.1.20.17 min-poll=6 max-poll=10 iburst=yes auth-key=none
+ 2    address=time3.internal.greyrock.io resolved-address=10.1.20.18 min-poll=6 max-poll=10 iburst=yes auth-key=none
+ 3    address=time4.internal.greyrock.io resolved-address=10.1.20.19 min-poll=6 max-poll=10 iburst=yes auth-key=none
+
+# /system identity print
+  name: game-room-crs309
+
+# /system routerboard print (post-upgrade)
+       routerboard: yes
+             model: CRS309-1G-8S+
+          revision: r3
+     serial-number: HJX0AVXQW5W
+     firmware-type: dx3230L
+  factory-firmware: 7.18.2
+  current-firmware: 7.23
+  upgrade-firmware: 7.23

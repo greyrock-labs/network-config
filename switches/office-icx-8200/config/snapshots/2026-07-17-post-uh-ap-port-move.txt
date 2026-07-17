@@ -18,14 +18,14 @@ global-stp
 !
 vlan 1 name DEFAULT-VLAN by port
  spanning-tree 802-1w
- spanning-tree 802-1w priority 36864
+ spanning-tree 802-1w priority 4096
 !
 vlan 10 name Internal by port
  tagged ethe 1/1/5 to 1/1/7 ethe 1/2/2
- multicast passive
+ multicast active
  multicast fast-convergence
  multicast version 3
- multicast6 passive
+ multicast6 active
  multicast6 fast-convergence
 !
 vlan 20 name Servers by port

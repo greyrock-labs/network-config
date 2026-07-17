@@ -1,0 +1,25 @@
+Copyright (c) Ruckus Networks, Inc. All rights reserved.
+    UNIT 1: compiled on Nov 28 2025 at 06:09:54 labeled as RDR10010g_cd6
+      (105639360 bytes) from Primary RDR10010g_cd6.bin (UFI)
+        SW: Version 10.0.10g_cd6T253
+      Compressed Primary Boot Code size = 2097664, Version:10.2.12T255 (rdu10212)
+       Compiled on Wed Jul  9 06:04:08 2025
+
+  HW: Stackable ICX8200-C08ZP-POE
+==========================================================================
+UNIT 1: SL 1: ICX8200-C08ZP POE 8-port Management Module
+      Serial  #:FNR4338U023
+      Software Package: ICX8200_BASE_L3_SOFT_PACKAGE
+      Current License: 2X25G
+      P-ASIC  0: type 9822, rev 01  Chip 98DX3520
+==========================================================================
+UNIT 1: SL 2: ICX8200-2X25G 2-port 50G Module
+==========================================================================
+ 1500 MHz ARMv8.2 Cortex-A55 processor 857 MHz bus
+    8 MB boot flash memory
+    8 GB code flash memory
+    4 GB DRAM
+STACKID 1  system uptime is 22 minute(s) 45 second(s)
+The system started at 15:12:26 Eastern Fri Jul 17 2026
+
+The system : started=cold start

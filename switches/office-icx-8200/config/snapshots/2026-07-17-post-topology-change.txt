@@ -17,15 +17,14 @@ global-stp
 !
 !
 vlan 1 name DEFAULT-VLAN by port
- spanning-tree 802-1w
- spanning-tree 802-1w priority 36864
+ spanning-tree
 !
 vlan 10 name Internal by port
- tagged ethe 1/1/5 to 1/1/7 ethe 1/2/2
- multicast passive
+ tagged ethe 1/1/1 ethe 1/1/5 ethe 1/1/7 ethe 1/2/2
+ multicast active
  multicast fast-convergence
  multicast version 3
- multicast6 passive
+ multicast6 active
  multicast6 fast-convergence
 !
 vlan 20 name Servers by port
@@ -33,7 +32,7 @@ vlan 20 name Servers by port
  untagged ethe 1/1/7 to 1/1/8
 !
 vlan 4000 name Guest by port
- tagged ethe 1/1/5 to 1/1/6 ethe 1/2/2
+ tagged ethe 1/1/1 ethe 1/1/5 ethe 1/2/2
 !
 !
 !
@@ -72,13 +71,13 @@ manager registrar
 !
 interface management 1
 !
-interface ethernet 1/1/5
- port-name Office-AP
+interface ethernet 1/1/1
+ port-name UH-AP
  stp-bpdu-guard
  broadcast limit 500
 !
-interface ethernet 1/1/6
- port-name UH-AP
+interface ethernet 1/1/5
+ port-name Office-AP
  stp-bpdu-guard
  broadcast limit 500
 !

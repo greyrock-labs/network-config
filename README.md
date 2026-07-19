@@ -53,9 +53,9 @@ room's CRS309. Full detail in `topology/greyrock-home.md`.
 | Hostname            | Role              | Model          | Mgmt IP    | Status |
 | ------------------- | ----------------- | -------------- | ---------- | ------ |
 | office-rb5009       | router            | RB5009         | TBD        | not yet deployed |
-| office-crs309       | spine, STP root, mcast querier | CRS309-1G-8S+ | 10.1.0.10 | configured |
-| game-room-crs309    | spine             | CRS309-1G-8S+  | 10.1.0.13  | configured |
-| garage-crs309       | spine, end        | CRS309-1G-8S+  | 10.1.0.16  | configured |
+| office-crs309       | spine, STP root, mcast querier | CRS309-1G-8S+ | 10.1.0.10 | in production |
+| game-room-crs309    | spine             | CRS309-1G-8S+  | 10.1.0.13  | in production |
+| garage-crs309       | spine, end        | CRS309-1G-8S+  | 10.1.0.16  | in production |
 
 ### Access (Ruckus ICX, Unleashed)
 

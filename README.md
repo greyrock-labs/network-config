@@ -1,8 +1,8 @@
 # network-config
 
-Versioned, offline mirror of the Greyrock Labs switch and router fleet:
-a MikroTik spine (RouterOS) and Ruckus ICX access switches (FastIron,
-Unleashed-managed).
+Versioned, offline mirror of the Greyrock Labs network fleet: a
+MikroTik router + spine (RouterOS) and Ruckus ICX access switches
+(FastIron, Unleashed-managed).
 
 ## What this repo is
 
@@ -28,12 +28,18 @@ Unleashed-managed).
 
 ```
 network-config/
-├── switches/
-│   └── <hostname>/            # one directory per device, keyed by hostname
+├── routers/                   # one directory per RouterOS router/gateway
+│   └── <hostname>/
 │       ├── README.md          # role, model, mgmt IP, physical location
 │       ├── config/
 │       │   ├── running.txt    # latest capture (scrubbed of secrets)
 │       │   └── snapshots/     # dated historical captures
+├── switches/                  # one directory per switch (CRS/ICX)
+│   └── <hostname>/
+│       ├── README.md
+│       ├── config/
+│       │   ├── running.txt
+│       │   └── snapshots/
 ├── topology/                  # site topology, VLAN scheme, fleet templates, runbooks
 │   ├── greyrock-home.md       # the network: spine, leaves, VLANs, addressing
 │   ├── crs309-base-config.md  # CRS309 fleet template + apply-order + validation
@@ -48,11 +54,16 @@ Topology: `office-rb5009 → office-crs309 → game-room-crs309 →
 garage-crs309` (10G SFP+ spine); each room's ICX pair are leaves of the
 room's CRS309. Full detail in `topology/greyrock-home.md`.
 
+### Router (MikroTik, RouterOS)
+
+| Hostname       | Role                                     | Model   | Mgmt IP    | Status |
+| -------------- | ---------------------------------------- | ------- | ---------- | ------ |
+| office-rb5009  | gateway, L3 routing, DHCP, DNS, firewall, eBGP to k8s | RB5009  | 10.1.0.1   | in production |
+
 ### Spine (MikroTik, RouterOS)
 
 | Hostname            | Role              | Model          | Mgmt IP    | Status |
 | ------------------- | ----------------- | -------------- | ---------- | ------ |
-| office-rb5009       | router            | RB5009         | TBD        | not yet deployed |
 | office-crs309       | spine, STP root, mcast querier | CRS309-1G-8S+ | 10.1.0.10 | in production |
 | game-room-crs309    | spine             | CRS309-1G-8S+  | 10.1.0.13  | in production |
 | garage-crs309       | spine, end        | CRS309-1G-8S+  | 10.1.0.16  | in production |
@@ -78,7 +89,9 @@ cutover is complete.
 1. **Plan** — discuss the change; update `topology/` or the per-device
    README if the design shifts.
 2. **Pre-snapshot** (for non-trivial changes) — capture the current
-   config to `switches/<hostname>/config/snapshots/<date>-pre-<topic>.txt`.
+   config to `routers/<hostname>/config/snapshots/<date>-pre-<topic>.txt`
+   or `switches/<hostname>/config/snapshots/...` depending on the
+   device type.
 3. **Apply** — make the change on the live device (ICX: serial/SSH
    paste; MikroTik: Winbox/SSH). Apply in chunks; verify each chunk.
 4. **Post-snapshot** — capture the new config to

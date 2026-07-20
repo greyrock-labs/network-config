@@ -1,0 +1,417 @@
+# 2026-07-20 13:10:18 by RouterOS 7.23.2
+# software id = JA79-0IXE
+#
+# model = RB5009UG+S+
+# serial number = HMM0BDDPJAM
+/interface bridge
+add admin-mac=D0:EA:11:C7:4F:C3 auto-mac=no comment=defconf name=bridge vlan-filtering=yes
+/interface ethernet
+set [ find default-name=ether1 ] l2mtu=1514
+set [ find default-name=ether2 ] l2mtu=1514
+set [ find default-name=ether3 ] l2mtu=1514
+set [ find default-name=ether4 ] l2mtu=1514
+set [ find default-name=ether5 ] l2mtu=1514
+set [ find default-name=ether6 ] l2mtu=1514
+set [ find default-name=ether7 ] l2mtu=1514
+set [ find default-name=ether8 ] l2mtu=1514
+set [ find default-name=sfp-sfpplus1 ] l2mtu=1514
+/interface vlan
+add interface=bridge name=vlan10 vlan-id=10
+add interface=bridge name=vlan20 vlan-id=20
+add interface=bridge name=vlan4000 vlan-id=4000
+/interface list
+add comment=defconf name=WAN
+add comment=defconf name=LAN
+/ip pool
+add name=vlan1-mgmt ranges=10.1.0.240-10.1.0.254
+add name=vlan10-internal ranges=10.1.10.20-10.1.10.254
+add name=vlan20-servers ranges=10.1.20.20-10.1.20.254
+add name=vlan4000-guest ranges=192.168.23.20-192.168.23.254
+/ip dhcp-server
+add address-pool=vlan1-mgmt interface=bridge lease-script=":local zone \"internal.greyrock.io\"\
+    \n:local tag \"dhcp-dns\"\
+    \n:local ip \$leaseActIP\
+    \n:local mac \$leaseActMAC\
+    \n\
+    \n:if (\$leaseBound = \"1\") do={\
+    \n  :if ([:len [/ip dhcp-server lease find where address=\$ip dynamic=no]] = 0) do={\
+    \n    :local hn \$\"lease-hostname\"\
+    \n    :if ([:len \$hn] = 0) do={ :set hn \"host\" }\
+    \n    :local clean (\$hn . \".\" . \$zone)\
+    \n    :local sfx ([:pick \$mac 9 11] . [:pick \$mac 12 14] . [:pick \$mac 15 17])\
+    \n    :local suffixed (\$hn . \"-\" . \$sfx . \".\" . \$zone)\
+    \n    :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n    :if ([:len [/ip dns static find where comment=\$tag name=\$clean]] = 0) do={\
+    \n      /ip dns static add name=\$clean address=\$ip comment=\$tag ttl=5m\
+    \n    } else={\
+    \n      :foreach r in=[/ip dns static find where comment=\$tag name=\$suffixed] do={ /ip dns static remove \$r }\
+    \n      /ip dns static add name=\$suffixed address=\$ip comment=\$tag ttl=5m\
+    \n    }\
+    \n  }\
+    \n} else={\
+    \n  :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n}\
+    \n" lease-time=8h name=dhcp-vlan1
+add address-pool=vlan10-internal interface=vlan10 lease-script=":local zone \"internal.greyrock.io\"\
+    \n:local tag \"dhcp-dns\"\
+    \n:local ip \$leaseActIP\
+    \n:local mac \$leaseActMAC\
+    \n\
+    \n:if (\$leaseBound = \"1\") do={\
+    \n  :if ([:len [/ip dhcp-server lease find where address=\$ip dynamic=no]] = 0) do={\
+    \n    :local hn \$\"lease-hostname\"\
+    \n    :if ([:len \$hn] = 0) do={ :set hn \"host\" }\
+    \n    :local clean (\$hn . \".\" . \$zone)\
+    \n    :local sfx ([:pick \$mac 9 11] . [:pick \$mac 12 14] . [:pick \$mac 15 17])\
+    \n    :local suffixed (\$hn . \"-\" . \$sfx . \".\" . \$zone)\
+    \n    :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n    :if ([:len [/ip dns static find where comment=\$tag name=\$clean]] = 0) do={\
+    \n      /ip dns static add name=\$clean address=\$ip comment=\$tag ttl=5m\
+    \n    } else={\
+    \n      :foreach r in=[/ip dns static find where comment=\$tag name=\$suffixed] do={ /ip dns static remove \$r }\
+    \n      /ip dns static add name=\$suffixed address=\$ip comment=\$tag ttl=5m\
+    \n    }\
+    \n  }\
+    \n} else={\
+    \n  :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n}\
+    \n" lease-time=8h name=dhcp-vlan10
+add address-pool=vlan20-servers interface=vlan20 lease-script=":local zone \"internal.greyrock.io\"\
+    \n:local tag \"dhcp-dns\"\
+    \n:local ip \$leaseActIP\
+    \n:local mac \$leaseActMAC\
+    \n\
+    \n:if (\$leaseBound = \"1\") do={\
+    \n  :if ([:len [/ip dhcp-server lease find where address=\$ip dynamic=no]] = 0) do={\
+    \n    :local hn \$\"lease-hostname\"\
+    \n    :if ([:len \$hn] = 0) do={ :set hn \"host\" }\
+    \n    :local clean (\$hn . \".\" . \$zone)\
+    \n    :local sfx ([:pick \$mac 9 11] . [:pick \$mac 12 14] . [:pick \$mac 15 17])\
+    \n    :local suffixed (\$hn . \"-\" . \$sfx . \".\" . \$zone)\
+    \n    :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n    :if ([:len [/ip dns static find where comment=\$tag name=\$clean]] = 0) do={\
+    \n      /ip dns static add name=\$clean address=\$ip comment=\$tag ttl=5m\
+    \n    } else={\
+    \n      :foreach r in=[/ip dns static find where comment=\$tag name=\$suffixed] do={ /ip dns static remove \$r }\
+    \n      /ip dns static add name=\$suffixed address=\$ip comment=\$tag ttl=5m\
+    \n    }\
+    \n  }\
+    \n} else={\
+    \n  :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n}\
+    \n" lease-time=8h name=dhcp-vlan20
+add address-pool=vlan4000-guest interface=vlan4000 lease-time=2h name=dhcp-vlan4000
+/routing bgp instance
+add as=64513 disabled=no name=greyrock
+/user group
+add comment="External DNS" name=externaldns policy=read,write,api,rest-api,!local,!telnet,!ssh,!ftp,!reboot,!policy,!test,!winbox,!password,!web,!sniff,!sensitive,!romon
+/disk settings
+set auto-media-interface=bridge auto-media-sharing=yes auto-smb-sharing=yes
+/interface bridge port
+add bridge=bridge comment=defconf interface=ether2
+add bridge=bridge comment=defconf interface=ether3
+add bridge=bridge comment=defconf interface=ether4
+add bridge=bridge comment=defconf interface=ether5
+add bridge=bridge comment=defconf interface=ether6
+add bridge=bridge comment=defconf interface=ether7
+add bridge=bridge comment=defconf interface=ether8
+add bridge=bridge comment=defconf interface=sfp-sfpplus1
+/ip neighbor discovery-settings
+set discover-interface-list=LAN
+/interface bridge vlan
+add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=10
+add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=20
+add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=4000
+add bridge=bridge untagged=ether2,ether3,ether4,ether5,ether6,ether7,ether8,sfp-sfpplus1 vlan-ids=1
+/interface list member
+add comment=defconf interface=bridge list=LAN
+add comment=defconf interface=ether1 list=WAN
+add interface=vlan10 list=LAN
+add interface=vlan20 list=LAN
+add interface=vlan4000 list=LAN
+/ip address
+add address=10.1.0.1/24 interface=bridge network=10.1.0.0
+add address=10.1.10.1/24 interface=vlan10 network=10.1.10.0
+add address=10.1.20.1/24 interface=vlan20 network=10.1.20.0
+add address=192.168.23.1/24 interface=vlan4000 network=192.168.23.0
+/ip dhcp-client
+add comment=defconf interface=ether1 name=client1 use-peer-dns=no
+/ip dhcp-server lease
+add address=10.1.10.74 comment="Bambu A1 Printer" mac-address=30:30:F9:09:00:54 server=dhcp-vlan10
+add address=10.1.10.3 comment="Home Assistant" mac-address=3C:EC:EF:57:EB:26 server=dhcp-vlan10
+add address=10.1.20.10 comment="K8S - Kerfuffle" mac-address=98:B7:85:23:30:20 server=dhcp-vlan20
+add address=10.1.20.11 comment="KVM - Kerfuffle" mac-address=30:52:53:04:F9:63 server=dhcp-vlan20
+add address=10.1.20.12 comment="NAS - codswallop" mac-address=98:B7:85:24:AE:CD server=dhcp-vlan20
+add address=10.1.20.13 comment="KVM - codswallop" mac-address=30:52:53:07:55:73 server=dhcp-vlan20
+add address=10.1.20.14 comment="KVM - Home Assistant" mac-address=3C:EC:EF:5A:E2:B2 server=dhcp-vlan20
+add address=10.1.20.16 comment=NTP1 mac-address=4E:90:51:6F:5B:40 server=dhcp-vlan20
+add address=10.1.20.17 comment=NTP2 mac-address=26:04:78:04:B1:70 server=dhcp-vlan20
+add address=10.1.20.18 comment=NTP3 mac-address=66:E4:B1:63:37:1B server=dhcp-vlan20
+add address=10.1.20.19 comment=NTP4 mac-address=CA:87:EA:8C:48:A2 server=dhcp-vlan20
+/ip dhcp-server network
+add address=10.1.0.0/24 dns-server=10.1.0.1 domain=internal.greyrock.io gateway=10.1.0.1
+add address=10.1.10.0/24 dns-server=10.1.10.1 domain=internal.greyrock.io gateway=10.1.10.1
+add address=10.1.20.0/24 dns-server=10.1.20.1 domain=internal.greyrock.io gateway=10.1.20.1
+add address=192.168.23.0/24 dns-server=192.168.23.1 domain=internal.greyrock.io gateway=192.168.23.1
+/ip dns
+set allow-remote-requests=yes mdns-repeat-ifaces=vlan10,vlan20,bridge servers=9.9.9.9,149.112.112.112
+/ip dns static
+add address=10.1.0.1 name=office-rb5009.internal.greyrock.io type=A
+add address=10.1.0.10 name=office-crs309.internal.greyrock.io type=A
+add address=10.1.0.11 name=office-icx-8200.internal.greyrock.io type=A
+add address=10.1.0.12 name=office-icx-7150.internal.greyrock.io type=A
+add address=10.1.0.13 name=game-room-crs309.internal.greyrock.io type=A
+add address=10.1.0.14 name=game-room-icx-8200.internal.greyrock.io type=A
+add address=10.1.0.15 name=game-room-icx-7150.internal.greyrock.io type=A
+add address=10.1.0.16 name=garage-crs309.internal.greyrock.io type=A
+add address=10.1.0.17 name=garage-icx-8200.internal.greyrock.io type=A
+add address=10.1.0.18 name=garage-icx-7150.internal.greyrock.io type=A
+add address=10.1.25.2 name=k8s.internal.greyrock.io type=A
+add address=10.1.10.7 name=unleashed.internal.greyrock.io type=A
+add address=10.1.10.74 name=bambu-a1-printer.internal.greyrock.io type=A
+add address=10.1.10.3 name=homeassistant.internal.greyrock.io type=A
+add address=10.1.20.10 name=kerfuffle.internal.greyrock.io type=A
+add address=10.1.20.12 name=codswallop.internal.greyrock.io type=A
+add address=10.1.20.13 name=kvm-codswallop.internal.greyrock.io type=A
+add address=10.1.20.14 name=kvm-homeassistant.internal.greyrock.io type=A
+add address=10.1.20.16 name=time1.internal.greyrock.io type=A
+add address=10.1.20.17 name=time2.internal.greyrock.io type=A
+add address=10.1.20.18 name=time3.internal.greyrock.io type=A
+add address=10.1.20.19 name=time4.internal.greyrock.io type=A
+add address=10.1.10.60 comment=dhcp-dns name=SonosZP.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.56 comment=dhcp-dns name=LivingRmAppleTV.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.54 comment=dhcp-dns name=JK10EQ001445.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.55 comment=dhcp-dns name=Game-Room.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.53 comment=dhcp-dns name=GameRooPodRight.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.50 comment=dhcp-dns name=Thermostat.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.51 comment=dhcp-dns name=Office-Apple-TV.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.48 comment=dhcp-dns name=GameRooePodLeft.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.47 comment=dhcp-dns name=LivingRePodLeft.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.203 comment=dhcp-dns name=bt-proxy-garage.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.78 comment=dhcp-dns name=SonosZP-6ED6B4.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.44 comment=dhcp-dns name=MasterBmHomePod.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.119 comment=dhcp-dns name=SonosZP-6D6D2B.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.45 comment=dhcp-dns name=host-000844.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.43 comment=dhcp-dns name=tubeszb-efr32-mgm24-2023.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.42 comment=dhcp-dns name=KP125M.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.101 comment=dhcp-dns name=KP125M-977367.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.173 comment=dhcp-dns name=KP125M-977D32.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.180 comment=dhcp-dns name=iPhone.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.169 comment=dhcp-dns name=hvac-kitchen.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.170 comment=dhcp-dns name=KP125M-97792F.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.168 comment=dhcp-dns name=LivingRPodRight.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.243 comment=dhcp-dns name=DownstamHomePod.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.46 comment=dhcp-dns name=host.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.41 comment=dhcp-dns name=host-C04560.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.196 comment=dhcp-dns name=KP125M-97794A.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.157 comment=dhcp-dns name=IotaBase.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.126 comment=dhcp-dns name=garage-ratgdo-todd.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.40 comment=dhcp-dns name=Litter-Robot4.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.39 comment=dhcp-dns name=Mac.internal.greyrock.io ttl=5m type=A
+add cname=ingress-int.greyrock.io name=prowlarr.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=nvr.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=home.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=status.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=idm.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=sabnzbd.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=victoria-logs.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=jellyfin.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=bambuddy.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=maintainerr.greyrock.io ttl=1h type=CNAME
+add address=10.1.25.4 name=ingress-int.greyrock.io ttl=1h type=A
+add address=161.35.252.109 name=skedaddle-gatus.greyrock.io ttl=1h type=A
+add cname=ingress-ext.greyrock.io name=requests.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=actual.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=freshrss.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=it-tools.greyrock.io ttl=1h type=CNAME
+add address=161.35.252.109 name=skedaddle-doco-cd.greyrock.io ttl=1h type=A
+add cname=ingress-int.greyrock.io name=renovate.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=karakeep.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=certs.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=flux-webhook.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=atuin.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=kromgo.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=search.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=grafana.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=audiobookshelf.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=bookboss.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=alertmanager.greyrock.io ttl=1h type=CNAME
+add address=10.1.25.3 name=ingress-ext.greyrock.io ttl=1h type=A
+add cname=ingress-int.greyrock.io name=shelfmark.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=paperless.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=plex.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=git.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=watchstate.greyrock.io ttl=1h type=CNAME
+add address=161.35.252.109 name=twnl.greyrock.io ttl=1h type=A
+add cname=ingress-int.greyrock.io name=kopia.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=konflate.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=memini.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=gatus.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=manyfold.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=coolercontrol.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=prometheus.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=hubble.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=thelounge.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=echo-server.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=litellm.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=chat.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=radarr.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=sonarr.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=renovate-webhook.greyrock.io ttl=1h type=CNAME
+add name=k8s.main.cname-prowlarr.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/downloads/prowlarr\"" ttl=1h type=TXT
+add name=k8s.main.cname-nvr.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/home-automation/scrypted\"" ttl=1h type=TXT
+add name=k8s.main.cname-home.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/home-automation/home-assistant\"" ttl=1h type=TXT
+add name=k8s.main.cname-status.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/gatus\"" ttl=1h type=TXT
+add name=k8s.main.cname-idm.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/security/kanidm\"" ttl=1h type=TXT
+add name=k8s.main.cname-sabnzbd.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/downloads/sabnzbd\"" ttl=1h type=TXT
+add name=k8s.main.cname-victoria-logs.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/victoria-logs-server\"" ttl=1h type=TXT
+add name=k8s.main.cname-jellyfin.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/jellyfin\"" ttl=1h type=TXT
+add name=k8s.main.cname-bambuddy.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/home-automation/bambuddy\"" ttl=1h type=TXT
+add name=k8s.main.cname-maintainerr.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/maintainerr\"" ttl=1h type=TXT
+add name=k8s.main.a-ingress-int.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=service/network/envoy-internal\"" ttl=1h type=TXT
+add name=k8s.main.a-skedaddle-gatus.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=crd/network/towonel-agent\"" ttl=1h type=TXT
+add name=k8s.main.cname-requests.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/seerr\"" ttl=1h type=TXT
+add name=k8s.main.cname-actual.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/home-automation/actual\"" ttl=1h type=CNAME
+add name=k8s.main.cname-freshrss.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/freshrss\"" ttl=1h type=TXT
+add name=k8s.main.cname-it-tools.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/it-tools\"" ttl=1h type=TXT
+add name=k8s.main.a-skedaddle-doco-cd.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/crd/network/towonel-agent\"" ttl=1h type=TXT
+add name=k8s.main.cname-renovate.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/renovate/renovate-operator\"" ttl=1h type=TXT
+add name=k8s.main.cname-karakeep.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/karakeep\"" ttl=1h type=TXT
+add name=k8s.main.cname-certs.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/mediagreyrock.io="" ttl=1h type=TXT
+add name=k8s.main.cname-flux-webhook.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/flux-system/github-webhook\"" ttl=1h type=TXT
+add name=k8s.main.cname-atuin.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/atuin\"" ttl=1h type=TXT
+add name=k8s.main.cname-kromgo.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/kromgo\"" ttl=1h type=TXT
+add name=k8s.main.cname-search.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/searxng\"" ttl=1h type=TXT
+add name=k8s.main.cname-grafana.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/grafana-httproute\"" ttl=1h type=TXT
+add name=k8s.main.cname-audiobookshelf.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/audiobookshelf\"" ttl=1h type=TXT
+add name=k8s.main.cname-bookboss.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/books/arr-stack-bookboss\"" ttl=1h type=TXT
+add name=k8s.main.cname-alertmanager.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/kube-prometheus-stack-alertmanager\"" ttl=1h type=TXT
+add name=k8s.main.a-ingress-ext.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/kube-prometheus-stack-grafana\"" ttl=1h type=TXT
+add name=k8s.main.cname-shelfmark.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/downloads/shelfmark\"" ttl=1h type=TXT
+add name=k8s.main.cname-paperless.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/paperless\"" ttl=1h type=TXT
+add name=k8s.main.cname-plex.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/plex\"" ttl=1h type=TXT
+add name=k8s.main.cname-git.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/dev/forgejo\"" ttl=1h type=TXT
+add name=k8s.main.cname-watchstate.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/watchstate\"" ttl=1h type=TXT
+add name=k8s.main.a-twnl.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/crd/network/towonel-agent\"" ttl=1h type=TXT
+add name=k8s.main.cname-kopia.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/system/kopia\"" ttl=1h type=TXT
+add name=k8s.main.cname-konflate.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/flux-system/konflate\"" ttl=1h type=TXT
+add name=k8s.main.cname-memini.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/ai/memini\"" ttl=1h type=TXT
+add name=k8s.main.cname-gatus.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/gatus\"" ttl=1h type=TXT
+add name=k8s.main.cname-manyfold.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/manyfold\"" ttl=1h type=TXT
+add name=k8s.main.cname-coolercontrol.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/network/coolercontrol\"" ttl=1h type=TXT
+add name=k8s.main.cname-prometheus.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/kube-prometheus-stack-prometheus\"" ttl=1h type=TXT
+add name=k8s.main.cname-hubble.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/kube-system/hubble-ui\"" ttl=1h type=TXT
+add name=k8s.main.cname-thelounge.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/thelounge\"" ttl=1h type=TXT
+add name=k8s.main.cname-echo-server.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/network/echo-server\"" ttl=1h type=TXT
+add name=k8s.main.cname-litellm.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/ai/litellm\"" ttl=1h type=TXT
+add name=k8s.main.cname-chat.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/ai/open-webui\"" ttl=1h type=TXT
+add name=k8s.main.cname-radarr.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/downloads/radarr\"" ttl=1h type=TXT
+add name=k8s.main.cname-sonarr.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/downloads/sonarr\"" ttl=1h type=TXT
+add name=k8s.main.cname-renovate-webhook.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/renovate/renovate-operator-webhook\"" ttl=1h type=TXT
+add address=10.1.10.71 comment=dhcp-dns name=garage-ratgdo-andy.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.38 comment=dhcp-dns name=Litter-Robot4-82FD4C.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.244 comment=dhcp-dns name=WINC-72-fa.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.190 comment=dhcp-dns name=hvac-office.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.232 comment=dhcp-dns name=hvac-master-bedroom.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.221 comment=dhcp-dns name=office-weather-display.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.37 comment=dhcp-dns name=hvac-dining-room.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.120 comment=dhcp-dns name=bt-proxy-kitchen.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.137 comment=dhcp-dns name=light-office-ceiling-1.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.21 comment=dhcp-dns name=light-office-ceiling-3.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.20 comment=dhcp-dns name=light-office-ceiling-2.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.96 comment=dhcp-dns name=Courtyard.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.22 comment=dhcp-dns name=uvc-g6-pro-turret.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.27 comment=dhcp-dns name=uvc-g5-flex.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.210 comment=dhcp-dns name=uvc-g5-flex-0DF1BC.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.72 comment=dhcp-dns name=bt-proxy-living-room.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.158 comment=dhcp-dns name=HS300.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.25 comment=dhcp-dns name=uvc-g6-pro-turret-B4366B.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.26 comment=dhcp-dns name=game-room-todds-omnixie-clock.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.161 comment=dhcp-dns name=light-office-ceiling-4.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.67 comment=dhcp-dns name=bt-proxy-office.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.150 comment=dhcp-dns name=IotaGrge.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.29 comment=dhcp-dns name=Tesla_Model_3.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.133 comment=dhcp-dns name=garage-camera-side-yard.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.30 comment=dhcp-dns name=TODDS-DESKTOP.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.160 comment=dhcp-dns name=bt-proxy-downstairs-bath.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.148 comment=dhcp-dns name=MyQ-F96.internal.greyrock.io ttl=5m type=A
+add address=10.1.10.125 comment=dhcp-dns name=MyQ-F66.internal.greyrock.io ttl=5m type=A
+/ip firewall address-list
+add address=10.1.0.0/16 list=internal
+/ip firewall filter
+add action=drop chain=forward comment="guest isolation: drop VLAN 4000 to internal" dst-address-list=internal in-interface=vlan4000
+add action=accept chain=input comment="defconf: accept established,related,untracked" connection-state=established,related,untracked
+add action=drop chain=input comment="defconf: drop invalid" connection-state=invalid
+add action=accept chain=input comment="defconf: accept ICMP" protocol=icmp
+add action=accept chain=input comment="defconf: accept to local loopback (for CAPsMAN)" dst-address=127.0.0.1
+add action=drop chain=input comment="defconf: drop all not coming from LAN" in-interface-list=!LAN
+add action=accept chain=forward comment="defconf: accept in ipsec policy" ipsec-policy=in,ipsec
+add action=accept chain=forward comment="defconf: accept out ipsec policy" ipsec-policy=out,ipsec
+add action=fasttrack-connection chain=forward comment="defconf: fasttrack" connection-state=established,related
+add action=accept chain=forward comment="defconf: accept established,related, untracked" connection-state=established,related,untracked
+add action=drop chain=forward comment="defconf: drop invalid" connection-state=invalid
+add action=drop chain=forward comment="defconf: drop all from WAN not DSTNATed" connection-nat-state=!dstnat connection-state=new in-interface-list=WAN
+/ip firewall nat
+add action=masquerade chain=srcnat comment="defconf: masquerade" ipsec-policy=out,none out-interface-list=WAN
+/ip service
+set telnet disabled=yes
+set www disabled=yes
+set reverse-proxy disabled=yes
+set www-ssl address=10.1.0.0/24,10.1.10.0/24,10.1.20.0/24 certificate="Grey Rock Router" disabled=no
+set api-ssl certificate="Grey Rock Router"
+/ipv6 address
+add address=fdc0:ffee:215:0:1::1 interface=bridge
+add address=fdc0:ffee:215:0:a::1 interface=vlan10
+add address=fdc0:ffee:215:0:14::1 interface=vlan20
+add from-pool=spectrum-v6 interface=bridge
+add address=0:0:0:1:: from-pool=spectrum-v6 interface=vlan10
+add address=0:0:0:2:: from-pool=spectrum-v6 interface=vlan20
+/ipv6 dhcp-client
+add add-default-route=yes interface=ether1 pool-name=spectrum-v6 pool-prefix-length=64 prefix-hint=::/56 request=prefix use-peer-dns=no
+/ipv6 firewall address-list
+add address=::/128 comment="defconf: unspecified address" list=bad_ipv6
+add address=::1/128 comment="defconf: lo" list=bad_ipv6
+add address=fec0::/10 comment="defconf: site-local" list=bad_ipv6
+add address=::ffff:0.0.0.0/96 comment="defconf: ipv4-mapped" list=bad_ipv6
+add address=::/96 comment="defconf: ipv4 compat" list=bad_ipv6
+add address=100::/64 comment="defconf: discard only " list=bad_ipv6
+add address=2001:db8::/32 comment="defconf: documentation" list=bad_ipv6
+add address=2001:10::/28 comment="defconf: ORCHID" list=bad_ipv6
+add address=3ffe::/16 comment="defconf: 6bone" list=bad_ipv6
+/ipv6 firewall filter
+add action=accept chain=input comment="defconf: accept established,related,untracked" connection-state=established,related,untracked
+add action=drop chain=input comment="defconf: drop invalid" connection-state=invalid
+add action=accept chain=input comment="defconf: accept ICMPv6" protocol=icmpv6
+add action=accept chain=input comment="defconf: accept UDP traceroute" dst-port=33434-33534 protocol=udp
+add action=accept chain=input comment="defconf: accept DHCPv6-Client prefix delegation." dst-port=546 protocol=udp src-address=fe80::/10
+add action=accept chain=input comment="defconf: accept IKE" dst-port=500,4500 protocol=udp
+add action=accept chain=input comment="defconf: accept ipsec AH" protocol=ipsec-ah
+add action=accept chain=input comment="defconf: accept ipsec ESP" protocol=ipsec-esp
+add action=accept chain=input comment="defconf: accept input" comment="defconf: accept all that matches ipsec policy" ipsec-policy=in,ipsec
+add action=drop chain=input comment="defconf: drop everything else not coming from LAN" in-interface-list=!LAN
+add action=fasttrack-connection chain=forward comment="defconf: fasttrack6" connection-state=established,related
+add action=accept chain=forward comment="defconf: accept established,related,untracked" connection-state=established,related,untracked
+add action=drop chain=forward comment="defconf: drop invalid" connection-state=invalid
+add action=drop chain=forward comment="defconf: drop packets with bad src ipv6" src-address-list=bad_ipv6
+add action=drop chain=forward comment="defconf: drop packets with bad dst ipv6" dst-address-list=bad_ipv6
+add action=drop chain=forward comment="defconf: rfc4890 drop hop-limit=1" hop-limit=equal:1 protocol=icmpv6
+add action=accept chain=forward comment="defconf: accept ICMPv6" protocol=icmpv6
+add action=accept chain=forward comment="defconf: accept HIP" protocol=139
+add action=accept chain=forward comment="defconf: accept IKE" dst-port=500,4500 protocol=udp
+add action=accept chain=forward comment="defconf: accept ipsec AH" protocol=ipsec-ah
+add action=accept chain=forward comment="defconf: accept ipsec ESP" protocol=ipsec-esp
+add action=accept chain=forward comment="defconf: accept all that matches ipsec policy" ipsec-policy=in,ipsec
+add action=drop chain=forward comment="defconf: drop everything else not coming from LAN" in-interface-list=!LAN
+/ipv6 nd
+set [ find default=yes ] advertise-dns=yes
+/routing bgp connection
+add connect=yes disabled=no instance=greyrock listen=yes local.address=10.1.20.1 .role=ebgp name=k8s-kerfuffle remote.address=10.1.20.10 .as=64514
+/system clock
+set time-zone-name=America/New_York
+/system identity
+set name=office-rb5009
+/tool mac-server
+set allowed-interface-list=LAN
+/tool mac-server mac-winbox
+set allowed-interface-list=LAN
+[admin@office-rb5009] >

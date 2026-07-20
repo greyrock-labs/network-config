@@ -62,17 +62,16 @@ room's CRS309. Full detail in `topology/greyrock-home.md`.
 | Hostname            | Role    | Model     | Mgmt IP    | Status |
 | ------------------- | ------- | --------- | ---------- | ------ |
 | office-icx-8200     | access  | ICX 8200  | 10.1.0.11  | in production |
-| office-icx-7150     | access  | ICX 7150  | TBD        | reset, pending reconfig |
+| office-icx-7150     | access  | ICX 7150  | 10.1.0.12  | in production |
 | game-room-icx-8200  | access  | ICX 8200  | 10.1.0.14  | in production |
 | game-room-icx-7150  | access  | ICX 7150  | 10.1.0.15  | in production |
 | garage-icx-8200     | access  | ICX 8200  | 10.1.0.17  | in production |
 | garage-icx-7150     | access  | ICX 7150  | 10.1.0.18  | in production |
 
-A fleet renumber is in progress; ICX mgmt IPs get assigned as each box
-is reconfigured. Reconfig template: apply the box's existing
-`running.txt` with the per-box deltas (new IP, single uplink to the
-room's CRS309, no ICX-to-ICX downlink, leaf STP priority 36864,
-multicast passive).
+All six ICX are now cut over to the Mikrotik spine — each has a single
+uplink to its room's CRS309 (no ICX-to-ICX links), leaf STP priority
+36864, and passive multicast. The fleet renumber that ran alongside the
+cutover is complete.
 
 ## Workflow per change
 

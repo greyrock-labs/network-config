@@ -1,8 +1,9 @@
 # office-rb5009
 
-> **Status:** bench build in progress — will replace the UDM Pro Max as the
-> network gateway (WAN, inter-VLAN routing, DHCP, DNS, firewall, IPv6, mDNS).
-> Cutover is a single recable (WAN + spine trunk) once validated.
+> **Status:** in production as of 2026-07-20 — replaced the UDM Pro Max as
+> the network gateway (WAN, inter-VLAN routing, DHCP, DNS, firewall, IPv6,
+> mDNS). See `changes/2026-07-20-office-rb5009-initial-deploy.md` and
+> `changes/2026-07-20-office-rb5009-ra-dns-and-quad9-v6.md`.
 
 ## Identity
 

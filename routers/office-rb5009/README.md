@@ -69,12 +69,14 @@ Everything the UDM does today moves here:
   guest clients cannot probe the smart-home fleet.
 - **VPN** — TBD (if the UDM terminates one)
 
-## Physical (planned)
+## Physical
 
 - **Spine trunk:** sfp-sfpplus1 (10G) → office-crs309 sfp-sfpplus1
   (VLAN 1 untagged + VLANs 10/20/4000 tagged)
-- **WAN:** TBD (ether8 2.5G if internet > 1G, else ether1)
-- **Mgmt:** reachable on VLAN 1 / 10.1.0.1 once the bridge is up
+- **WAN:** ether1 — this is the **2.5G** port on the RB5009 (ether2–8 are 1G,
+  sfp-sfpplus1 is 10G). Standalone routed L3 interface, **not** on the bridge.
+  Links at 2.5Gbps full-duplex to the Spectrum modem.
+- **Mgmt:** reachable on VLAN 1 / 10.1.0.1
 
 ## VLAN / subnet map (confirm)
 

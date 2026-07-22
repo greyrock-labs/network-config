@@ -31,7 +31,7 @@ uplink each. See `topology/greyrock-home.md` (rewritten today) and
   ICX need the same treatment when they're reconfigured.
 - VLAN 10 multicast active → passive: the querier role moved to
   office-crs309. Multicast validated end-to-end in production
-  (see `topology/multicast-runbook.md`, written today).
+  (see `runbooks/multicast-runbook.md`, written today).
 
 **Credential scrub:** the June snapshot captures across all six ICX dirs
 contained the real admin password hash and SNMP community strings. All

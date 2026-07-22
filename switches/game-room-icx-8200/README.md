@@ -60,7 +60,7 @@
 - APs are BPDU-guarded: if an AP receives a BPDU it err-disables —
   desired behavior, don't remove.
 - Multicast is passive on VLAN 10 (both protocols); the IGMP/MLD
-  querier is office-crs309. See `topology/multicast-runbook.md`.
+  querier is office-crs309. See `runbooks/multicast-runbook.md`.
 - Leaf STP priority 36864 on VLAN 1: this box must never win root.
 
 ## Change history

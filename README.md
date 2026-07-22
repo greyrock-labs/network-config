@@ -40,10 +40,12 @@ network-config/
 │       ├── config/
 │       │   ├── running.txt
 │       │   └── snapshots/
-├── topology/                  # site topology, VLAN scheme, fleet templates, runbooks
+├── topology/                  # site topology, VLAN scheme, fleet templates
 │   ├── greyrock-home.md       # the network: spine, leaves, VLANs, addressing
-│   ├── crs309-base-config.md  # CRS309 fleet template + apply-order + validation
-│   └── multicast-runbook.md   # how to inspect IGMP/MLD on both platforms
+│   └── crs309-base-config.md  # CRS309 fleet template + apply-order + validation
+├── runbooks/                  # operational how-to guides
+│   ├── multicast-runbook.md   # how to inspect IGMP/MLD on both platforms
+│   └── ca-issuing-runbook.md  # issue an internal TLS cert from the Grey Rock CA
 ├── changes/                   # dated prose notes for each meaningful change
 └── .claude/CLAUDE.md          # project-level context for Claude
 ```

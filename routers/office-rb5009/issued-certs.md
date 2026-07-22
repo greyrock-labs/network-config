@@ -2,7 +2,7 @@
 
 Leaf certs signed by **Grey Rock Intermediate CA** (EC) on office-rb5009,
 for internal devices that can't do ACME. Private keys live on the router
-and are never committed. **How to issue one:** `ca-issuing-runbook.md`.
+and are never committed. **How to issue one:** `../../runbooks/ca-issuing-runbook.md`.
 CA design + rationale: `changes/2026-07-22-office-rb5009-internal-ca-rebuild.md`.
 
 All leaves: EC P-256, `key-usage=digital-signature,key-encipherment,tls-server`

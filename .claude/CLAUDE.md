@@ -80,6 +80,23 @@ layout and workflow.
 5. Document the why in `changes/<date>-<hostname>-<topic>.md`.
 6. Commit and push to Forgejo.
 
+## Scrubbing rb5009 config exports (house rule)
+
+Beyond secrets, the office-rb5009's `/ip dns static` section accumulates
+**dynamic** records that MUST be stripped from every saved snapshot and from
+`running.txt` before committing:
+
+- **external-dns records** — created on the rb5009 by external-dns running in
+  the k8s cluster. Each A/CNAME comes paired with a TXT registry record; strip
+  **both halves** of every pair.
+- **DHCP-lease-script records** — auto-registered by the `dhcp-dns-register`
+  lease-script (identifiable by their comment tag and `ttl=5m`).
+
+**Keep only** the hand-maintained `/ip dns static` records that back the
+**static DHCP lease reservations** (the infra A records: switches, router,
+k8s, etc.). Everything else under `/ip dns static` is dynamic and does not
+belong in a saved config.
+
 ## Things not to do
 
 - Don't put real secrets, PSKs, or community strings in committed config

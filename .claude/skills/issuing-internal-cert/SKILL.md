@@ -22,12 +22,28 @@ in-cluster). Every issued cert gets a row in
 **Full step-by-step procedure:** `runbooks/ca-issuing-runbook.md` — this
 skill is the map + the traps; follow the runbook for exact commands.
 
+**Exported CA files** (root + intermediate, public) live on the workstation
+at `~/Documents/Grey Rock/` as `cert_export_*.crt`. Re-export from the router
+after any CA rebuild so these stay current.
+
 ## Which method
 
 | Situation | Method |
 |-----------|--------|
 | Appliance just needs cert + key uploaded (default) | **A** — router generates the key |
 | Private key must never leave the device | **B** — device makes a CSR, sign off-box with openssl (RouterOS **cannot** sign an external CSR) |
+
+## Device quirks
+
+- **Reolink (PoE doorbell, cameras) — RSA only.** The HTTPS web service
+  rejects EC certs (upload just says "failed"). Issue the leaf with
+  `key-size=2048` (numeric = RSA; a curve name = EC). Upload under
+  Settings → Network → Advanced → **HTTPS Settings**; the cert field wants
+  the full chain (leaf + intermediate). Filenames containing the FQDN can
+  break the upload — use plain `server.crt` / `server.key`.
+- **RSA key encoding.** OpenSSL 3.x `openssl rsa` emits PKCS#8
+  (`BEGIN PRIVATE KEY`) by default; add **`-traditional`** for the PKCS#1
+  (`BEGIN RSA PRIVATE KEY`) form old appliances expect.
 
 ## Guardrails (the things that bite)
 

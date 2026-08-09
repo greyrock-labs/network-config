@@ -1,0 +1,44 @@
+# /system resource print
+                   uptime: 7m6s
+                  version: 7.23 (stable)
+               build-time: 2026-05-25 09:05:50
+         factory-software: 6.44.6
+              free-memory: 441.0MiB
+             total-memory: 512.0MiB
+                      cpu: ARM
+                cpu-count: 2
+            cpu-frequency: 800MHz
+                 cpu-load: 59%
+           free-hdd-space: 1192.0KiB
+          total-hdd-space: 16.0MiB
+  write-sect-since-reboot: 624
+         write-sect-total: 5485
+        architecture-name: arm
+               board-name: CRS309-1G-8S+
+                 platform: MikroTik
+
+# /system routerboard print (post-upgrade)
+       routerboard: yes
+             model: CRS309-1G-8S+
+          revision: r2
+     serial-number: HD608ETHR1E
+     firmware-type: dx3230L
+  factory-firmware: 6.48.6
+  current-firmware: 7.23
+  upgrade-firmware: 7.23
+
+# /interface print
+Flags: R - RUNNING; S - SLAVE
+Columns: NAME, TYPE, ACTUAL-MTU, L2MTU, MAX-L2MTU, MAC-ADDRESS
+ #    NAME          TYPE      ACTUAL-MTU  L2MTU  MAX-L2MTU  MAC-ADDRESS
+ 0 RS ether1        ether           1500   1584      10218  18:FD:74:B2:D0:1E
+ 1 RS sfp-sfpplus1  ether           1500   1584      10218  18:FD:74:B2:D0:16
+ 2  S sfp-sfpplus2  ether           1500   1584      10218  18:FD:74:B2:D0:17
+ 3  S sfp-sfpplus3  ether           1500   1584      10218  18:FD:74:B2:D0:18
+ 4  S sfp-sfpplus4  ether           1500   1584      10218  18:FD:74:B2:D0:19
+ 5  S sfp-sfpplus5  ether           1500   1584      10218  18:FD:74:B2:D0:1A
+ 6  S sfp-sfpplus6  ether           1500   1584      10218  18:FD:74:B2:D0:1B
+ 7  S sfp-sfpplus7  ether           1500   1584      10218  18:FD:74:B2:D0:1C
+ 8  S sfp-sfpplus8  ether           1500   1584      10218  18:FD:74:B2:D0:1D
+ 9 R  bridge        bridge          1500   1584             18:FD:74:B2:D0:1E
+10 R  lo            loopback       65536                    00:00:00:00:00:00

@@ -10,7 +10,7 @@ Grey Rock Root CA (secp384r1, self-signed, trusted)
 
 Use it for internal devices that can't do ACME (cameras, Ruckus
 Unleashed, appliance mgmt UIs). **Not** k8s — cluster TLS is handled
-in-cluster. Record every issued cert in `issued-certs.md`.
+in-cluster. Record every issued cert in `../routers/office-rb5009/issued-certs.md`.
 
 ---
 
@@ -109,7 +109,7 @@ is benign — it just means openssl doesn't have the root; the browser does.
 
 ### 7. Record it
 
-Add a row to `issued-certs.md` (name, CN, SANs, key, issued/expires, serial,
+Add a row to `../routers/office-rb5009/issued-certs.md` (name, CN, SANs, key, issued/expires, serial,
 device).
 
 ---
@@ -151,4 +151,4 @@ intermediate or a leaf.
 ## Renewal
 
 Leaves expire per their `days-valid`. Re-run Method A with the same
-name/CN/SANs, re-export, re-install, update `issued-certs.md`.
+name/CN/SANs, re-export, re-install, update `../routers/office-rb5009/issued-certs.md`.

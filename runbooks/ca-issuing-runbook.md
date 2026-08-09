@@ -57,23 +57,25 @@ success, so it looks like it failed even when it worked).
 > System → Certificates → select `<name>` → **Export** → Type `PEM`,
 > set an **Export Passphrase** → Export
 
-Gives `<name>.crt` + `<name>.key` (key encrypted) in Files. Also export the
+RouterOS names the exported files `cert_export_<name>.crt` and
+`cert_export_<name>.key` (key encrypted) in Files. Also export the
 intermediate once (public cert, no key — no passphrase):
 
 ```
 /certificate export-certificate "Grey Rock Intermediate CA" type=pem
 ```
 
-Pull the files from Winbox → Files.
+→ `cert_export_Grey Rock Intermediate CA.crt`. Pull the files from
+Winbox → Files.
 
 ### 4. Prep the files (workstation)
 
 ```
 # strip the passphrase (openssl pkey handles EC + either PEM format)
-openssl pkey -in "<name>.key" -out <host>.key
+openssl pkey -in "cert_export_<name>.key" -out <host>.key
 
 # build the chain: leaf FIRST, then intermediate, NOT the root
-cat "<name>.crt" "Grey Rock Intermediate CA.crt" > <host>-fullchain.crt
+cat "cert_export_<name>.crt" "cert_export_Grey Rock Intermediate CA.crt" > <host>-fullchain.crt
 ```
 
 Sanity-check the bundle has two certs cleanly separated:
@@ -100,7 +102,7 @@ Delete the un-passphrased `<host>.key` from the workstation once installed.
 echo | openssl s_client -connect <host>.internal.greyrock.io:443 -showcerts 2>/dev/null | grep -E "s:|i:"
 
 # full-path check (openssl ignores the macOS keychain, so point it at the root)
-echo | openssl s_client -connect <host>.internal.greyrock.io:443 -CAfile "Grey Rock Root CA.crt" 2>/dev/null | grep "Verify"
+echo | openssl s_client -connect <host>.internal.greyrock.io:443 -CAfile "$HOME/Documents/Grey Rock/cert_export_Grey Rock Root CA.crt" 2>/dev/null | grep "Verify"
 #   -> Verify return code: 0 (ok)
 ```
 Browser test: the page is Secure **only on clients that trust the root**

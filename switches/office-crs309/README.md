@@ -11,6 +11,7 @@
 | Model        | MikroTik CRS309-1G-8S+IN |
 | Hardware rev | r2 |
 | Serial #     | HD60848KFNQ |
+| MAC Address  | 18:FD:74:B2:D0:6F |
 | Software ID  | 4RMC-F2FX |
 | RouterOS     | 7.23 (stable), build 2026-05-25 |
 | Current firmware | 7.23 (upgraded from 6.48.6 on 2026-07-17) |

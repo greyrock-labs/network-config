@@ -11,6 +11,7 @@
 | Model        | MikroTik CRS309-1G-8S+IN |
 | Hardware rev | r2 |
 | Serial #     | HD608ETHR1E |
+| MAC Address  | 18:FD:74:B2:D0:1E |
 | Software ID  | IF4R-M3DV |
 | RouterOS     | 7.23 (stable), build 2026-05-25 |
 | Current firmware | 7.23 (upgraded from 6.48.6 on 2026-07-17) |
@@ -21,7 +22,7 @@
 
 | Field        | Value |
 | ------------ | ----- |
-| Mgmt IP      | 10.1.0.16/24 |
+| Mgmt IP      | 10.1.0.30/24 |
 | Mgmt VLAN    | 1 (native, untagged on mgmt port) |
 | Default GW   | 10.1.0.1 (office-rb5009) |
 | OOB access?  | serial console (9600 8N1) |

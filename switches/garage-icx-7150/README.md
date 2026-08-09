@@ -12,6 +12,7 @@
 | Firmware     | 10.0.10g_cd6T213 (SPR10010g_cd6) |
 | Software pkg | ICX7150_L3_SOFT_PACKAGE, license 2X10GR |
 | Serial #     | FEK3849R0HS |
+| MAC Address  | C0:C5:20:A0:50:B3 |
 | Physical location | garage |
 | Role         | access (cameras / doorbell / desks) |
 
@@ -19,7 +20,7 @@
 
 | Field        | Value |
 | ------------ | ----- |
-| Mgmt IP      | 10.1.0.18/24 (static, on ve 1 / VLAN 1) |
+| Mgmt IP      | 10.1.0.32/24 (static, on ve 1 / VLAN 1) |
 | Mgmt VLAN    | 1 (native) |
 | Default GW   | 10.1.0.1 |
 | OOB access?  | serial console |

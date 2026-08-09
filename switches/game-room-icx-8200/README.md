@@ -12,6 +12,7 @@
 | Firmware     | 10.0.10g_cd6T253 (RDR10010g_cd6) |
 | Software pkg | ICX8200_L3_SOFT_PACKAGE, license 2X25GR |
 | Serial #     | FNR4329U04W |
+| MAC Address  | 80:F0:CF:1F:AC:4A |
 | Physical location | game room |
 | Role         | access |
 
@@ -19,7 +20,7 @@
 
 | Field        | Value |
 | ------------ | ----- |
-| Mgmt IP      | 10.1.0.14/24 (static, on ve 1 / VLAN 1) |
+| Mgmt IP      | 10.1.0.21/24 (static, on ve 1 / VLAN 1) |
 | Mgmt VLAN    | 1 (native) |
 | Default GW   | 10.1.0.1 |
 | OOB access?  | serial console |

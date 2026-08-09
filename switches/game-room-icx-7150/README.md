@@ -12,6 +12,7 @@
 | Firmware     | 10.0.10g_cd6T213 (SPR10010g_cd6) |
 | Software pkg | ICX7150_L3_SOFT_PACKAGE, license 2X10GR |
 | Serial #     | FEK3825R01Z |
+| MAC Address  | C0:C5:20:A7:BB:11 |
 | Physical location | game room |
 | Role         | access (IoT bridges) |
 
@@ -19,7 +20,7 @@
 
 | Field        | Value |
 | ------------ | ----- |
-| Mgmt IP      | 10.1.0.15/24 (static, on ve 1 / VLAN 1) |
+| Mgmt IP      | 10.1.0.22/24 (static, on ve 1 / VLAN 1) |
 | Mgmt VLAN    | 1 (native) |
 | Default GW   | 10.1.0.1 |
 | OOB access?  | serial console |

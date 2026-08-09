@@ -11,6 +11,7 @@
 | Model        | MikroTik CRS309-1G-8S+IN |
 | Hardware rev | r3 |
 | Serial #     | HJX0AVXQW5W |
+| MAC Address  | 04:F4:1C:58:22:D5 |
 | Software ID  | JEPC-60YK |
 | RouterOS     | 7.23 (stable), build 2026-05-25 |
 | Current firmware | 7.23 (upgraded from 7.18.2 on 2026-07-17) |
@@ -21,7 +22,7 @@
 
 | Field        | Value |
 | ------------ | ----- |
-| Mgmt IP      | 10.1.0.13/24 |
+| Mgmt IP      | 10.1.0.20/24 |
 | Mgmt VLAN    | 1 (native, untagged on mgmt port) |
 | Default GW   | 10.1.0.1 (office-rb5009) |
 | OOB access?  | serial console (9600 8N1) |

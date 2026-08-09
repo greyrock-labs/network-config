@@ -12,6 +12,7 @@
 | Firmware     | 10.0.10g_cd6T213 (SPR10010g_cd6) |
 | Software pkg | ICX7150_L3_SOFT_PACKAGE, license 2X10GR |
 | Serial #     | FEK3850Q0W1 |
+| MAC Address  | DC:AE:EB:2F:E9:8C |
 | Physical location | office |
 | Role         | access (KVM/infra bridges) |
 

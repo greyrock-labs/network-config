@@ -12,8 +12,9 @@
 | Hostname     | office-rb5009 |
 | FQDN         | office-rb5009.internal.greyrock.io |
 | Model        | MikroTik RB5009 |
-| RouterOS     | TBD (confirm; upgrade to current before build) |
-| Serial #     | TBD |
+| RouterOS     | 7.23.3 |
+| Serial #     | HMM0BDDPJAM |
+| MAC Address  | D0:EA:11:C7:4F:C3 |
 | Physical location | office |
 | Role         | router / L3 gateway / firewall / DHCP / DNS |
 

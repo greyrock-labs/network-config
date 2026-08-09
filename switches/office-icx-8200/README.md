@@ -11,6 +11,7 @@
 | Model        | Ruckus ICX 8200 (Unleashed, T-series) |
 | Firmware     | 10.0.10g_cd6T253 (RDR10010g_cd6) |
 | Serial #     | FNR4338U023 |
+| MAC Address  | 3C:46:A1:13:BA:4C |
 | Physical location | office |
 | Role         | access |
 

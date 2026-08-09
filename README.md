@@ -1,80 +1,102 @@
 # network-config
 
-Versioned, offline mirror of the Ruckus ICX switch fleet at Greyrock Labs.
+Versioned, offline mirror of the Greyrock Labs switch and router fleet:
+a MikroTik spine (RouterOS) and Ruckus ICX access switches (FastIron,
+Unleashed-managed).
 
 ## What this repo is
 
-- **Source of truth for switch config** — every change we make to a switch is
-  captured back into this repo and committed. The switch's running-config is
-  the live state; the repo is the durable record.
-- **Backup** — if a switch dies or its config is wiped, we can rebuild from a
-  snapshot here.
-- **Change log** — every meaningful change gets a file under `changes/` with
-  the *why*, not just the *what*.
-- **Working memory for Claude** — at the start of a session, point Claude at
-  this repo and it can orient itself from the README files, topology notes,
-  and recent changes.
+- **Source of truth for device config** — every change made to a device
+  is captured back into this repo and committed. The device's running
+  config is the live state; the repo is the durable record.
+- **Backup** — if a device dies or its config is wiped, we rebuild from
+  a capture here.
+- **Change log** — every meaningful change gets a file under `changes/`
+  with the *why*, not just the *what*.
+- **Working memory for Claude** — at the start of a session, point
+  Claude at this repo and it orients itself from the README files,
+  topology notes, and recent changes.
 
 ## What this repo is NOT
 
-- Not a config-management system (no Ansible/Salt/etc.). Changes are made
-  manually on the live switch and then captured.
-- Not a replacement for the live running-config. The switch is always
-  authoritative for the current state; the repo can lag until a capture runs.
+- Not a config-management system (no Ansible/Salt/etc.). Changes are
+  made manually on the live device and then captured.
+- Not a replacement for the live running config. The device is always
+  authoritative for current state; the repo can lag until a capture.
 
 ## Layout
 
 ```
 network-config/
 ├── switches/
-│   └── <hostname>/            # one directory per switch, keyed by hostname
+│   └── <hostname>/            # one directory per device, keyed by hostname
 │       ├── README.md          # role, model, mgmt IP, physical location
 │       ├── config/
-│       │   ├── running.txt    # latest `show running-config` (scrubbed of secrets)
-│       │   ├── initial-setup.txt  # the staged config that was applied
+│       │   ├── running.txt    # latest capture (scrubbed of secrets)
 │       │   └── snapshots/     # dated historical captures
-├── topology/                  # site diagrams, VLAN schemes, addressing
+├── topology/                  # site topology, VLAN scheme, fleet templates, runbooks
+│   ├── greyrock-home.md       # the network: spine, leaves, VLANs, addressing
+│   ├── crs309-base-config.md  # CRS309 fleet template + apply-order + validation
+│   └── multicast-runbook.md   # how to inspect IGMP/MLD on both platforms
 ├── changes/                   # dated prose notes for each meaningful change
 └── .claude/CLAUDE.md          # project-level context for Claude
 ```
 
+## The fleet
+
+Topology: `office-rb5009 → office-crs309 → game-room-crs309 →
+garage-crs309` (10G SFP+ spine); each room's ICX pair are leaves of the
+room's CRS309. Full detail in `topology/greyrock-home.md`.
+
+### Spine (MikroTik, RouterOS)
+
+| Hostname            | Role              | Model          | Mgmt IP    | Status |
+| ------------------- | ----------------- | -------------- | ---------- | ------ |
+| office-rb5009       | router            | RB5009         | TBD        | not yet deployed |
+| office-crs309       | spine, STP root, mcast querier | CRS309-1G-8S+ | 10.1.0.10 | configured |
+| game-room-crs309    | spine             | CRS309-1G-8S+  | 10.1.0.13  | configured |
+| garage-crs309       | spine, end        | CRS309-1G-8S+  | 10.1.0.16  | configured |
+
+### Access (Ruckus ICX, Unleashed)
+
+| Hostname            | Role    | Model     | Mgmt IP    | Status |
+| ------------------- | ------- | --------- | ---------- | ------ |
+| office-icx-8200     | access  | ICX 8200  | 10.1.0.11  | in production |
+| office-icx-7150     | access  | ICX 7150  | TBD        | reset, pending reconfig |
+| game-room-icx-8200  | access  | ICX 8200  | TBD        | reset, pending reconfig |
+| game-room-icx-7150  | access  | ICX 7150  | TBD        | reset, pending reconfig |
+| garage-icx-8200     | access  | ICX 8200  | TBD        | reset, pending reconfig |
+| garage-icx-7150     | access  | ICX 7150  | TBD        | reset, pending reconfig |
+
+A fleet renumber is in progress; ICX mgmt IPs get assigned as each box
+is reconfigured. Reconfig template: apply the box's existing
+`running.txt` with the per-box deltas (new IP, single uplink to the
+room's CRS309, no ICX-to-ICX downlink, leaf STP priority 36864,
+multicast passive).
+
 ## Workflow per change
 
-1. **Plan** — discuss the change; update `topology/` or per-switch README if
-   the design shifts.
-2. **Pre-snapshot** (for non-trivial changes) — capture current `show run` to
-   `switches/<hostname>/config/snapshots/<date>-pre-<topic>.txt`. Commit.
-3. **Apply** — make the change on the live switch via the serial console
-   (or SSH when available). Apply in chunks; verify each chunk.
-4. **Post-snapshot** — capture the new `show run`, save to
-   `switches/<hostname>/config/snapshots/<date>-post-<topic>.txt` and
-   `running.txt`. Commit.
-5. **Document** — write `changes/<date>-<switch>-<topic>.md` describing what
-   changed and *why*. Commit. Push to Forgejo.
+1. **Plan** — discuss the change; update `topology/` or the per-device
+   README if the design shifts.
+2. **Pre-snapshot** (for non-trivial changes) — capture the current
+   config to `switches/<hostname>/config/snapshots/<date>-pre-<topic>.txt`.
+3. **Apply** — make the change on the live device (ICX: serial/SSH
+   paste; MikroTik: Winbox/SSH). Apply in chunks; verify each chunk.
+4. **Post-snapshot** — capture the new config to
+   `snapshots/<date>-post-<topic>.txt` AND overwrite `running.txt`.
+   Scrub secrets before committing — no real password hashes or SNMP
+   communities in the repo, use `<REDACTED-*>` placeholders.
+5. **Document** — write `changes/<date>-<topic>.md` with the why.
+6. **Commit.** Push when asked.
 
-If anything goes sideways, the pre-snapshot is your rollback: re-apply by
-hand (the workflow is interactive, no automation scripts).
-
-## Switches
-
-| Hostname           | Role    | Model       | Mgmt IP     | Status        |
-| ------------------ | ------- | ----------- | ----------- | ------------- |
-| garage-icx-8200    | access  | ICX 8200    | 10.1.0.10   | configured    |
-| garage-icx-7150    | access  | ICX 7150    | 10.1.0.11   | configured    |
-| _TBD_              | access  | _TBD_       | _TBD_       | _new_         |
-| _TBD_              | access  | _TBD_       | _TBD_       | _new_         |
-| _TBD_              | access  | _TBD_       | _TBD_       | _new_         |
-| _TBD_              | access  | _TBD_       | _TBD_       | _new_         |
-
-All switches are access-layer and managed by Ruckus Unleashed. Fill in the
-remaining four as we go — see `topology/greyrock-home.md` for the daisy
-chain order.
+If anything goes sideways, the pre-snapshot is the rollback: re-apply
+by hand (the workflow is interactive, no automation).
 
 ## Working with Claude on this repo
 
 At the start of a session, say something like:
 
-> "Let's work on game-room-icx-7150 in the network-config repo."
+> "Let's work on game-room-icx-8200 in the network-config repo."
 
-Claude will read this repo and orient itself. You shouldn't need to re-explain
-the layout, conventions, or current state.
+Claude reads this repo and orients itself. You shouldn't need to
+re-explain the layout, conventions, or current state.

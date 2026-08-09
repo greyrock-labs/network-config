@@ -89,6 +89,10 @@ office 8200's priority will be lowered in a separate change.
   physical cable)
 - Once that cable is in, the daisy chain is end-to-end live from
   the router to the garage
-- Lower STP priority on the office 8200 (see above)
-- Configure the 2 missing ports on the office 8200 (separate
-  follow-up)
+
+## Resolved (post-hoc, after this change note was written)
+
+- STP priority on the office 8200 was lowered to 4096 — see
+  `changes/2026-06-25-office-icx-8200-followup.md`
+- The 2 missing ports (1/1/7 Kerfuffle, 1/1/8 NAS) on the office
+  8200 were added — same follow-up change note

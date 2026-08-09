@@ -302,6 +302,7 @@ add address=10.1.0.15 name=game-room-icx-7150.internal.greyrock.io type=A
 add address=10.1.0.16 name=garage-crs309.internal.greyrock.io type=A
 add address=10.1.0.17 name=garage-icx-8200.internal.greyrock.io type=A
 add address=10.1.0.18 name=garage-icx-7150.internal.greyrock.io type=A
+add address=10.1.0.100 name=office-r770.internal.greyrock.io type=A
 add address=10.1.25.2 name=k8s.internal.greyrock.io type=A
 add address=10.1.10.7 name=unleashed.internal.greyrock.io type=A
 add address=10.1.10.74 name=bambu-a1-printer.internal.greyrock.io type=A

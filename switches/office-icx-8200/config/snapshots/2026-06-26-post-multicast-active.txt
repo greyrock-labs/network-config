@@ -50,6 +50,7 @@ jumbo
 hostname office-icx-8200
 ip dns domain-list internal.greyrock.io
 ip dns server-address 10.1.0.1
+ip multicast flood-unregistered
 ipv6 multicast version 2
 !
 !

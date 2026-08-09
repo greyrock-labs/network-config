@@ -269,6 +269,7 @@ add comment=defconf interface=ether1 name=client1 use-peer-dns=no
 add address=10.1.10.74 comment="Bambu A1 Printer" mac-address=30:30:F9:09:00:54 server=dhcp-vlan10
 add address=10.1.10.3 comment="Home Assistant" mac-address=3C:EC:EF:57:EB:26 server=dhcp-vlan10
 add address=10.1.10.66 comment="Garage Camera - Todd" mac-address=74:3F:C2:E7:EB:78 server=dhcp-vlan10
+add address=10.1.10.68 comment="Garage Camera - Andy" mac-address=74:3F:C2:E7:EB:73 server=dhcp-vlan10
 add address=10.1.20.10 comment="K8S - Kerfuffle" mac-address=98:B7:85:23:30:20 server=dhcp-vlan20
 add address=10.1.20.11 comment="KVM - Kerfuffle" mac-address=30:52:53:04:F9:63 server=dhcp-vlan20
 add address=10.1.20.12 comment="NAS - codswallop" mac-address=98:B7:85:24:AE:CD server=dhcp-vlan20
@@ -316,6 +317,7 @@ add address=10.1.10.7 name=unleashed.internal.greyrock.io type=A
 add address=10.1.10.74 name=bambu-a1-printer.internal.greyrock.io type=A
 add address=10.1.10.3 name=homeassistant.internal.greyrock.io type=A
 add address=10.1.10.66 name=garage-camera-todd.internal.greyrock.io type=A
+add address=10.1.10.68 name=garage-camera-andy.internal.greyrock.io type=A
 add address=10.1.20.10 name=kerfuffle.internal.greyrock.io type=A
 add address=10.1.20.12 name=codswallop.internal.greyrock.io type=A
 add address=10.1.20.13 name=kvm-codswallop.internal.greyrock.io type=A

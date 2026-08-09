@@ -1,4 +1,4 @@
-# 2026-07-27 09:45:43 by RouterOS 7.23.2
+# 2026-07-27 10:08:24 by RouterOS 7.23.2
 # software id = JA79-0IXE
 #
 # model = RB5009UG+S+
@@ -211,8 +211,6 @@ add as=64513 disabled=no name=greyrock
 /user group
 add comment="External DNS" name=externaldns policy=\
     read,write,api,rest-api,!local,!telnet,!ssh,!ftp,!reboot,!policy,!test,!winbox,!password,!web,!sniff,!sensitive,!romon
-/certificate settings
-set crl-download=yes crl-use=yes
 /disk settings
 set auto-media-interface=bridge auto-media-sharing=yes auto-smb-sharing=yes
 /interface bridge port

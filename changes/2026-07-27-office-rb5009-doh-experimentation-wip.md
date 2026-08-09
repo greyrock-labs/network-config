@@ -29,23 +29,36 @@ VLAN 4000 (guest) and VLAN 1 (mgmt/bridge is a partial exception — see
 below) are **not yet** forced. `bridge` is a DNS-FORCE member (so VLAN
 1 mgmt traffic is included) but VLAN 4000 (guest) deliberately is not.
 
+## Update 2026-07-27: `/certificate settings` reverted
+
+`crl-use=yes` (with `crl-download=yes`) was causing problems, unrelated
+to the internal CA. Reverted on the router:
+
+```
+/certificate settings set crl-download=no crl-use=no
+```
+
+Both are RouterOS defaults, so the `/certificate settings` section
+no longer appears in `/export` at all. `running.txt` updated to match
+(section removed).
+
 ## Status
 
-This is a snapshot of in-progress tinkering, not a finished design.
-Known open questions for when we pick this back up:
-- Is `crl-use=yes` actually needed/wanted given the internal CA setup
-  from `2026-07-22-office-rb5009-internal-ca-rebuild.md`, or is CRL
-  checking going to fail closed against internal-only leaves that
-  don't publish a CRL endpoint?
+Still in-progress tinkering, not a finished design. Open questions for
+when we pick this back up:
 - Router-side `/ip dns` doesn't have `use-doh-server` set — decide
   whether the router itself should resolve via DoH upstream, or DoH is
   purely a thing we're blocking/redirecting for LAN clients.
 - Guest VLAN (4000) and mgmt VLAN (1) DNS-FORCE posture — intentional
   exclusion or not decided yet.
+- What was actually wrong with `crl-use=yes` — not diagnosed, just
+  reverted because it was causing problems.
 
 ## Repo
 
-- `config/running.txt` updated to match live state.
-- Snapshot: `config/snapshots/2026-07-27-post-doh-forced-dns-wip.txt`.
+- `config/running.txt` updated to match live state (including the
+  `/certificate settings` revert).
+- Snapshot: `config/snapshots/2026-07-27-post-doh-forced-dns-wip.txt`
+  (pre-revert). No post-revert snapshot taken per user direction.
 - No secrets in the diff; `/ip dns static` scrub (house rule) already
   verified consistent with what's live.

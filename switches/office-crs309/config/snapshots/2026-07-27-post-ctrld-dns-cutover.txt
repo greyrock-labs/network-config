@@ -1,10 +1,10 @@
-# 2026-07-27 13:00:53 by RouterOS 7.23
-# software id = JEPC-60YK
+# 2026-07-27 12:59:41 by RouterOS 7.23
+# software id = 4RMC-F2FX
 #
 # model = CRS309-1G-8S+
-# serial number = HJX0AVXQW5W
+# serial number = HD60848KFNQ
 /interface bridge
-add igmp-snooping=yes igmp-version=3 mld-version=2 name=bridge priority=0x3000 vlan-filtering=yes
+add admin-mac=18:FD:74:B2:D0:6F auto-mac=no comment=defconf igmp-snooping=yes igmp-version=3 mld-version=2 multicast-querier=yes name=bridge priority=0x1000 vlan-filtering=yes
 /interface ethernet
 set [ find default-name=ether1 ] l2mtu=9092 mtu=9000
 set [ find default-name=sfp-sfpplus1 ] l2mtu=9092 mtu=9000
@@ -17,10 +17,10 @@ set [ find default-name=sfp-sfpplus7 ] l2mtu=9092 mtu=9000
 set [ find default-name=sfp-sfpplus8 ] l2mtu=9092 mtu=9000
 /interface bridge port
 add bridge=bridge comment=mgmt interface=ether1
-add bridge=bridge comment="to office-crs309 (spine uplink)" interface=sfp-sfpplus1
-add bridge=bridge comment="to garage-crs309 (spine downlink)" interface=sfp-sfpplus2
-add bridge=bridge comment="to game-room-icx-8200" interface=sfp-sfpplus3
-add bridge=bridge comment="to game-room-icx-7150" interface=sfp-sfpplus4
+add bridge=bridge comment="to office-rb5009 (spine uplink)" interface=sfp-sfpplus1
+add bridge=bridge comment="to game-room-crs309 (spine downlink)" interface=sfp-sfpplus2
+add bridge=bridge comment="to office-icx-8200" interface=sfp-sfpplus3
+add bridge=bridge comment="to office-icx-7150" interface=sfp-sfpplus4
 add bridge=bridge comment=unused interface=sfp-sfpplus5
 add bridge=bridge comment=unused interface=sfp-sfpplus6
 add bridge=bridge comment=unused interface=sfp-sfpplus7
@@ -31,15 +31,15 @@ add bridge=bridge tagged=sfp-sfpplus1,sfp-sfpplus2,sfp-sfpplus3,sfp-sfpplus4 vla
 add bridge=bridge tagged=sfp-sfpplus1,sfp-sfpplus2,sfp-sfpplus3,sfp-sfpplus4 vlan-ids=20
 add bridge=bridge tagged=sfp-sfpplus1,sfp-sfpplus2,sfp-sfpplus3,sfp-sfpplus4 vlan-ids=4000
 /ip address
-add address=10.1.0.13/24 interface=bridge network=10.1.0.0
+add address=10.1.0.10/24 interface=bridge network=10.1.0.0
 /ip dns
 set servers=10.1.30.20
 /ip route
-add dst-address=0.0.0.0/0 gateway=10.1.0.1
+add disabled=no dst-address=0.0.0.0/0 gateway=10.1.0.1
 /system clock
 set time-zone-name=America/New_York
 /system identity
-set name=game-room-crs309
+set name=office-crs309
 /system ntp client
 set enabled=yes
 /system ntp client servers
@@ -47,7 +47,5 @@ add address=time1.internal.greyrock.io
 add address=time2.internal.greyrock.io
 add address=time3.internal.greyrock.io
 add address=time4.internal.greyrock.io
-/system routerboard settings
-set enter-setup-on=delete-key
 /tool romon
 set enabled=yes secret="<REDACTED-ROMON-SECRET>"

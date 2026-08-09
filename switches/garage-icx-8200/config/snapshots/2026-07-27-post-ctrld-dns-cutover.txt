@@ -21,8 +21,7 @@ vlan 1 name DEFAULT-VLAN by port
  spanning-tree 802-1w priority 36864
 !
 vlan 10 name Internal by port
- tagged ethe 1/1/7 to 1/1/8 ethe 1/2/2
- untagged ethe 1/1/1 ethe 1/1/5
+ tagged ethe 1/1/1 to 1/1/5 ethe 1/2/2
  multicast passive
  multicast fast-convergence
  multicast version 3
@@ -33,7 +32,7 @@ vlan 20 name Servers by port
  tagged ethe 1/2/2
 !
 vlan 4000 name Guest by port
- tagged ethe 1/1/7 to 1/1/8 ethe 1/2/2
+ tagged ethe 1/1/1 to 1/1/5 ethe 1/2/2
 !
 !
 !
@@ -47,10 +46,11 @@ inline power allocation dynamic all
 clock summer-time
 clock timezone us Eastern
 jumbo
-hostname game-room-icx-8200
+hostname garage-icx-8200
 ip dns domain-list internal.greyrock.io
 ip dns server-address 10.1.30.20
 ip multicast flood-unregistered
+ipv6 multicast version 2
 ipv6 multicast flood-unregistered
 !
 !
@@ -65,7 +65,6 @@ manager registrar
 !
 !
 !
-ipv6 mld version 2
 !
 !
 !
@@ -73,30 +72,35 @@ ipv6 mld version 2
 interface management 1
 !
 interface ethernet 1/1/1
- port-name Andys-Desktop
+ port-name Garage-AP
+ stp-bpdu-guard
+ broadcast limit 500
+!
+interface ethernet 1/1/2
+ port-name Garage-Rear-AP
+ stp-bpdu-guard
+ broadcast limit 500
+!
+interface ethernet 1/1/3
+ port-name Garage-Side-AP
+ stp-bpdu-guard
+ broadcast limit 500
+!
+interface ethernet 1/1/4
+ port-name Side-Drive-AP
  stp-bpdu-guard
  broadcast limit 500
 !
 interface ethernet 1/1/5
- port-name Todds-Desktop
- stp-bpdu-guard
- broadcast limit 500
-!
-interface ethernet 1/1/7
- port-name Game-Room-AP
- stp-bpdu-guard
- broadcast limit 500
-!
-interface ethernet 1/1/8
- port-name Living-Room-AP
+ port-name Kitchen-AP
  stp-bpdu-guard
  broadcast limit 500
 !
 interface ethernet 1/2/2
- port-name GameRoom-CRS309
+ port-name Garage-CRS309
 !
 interface ve 1
- ip address 10.1.0.14 255.255.255.0
+ ip address 10.1.0.17 255.255.255.0
  ipv6 enable
  ipv6 address autoconfig
 !

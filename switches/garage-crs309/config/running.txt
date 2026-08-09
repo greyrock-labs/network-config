@@ -1,4 +1,4 @@
-# 2026-07-17 16:47:09 by RouterOS 7.23
+# 2026-07-27 13:00:06 by RouterOS 7.23
 # software id = IF4R-M3DV
 #
 # model = CRS309-1G-8S+
@@ -35,7 +35,7 @@ add bridge=bridge tagged=sfp-sfpplus1,sfp-sfpplus2,sfp-sfpplus3 vlan-ids=4000
 /ip address
 add address=10.1.0.16/24 interface=bridge network=10.1.0.0
 /ip dns
-set servers=10.1.0.1
+set servers=10.1.30.20
 /ip route
 add dst-address=0.0.0.0/0 gateway=10.1.0.1
 /system clock

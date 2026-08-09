@@ -48,7 +48,7 @@ clock timezone us Eastern
 jumbo
 hostname office-icx-7150
 ip dns domain-list internal.greyrock.io
-ip dns server-address 10.1.0.1
+ip dns server-address 10.1.30.20
 ip multicast flood-unregistered
 !
 !
@@ -146,6 +146,7 @@ logging host 10.1.10.7 udp-port 6514
 
 
 !
+snmp-server community 2 <REDACTED-SNMP-COMMUNITY> ro
 snmp-server community 2 <REDACTED-SNMP-COMMUNITY> ro
 !
 cli timeout 0

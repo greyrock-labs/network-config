@@ -1,4 +1,4 @@
-# 2026-07-17 16:23:13 by RouterOS 7.23
+# 2026-07-27 12:59:41 by RouterOS 7.23
 # software id = 4RMC-F2FX
 #
 # model = CRS309-1G-8S+
@@ -33,7 +33,7 @@ add bridge=bridge tagged=sfp-sfpplus1,sfp-sfpplus2,sfp-sfpplus3,sfp-sfpplus4 vla
 /ip address
 add address=10.1.0.10/24 interface=bridge network=10.1.0.0
 /ip dns
-set servers=10.1.0.1
+set servers=10.1.30.20
 /ip route
 add disabled=no dst-address=0.0.0.0/0 gateway=10.1.0.1
 /system clock

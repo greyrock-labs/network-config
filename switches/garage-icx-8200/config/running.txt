@@ -48,7 +48,7 @@ clock timezone us Eastern
 jumbo
 hostname garage-icx-8200
 ip dns domain-list internal.greyrock.io
-ip dns server-address 10.1.0.1
+ip dns server-address 10.1.30.20
 ip multicast flood-unregistered
 ipv6 multicast version 2
 ipv6 multicast flood-unregistered
@@ -134,6 +134,7 @@ logging host 10.1.10.7 udp-port 6514
 
 
 !
+snmp-server community 2 <REDACTED-SNMP-COMMUNITY> ro
 snmp-server community 2 <REDACTED-SNMP-COMMUNITY> ro
 !
 cli timeout 0

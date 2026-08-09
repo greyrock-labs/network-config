@@ -6,10 +6,12 @@ Applied the four "TO DO" features from the initial-setup note.
 
 ### 1. Jumbo frames (global)
 
-- `jumbo` — enables 9216-byte MTU on all ports.
-- **REQUIRES A RELOAD** to take effect. The command is in running
-  config and saved to flash, but the actual MTU change happens at
-  boot. Plan a maintenance window to bounce the switch.
+- `jumbo` — enables jumbo MTU on all ports. **REQUIRES A RELOAD** to
+  take effect.
+- **Actual MTU is 10200 bytes** (not 9216) on this firmware — the
+  bare `jumbo` command sets the ICX default, which is "10K jumbo".
+  Verified post-reload with `show interfaces ethernet 1/1/1` →
+  `MTU 10200 bytes`.
 
 ### 2. RSTP (Rapid Spanning Tree)
 
@@ -82,4 +84,5 @@ Applied the four "TO DO" features from the initial-setup note.
 - **`spanning-tree 802-1w` must be enabled before
   `spanning-tree 802-1w priority`** — separate commands, not one.
 - **Jumbo command accepted without args; no size parameter on this
-  firmware.** Default is 9216.
+  firmware.** Default MTU is **10200 bytes** (not 9216). Verify
+  post-reload.

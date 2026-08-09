@@ -24,7 +24,7 @@ chain validates against the root clients already trust.
 
 | RouterOS name | CN | SANs | Key | Issued | Expires | Serial | Used by |
 |---------------|----|----|-----|--------|---------|--------|---------|
-| `office-rb5009` | office-rb5009.internal.greyrock.io | DNS:office-rb5009.internal.greyrock.io, IP:10.1.0.1, IP:10.1.10.1, IP:10.1.20.1 | EC P-256 | 2026-07-22 | 2028-07-21 | `2A77F1197B0D68C3` | router www-ssl / api-ssl |
+| `office-rb5009` | office-rb5009.internal.greyrock.io | DNS:office-rb5009.internal.greyrock.io, IP:10.1.0.1, IP:10.1.10.1, IP:10.1.20.1 | EC P-256 | 2026-08-09 | 2028-08-08 | `2CABE1AE663964CD` | router www-ssl / api-ssl |
 | `Ruckus Unleashed` | unleashed.internal.greyrock.io | DNS:unleashed.internal.greyrock.io, IP:10.1.10.7 | EC P-256 | 2026-07-22 | 2028-07-21 | `1A3760AFB5510B7E` | Ruckus Unleashed controller (10.1.10.7) |
 | `courtyard-porch-doorbell` | courtyard-porch-doorbell.internal.greyrock.io | DNS:courtyard-porch-doorbell.internal.greyrock.io, IP:10.1.10.96 | **RSA 2048** | 2026-07-23 | 2028-07-22 | `47158511E4DEEB01` | Reolink PoE doorbell (10.1.10.96, garage-icx-7150 port 1/1/1) — RSA: Reolink rejects EC |
 | `garage-camera-side-yard` | garage-camera-side-yard.internal.greyrock.io | DNS:garage-camera-side-yard.internal.greyrock.io, IP:10.1.10.133 | EC P-256 | 2026-07-23 | 2028-07-22 | `10A0056A0AB14050` | Hikvision camera (10.1.10.133) — signed off **root** (serves leaf-only, can't present the intermediate) |
@@ -35,7 +35,7 @@ chain validates against the root clients already trust.
 | `garage-camera-andy` | garage-camera-andy.internal.greyrock.io | DNS:garage-camera-andy.internal.greyrock.io, IP:10.1.10.68 | EC P-256 | 2026-07-31 | 2028-07-30 | `416AD26D799A7A22` | Hikvision camera (10.1.10.68) — signed off **root** (serves leaf-only, can't present the intermediate) |
 
 SHA-256 fingerprints:
-- office-rb5009: `898e9f8693298d968f3dd89558ff58d5cedadfc3d7188f2f9f7d052b2226c0c1`
+- office-rb5009: `e5abca93d872e710239f16c6137ab14f73dfe39f28218132b6c3557af38d7825`
 - Ruckus Unleashed: `b04fa5ada98e94ab95316c475eac31ac2579103ae8c71355c2ba302cd35e7bde`
 - courtyard-porch-doorbell: `c215449a37c7618ecaa0abc5ee8e9335a7b70dd6589f76e7faee9ae1802276ed`
 - garage-camera-side-yard: `b3382546916505517db5abb3b614f2da83d999e0f8032aaf7ce65d21b2d81435`

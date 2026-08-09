@@ -1,4 +1,4 @@
-# 2026-07-20 16:53:20 by RouterOS 7.23.2
+# 2026-07-20 15:33:14 by RouterOS 7.23.2
 # software id = JA79-0IXE
 #
 # model = RB5009UG+S+
@@ -28,48 +28,13 @@ add name=vlan10-internal ranges=10.1.10.20-10.1.10.254
 add name=vlan20-servers ranges=10.1.20.20-10.1.20.254
 add name=vlan4000-guest ranges=192.168.23.20-192.168.23.254
 /ip dhcp-server
-add address-pool=vlan1-mgmt interface=bridge lease-script="# dhcp-dns-register \E2\80\94 RouterOS DHCP lease-script for office-rb5009\
-    \n#\
-    \n# Auto-registers dynamic DHCP leases into /ip dns static under\
-    \n# internal.greyrock.io.\
-    \n#   - Only acts on initial BIND, never on renew. Renews are silent.\
-    \n#   - Skips fixed reservations (dynamic=no) so manual DNS records are\
-    \n#     never touched.\
-    \n#   - Tags its entries comment=dhcp-dns and only ever manages those.\
-    \n#   - Removes its own entry on lease expiry (leaseBound=0 path).\
-    \n#   - NEVER removes a static without comment=dhcp-dns. The script\
-    \n#     touches only entries with comment=dhcp-dns, period.\
-    \n#\
-    \n# LOAD: paste this whole body into the Lease Script box\
-    \n#   (Winbox/WebFig: IP > DHCP Server > <server> > Lease Script)\
-    \n#   on dhcp-vlan1, dhcp-vlan10, dhcp-vlan20 \E2\80\94 NOT guest.\
-    \n#   Do NOT set it via CLI `set lease-script=\"...\"` \E2\80\94 the embedded \" and \$\
-    \n#   need escaping and \$ substitutes at set-time. Use the GUI box.\
-    \n#\
-    \n# TEST: attach to dhcp-vlan10 first. Bounce one dynamic device, confirm a\
-    \n#   <hostname>.internal.greyrock.io record appears with comment=dhcp-dns\
-    \n#   and disappears on lease expiry. Force a second device to the same\
-    \n#   hostname to watch the -<macsuffix> variant appear. Then roll to the\
-    \n#   other two servers.\
-    \n#\
-    \n# RENEW HANDLING: RouterOS fires the lease-script on T1/T2 renews with\
-    \n# \$leaseBound=1 but the lease already exists in the table. The original\
-    \n# script treated every leaseBound=1 as a fresh bind and re-ran the\
-    \n# removal/insert dance, which on a fixed-reservation box could clobber\
-    \n# state. The new script distinguishes initial bind from renew by\
-    \n# checking whether the script already owns a record for this IP; if it\
-    \n# does, treat the event as a renew and do nothing.\
-    \n\
-    \n:local zone \"internal.greyrock.io\"\
+add address-pool=vlan1-mgmt interface=bridge lease-script=":local zone \"internal.greyrock.io\"\
     \n:local tag \"dhcp-dns\"\
     \n:local ip \$leaseActIP\
     \n:local mac \$leaseActMAC\
     \n\
     \n:if (\$leaseBound = \"1\") do={\
     \n  :if ([:len [/ip dhcp-server lease find where address=\$ip dynamic=no]] = 0) do={\
-    \n    :if ([:len [/ip dns static find where comment=\$tag address=\$ip]] > 0) do={\
-    \n      :return\
-    \n    }\
     \n    :local hn \$\"lease-hostname\"\
     \n    :if ([:len \$hn] = 0) do={ :set hn \"host\" }\
     \n    :local clean (\$hn . \".\" . \$zone)\
@@ -85,49 +50,15 @@ add address-pool=vlan1-mgmt interface=bridge lease-script="# dhcp-dns-register \
     \n  }\
     \n} else={\
     \n  :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
-    \n}" lease-time=8h name=dhcp-vlan1
-add address-pool=vlan10-internal interface=vlan10 lease-script="# dhcp-dns-register \E2\80\94 RouterOS DHCP lease-script for office-rb5009\
-    \n#\
-    \n# Auto-registers dynamic DHCP leases into /ip dns static under\
-    \n# internal.greyrock.io.\
-    \n#   - Only acts on initial BIND, never on renew. Renews are silent.\
-    \n#   - Skips fixed reservations (dynamic=no) so manual DNS records are\
-    \n#     never touched.\
-    \n#   - Tags its entries comment=dhcp-dns and only ever manages those.\
-    \n#   - Removes its own entry on lease expiry (leaseBound=0 path).\
-    \n#   - NEVER removes a static without comment=dhcp-dns. The script\
-    \n#     touches only entries with comment=dhcp-dns, period.\
-    \n#\
-    \n# LOAD: paste this whole body into the Lease Script box\
-    \n#   (Winbox/WebFig: IP > DHCP Server > <server> > Lease Script)\
-    \n#   on dhcp-vlan1, dhcp-vlan10, dhcp-vlan20 \E2\80\94 NOT guest.\
-    \n#   Do NOT set it via CLI `set lease-script=\"...\"` \E2\80\94 the embedded \" and \$\
-    \n#   need escaping and \$ substitutes at set-time. Use the GUI box.\
-    \n#\
-    \n# TEST: attach to dhcp-vlan10 first. Bounce one dynamic device, confirm a\
-    \n#   <hostname>.internal.greyrock.io record appears with comment=dhcp-dns\
-    \n#   and disappears on lease expiry. Force a second device to the same\
-    \n#   hostname to watch the -<macsuffix> variant appear. Then roll to the\
-    \n#   other two servers.\
-    \n#\
-    \n# RENEW HANDLING: RouterOS fires the lease-script on T1/T2 renews with\
-    \n# \$leaseBound=1 but the lease already exists in the table. The original\
-    \n# script treated every leaseBound=1 as a fresh bind and re-ran the\
-    \n# removal/insert dance, which on a fixed-reservation box could clobber\
-    \n# state. The new script distinguishes initial bind from renew by\
-    \n# checking whether the script already owns a record for this IP; if it\
-    \n# does, treat the event as a renew and do nothing.\
-    \n\
-    \n:local zone \"internal.greyrock.io\"\
+    \n}\
+    \n" lease-time=8h name=dhcp-vlan1
+add address-pool=vlan10-internal interface=vlan10 lease-script=":local zone \"internal.greyrock.io\"\
     \n:local tag \"dhcp-dns\"\
     \n:local ip \$leaseActIP\
     \n:local mac \$leaseActMAC\
     \n\
     \n:if (\$leaseBound = \"1\") do={\
     \n  :if ([:len [/ip dhcp-server lease find where address=\$ip dynamic=no]] = 0) do={\
-    \n    :if ([:len [/ip dns static find where comment=\$tag address=\$ip]] > 0) do={\
-    \n      :return\
-    \n    }\
     \n    :local hn \$\"lease-hostname\"\
     \n    :if ([:len \$hn] = 0) do={ :set hn \"host\" }\
     \n    :local clean (\$hn . \".\" . \$zone)\
@@ -143,49 +74,15 @@ add address-pool=vlan10-internal interface=vlan10 lease-script="# dhcp-dns-regis
     \n  }\
     \n} else={\
     \n  :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
-    \n}" lease-time=8h name=dhcp-vlan10
-add address-pool=vlan20-servers interface=vlan20 lease-script="# dhcp-dns-register \E2\80\94 RouterOS DHCP lease-script for office-rb5009\
-    \n#\
-    \n# Auto-registers dynamic DHCP leases into /ip dns static under\
-    \n# internal.greyrock.io.\
-    \n#   - Only acts on initial BIND, never on renew. Renews are silent.\
-    \n#   - Skips fixed reservations (dynamic=no) so manual DNS records are\
-    \n#     never touched.\
-    \n#   - Tags its entries comment=dhcp-dns and only ever manages those.\
-    \n#   - Removes its own entry on lease expiry (leaseBound=0 path).\
-    \n#   - NEVER removes a static without comment=dhcp-dns. The script\
-    \n#     touches only entries with comment=dhcp-dns, period.\
-    \n#\
-    \n# LOAD: paste this whole body into the Lease Script box\
-    \n#   (Winbox/WebFig: IP > DHCP Server > <server> > Lease Script)\
-    \n#   on dhcp-vlan1, dhcp-vlan10, dhcp-vlan20 \E2\80\94 NOT guest.\
-    \n#   Do NOT set it via CLI `set lease-script=\"...\"` \E2\80\94 the embedded \" and \$\
-    \n#   need escaping and \$ substitutes at set-time. Use the GUI box.\
-    \n#\
-    \n# TEST: attach to dhcp-vlan10 first. Bounce one dynamic device, confirm a\
-    \n#   <hostname>.internal.greyrock.io record appears with comment=dhcp-dns\
-    \n#   and disappears on lease expiry. Force a second device to the same\
-    \n#   hostname to watch the -<macsuffix> variant appear. Then roll to the\
-    \n#   other two servers.\
-    \n#\
-    \n# RENEW HANDLING: RouterOS fires the lease-script on T1/T2 renews with\
-    \n# \$leaseBound=1 but the lease already exists in the table. The original\
-    \n# script treated every leaseBound=1 as a fresh bind and re-ran the\
-    \n# removal/insert dance, which on a fixed-reservation box could clobber\
-    \n# state. The new script distinguishes initial bind from renew by\
-    \n# checking whether the script already owns a record for this IP; if it\
-    \n# does, treat the event as a renew and do nothing.\
-    \n\
-    \n:local zone \"internal.greyrock.io\"\
+    \n}\
+    \n" lease-time=8h name=dhcp-vlan10
+add address-pool=vlan20-servers interface=vlan20 lease-script=":local zone \"internal.greyrock.io\"\
     \n:local tag \"dhcp-dns\"\
     \n:local ip \$leaseActIP\
     \n:local mac \$leaseActMAC\
     \n\
     \n:if (\$leaseBound = \"1\") do={\
     \n  :if ([:len [/ip dhcp-server lease find where address=\$ip dynamic=no]] = 0) do={\
-    \n    :if ([:len [/ip dns static find where comment=\$tag address=\$ip]] > 0) do={\
-    \n      :return\
-    \n    }\
     \n    :local hn \$\"lease-hostname\"\
     \n    :if ([:len \$hn] = 0) do={ :set hn \"host\" }\
     \n    :local clean (\$hn . \".\" . \$zone)\
@@ -201,7 +98,8 @@ add address-pool=vlan20-servers interface=vlan20 lease-script="# dhcp-dns-regist
     \n  }\
     \n} else={\
     \n  :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
-    \n}" lease-time=8h name=dhcp-vlan20
+    \n}\
+    \n" lease-time=8h name=dhcp-vlan20
 add address-pool=vlan4000-guest interface=vlan4000 lease-time=2h name=dhcp-vlan4000
 /routing bgp instance
 add as=64513 disabled=no name=greyrock
@@ -273,7 +171,6 @@ add address=10.1.10.7 name=unleashed.internal.greyrock.io type=A
 add address=10.1.10.74 name=bambu-a1-printer.internal.greyrock.io type=A
 add address=10.1.10.3 name=homeassistant.internal.greyrock.io type=A
 add address=10.1.20.10 name=kerfuffle.internal.greyrock.io type=A
-add address=10.1.20.11 name=kvm-kerfuffle.internal.greyrock.io type=A
 add address=10.1.20.12 name=codswallop.internal.greyrock.io type=A
 add address=10.1.20.13 name=kvm-codswallop.internal.greyrock.io type=A
 add address=10.1.20.14 name=kvm-homeassistant.internal.greyrock.io type=A
@@ -302,6 +199,104 @@ add address=10.1.10.157 comment=dhcp-dns name=IotaBase.internal.greyrock.io ttl=
 add address=10.1.10.126 comment=dhcp-dns name=garage-ratgdo-todd.internal.greyrock.io ttl=5m type=A
 add address=10.1.10.40 comment=dhcp-dns name=Litter-Robot4.internal.greyrock.io ttl=5m type=A
 add address=10.1.10.39 comment=dhcp-dns name=Mac.internal.greyrock.io ttl=5m type=A
+add cname=ingress-int.greyrock.io name=prowlarr.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=nvr.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=home.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=status.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=idm.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=sabnzbd.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=victoria-logs.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=jellyfin.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=bambuddy.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=maintainerr.greyrock.io ttl=1h type=CNAME
+add address=10.1.25.4 name=ingress-int.greyrock.io ttl=1h type=A
+add address=161.35.252.109 name=skedaddle-gatus.greyrock.io ttl=1h type=A
+add cname=ingress-ext.greyrock.io name=requests.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=actual.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=freshrss.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=it-tools.greyrock.io ttl=1h type=CNAME
+add address=161.35.252.109 name=skedaddle-doco-cd.greyrock.io ttl=1h type=A
+add cname=ingress-int.greyrock.io name=renovate.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=karakeep.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=flux-webhook.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=atuin.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=kromgo.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=search.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=grafana.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=audiobookshelf.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=bookboss.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=alertmanager.greyrock.io ttl=1h type=CNAME
+add address=10.1.25.3 name=ingress-ext.greyrock.io ttl=1h type=A
+add cname=ingress-int.greyrock.io name=shelfmark.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=paperless.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=plex.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=git.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=watchstate.greyrock.io ttl=1h type=CNAME
+add address=161.35.252.109 name=twnl.greyrock.io ttl=1h type=A
+add cname=ingress-int.greyrock.io name=kopia.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=konflate.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=memini.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=gatus.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=manyfold.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=coolercontrol.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=prometheus.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=hubble.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=thelounge.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=echo-server.greyrock.io ttl=1h type=CNAME
+add cname=ingress-ext.greyrock.io name=litellm.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=chat.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=radarr.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=sonarr.greyrock.io ttl=1h type=CNAME
+add cname=ingress-int.greyrock.io name=renovate-webhook.greyrock.io ttl=1h type=CNAME
+add name=k8s.main.cname-prowlarr.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/downloads/prowlarr\"" ttl=1h type=TXT
+add name=k8s.main.cname-nvr.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/home-automation/scrypted\"" ttl=1h type=TXT
+add name=k8s.main.cname-home.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/home-automation/home-assistant\"" ttl=1h type=TXT
+add name=k8s.main.cname-status.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/gatus\"" ttl=1h type=TXT
+add name=k8s.main.cname-idm.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/security/kanidm\"" ttl=1h type=TXT
+add name=k8s.main.cname-sabnzbd.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/downloads/sabnzbd\"" ttl=1h type=TXT
+add name=k8s.main.cname-victoria-logs.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/victoria-logs-server\"" ttl=1h type=TXT
+add name=k8s.main.cname-jellyfin.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/jellyfin\"" ttl=1h type=TXT
+add name=k8s.main.cname-bambuddy.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/home-automation/bambuddy\"" ttl=1h type=TXT
+add name=k8s.main.cname-maintainerr.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/maintainerr\"" ttl=1h type=TXT
+add name=k8s.main.a-ingress-int.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=service/network/envoy-internal\"" ttl=1h type=TXT
+add name=k8s.main.a-skedaddle-gatus.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=crd/network/towonel-agent\"" ttl=1h type=TXT
+add name=k8s.main.cname-requests.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/seerr\"" ttl=1h type=TXT
+add name=k8s.main.cname-actual.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/actual\"" ttl=1h type=TXT
+add name=k8s.main.cname-freshrss.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/freshrss\"" ttl=1h type=TXT
+add name=k8s.main.cname-it-tools.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/it-tools\"" ttl=1h type=TXT
+add name=k8s.main.a-skedaddle-doco-cd.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=crd/network/towonel-agent\"" ttl=1h type=TXT
+add name=k8s.main.cname-renovate.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/renovate/renovate-operator\"" ttl=1h type=TXT
+add name=k8s.main.cname-karakeep.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/karakeep\"" ttl=1h type=TXT
+add name=k8s.main.cname-flux-webhook.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/flux-system/github-webhook\"" ttl=1h type=TXT
+add name=k8s.main.cname-atuin.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/atuin\"" ttl=1h type=TXT
+add name=k8s.main.cname-kromgo.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/kromgo\"" ttl=1h type=TXT
+add name=k8s.main.cname-search.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/searxng\"" ttl=1h type=TXT
+add name=k8s.main.cname-grafana.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/grafana-httproute\"" ttl=1h type=TXT
+add name=k8s.main.cname-audiobookshelf.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/audiobookshelf\"" ttl=1h type=TXT
+add name=k8s.main.cname-bookboss.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/books/arr-stack-bookboss\"" ttl=1h type=TXT
+add name=k8s.main.cname-alertmanager.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/kube-prometheus-stack-alertmanager\"" ttl=1h type=TXT
+add name=k8s.main.a-ingress-ext.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=service/network/envoy-external\"" ttl=1h type=TXT
+add name=k8s.main.cname-shelfmark.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/downloads/shelfmark\"" ttl=1h type=TXT
+add name=k8s.main.cname-paperless.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/paperless\"" ttl=1h type=TXT
+add name=k8s.main.cname-plex.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/plex\"" ttl=1h type=TXT
+add name=k8s.main.cname-git.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/dev/forgejo\"" ttl=1h type=TXT
+add name=k8s.main.cname-watchstate.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/media/watchstate\"" ttl=1h type=TXT
+add name=k8s.main.a-twnl.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=crd/network/towonel-agent\"" ttl=1h type=TXT
+add name=k8s.main.cname-kopia.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/system/kopia\"" ttl=1h type=TXT
+add name=k8s.main.cname-konflate.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/flux-system/konflate\"" ttl=1h type=TXT
+add name=k8s.main.cname-memini.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/ai/memini\"" ttl=1h type=TXT
+add name=k8s.main.cname-gatus.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/gatus\"" ttl=1h type=TXT
+add name=k8s.main.cname-manyfold.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/manyfold\"" ttl=1h type=TXT
+add name=k8s.main.cname-coolercontrol.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/network/coolercontrol\"" ttl=1h type=TXT
+add name=k8s.main.cname-prometheus.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/observability/kube-prometheus-stack-prometheus\"" ttl=1h type=TXT
+add name=k8s.main.cname-hubble.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/kube-system/hubble-ui\"" ttl=1h type=TXT
+add name=k8s.main.cname-thelounge.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/selfhosted/thelounge\"" ttl=1h type=TXT
+add name=k8s.main.cname-echo-server.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/network/echo-server\"" ttl=1h type=TXT
+add name=k8s.main.cname-litellm.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/ai/litellm\"" ttl=1h type=TXT
+add name=k8s.main.cname-chat.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/ai/open-webui\"" ttl=1h type=TXT
+add name=k8s.main.cname-radarr.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/downloads/radarr\"" ttl=1h type=TXT
+add name=k8s.main.cname-sonarr.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/downloads/sonarr\"" ttl=1h type=TXT
+add name=k8s.main.cname-renovate-webhook.greyrock.io text="\"heritage=external-dns,external-dns/owner=main,external-dns/resource=httproute/renovate/renovate-operator-webhook\"" ttl=1h type=TXT
 add address=10.1.10.71 comment=dhcp-dns name=garage-ratgdo-andy.internal.greyrock.io ttl=5m type=A
 add address=10.1.10.38 comment=dhcp-dns name=Litter-Robot4-82FD4C.internal.greyrock.io ttl=5m type=A
 add address=10.1.10.244 comment=dhcp-dns name=WINC-72-fa.internal.greyrock.io ttl=5m type=A
@@ -394,9 +389,9 @@ set reverse-proxy disabled=yes
 set www-ssl address=10.1.0.0/24,10.1.10.0/24,10.1.20.0/24 certificate="Grey Rock Router" disabled=no
 set api-ssl certificate="Grey Rock Router"
 /ipv6 address
-add address=fdc0:ffee:215:1::1 interface=bridge
-add address=fdc0:ffee:215:a::1 interface=vlan10
-add address=fdc0:ffee:215:14::1 interface=vlan20
+add address=fdc0:ffee:215:0:1::1 interface=bridge
+add address=fdc0:ffee:215:0:a::1 interface=vlan10
+add address=fdc0:ffee:215:0:14::1 interface=vlan20
 add from-pool=spectrum-v6 interface=bridge
 add address=0:0:0:1:: from-pool=spectrum-v6 interface=vlan10
 add address=0:0:0:2:: from-pool=spectrum-v6 interface=vlan20

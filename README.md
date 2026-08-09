@@ -59,14 +59,14 @@ If anything goes sideways, the pre-snapshot is your rollback: re-apply it via
 
 ## Switches
 
-| Slot  | Hostname | Role | Model | Mgmt IP | Status |
-| ----- | -------- | ---- | ----- | ------- | ------ |
-| sw-01 | _TBD_    | _TBD_ | _TBD_ | _TBD_   | _new_  |
-| sw-02 | _TBD_    | _TBD_ | _TBD_ | _TBD_   | _new_  |
-| sw-03 | _TBD_    | _TBD_ | _TBD_ | _TBD_   | _new_  |
-| sw-04 | _TBD_    | _TBD_ | _TBD_ | _TBD_   | _new_  |
-| sw-05 | _TBD_    | _TBD_ | _TBD_ | _TBD_   | _new_  |
-| sw-06 | _TBD_    | _TBD_ | _TBD_ | _TBD_   | _new_  |
+| Slot                | Hostname           | Role | Model      | Mgmt IP | Status       |
+| ------------------- | ------------------ | ---- | ---------- | ------- | ------------ |
+| garage-icx-8200     | garage-icx-8200    | TBD  | ICX 8200   | TBD     | unconfigured |
+| _sw-02_             | _TBD_              | _TBD_ | _TBD_     | _TBD_   | _new_        |
+| _sw-03_             | _TBD_              | _TBD_ | _TBD_     | _TBD_   | _new_        |
+| _sw-04_             | _TBD_              | _TBD_ | _TBD_     | _TBD_   | _new_        |
+| _sw-05_             | _TBD_              | _TBD_ | _TBD_     | _TBD_   | _new_        |
+| _sw-06_             | _TBD_              | _TBD_ | _TBD_     | _TBD_   | _new_        |
 
 Fill in as we go.
 

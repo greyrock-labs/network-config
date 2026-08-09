@@ -343,6 +343,8 @@ add action=drop chain=forward comment="defconf: drop all from WAN not DSTNATed" 
     in-interface-list=WAN
 /ip firewall nat
 add action=masquerade chain=srcnat comment="defconf: masquerade" ipsec-policy=out,none out-interface-list=WAN
+add action=accept chain=dstnat comment="kerfuffle: exempt from DNS-FORCE" dst-port=53 protocol=udp src-address=10.1.20.10
+add action=accept chain=dstnat comment="kerfuffle: exempt from DNS-FORCE" dst-port=53 protocol=tcp src-address=10.1.20.10
 add action=dst-nat chain=dstnat comment="force internal DNS" dst-port=53 in-interface-list=DNS-FORCE protocol=udp to-addresses=10.1.30.20 to-ports=53
 add action=dst-nat chain=dstnat dst-port=53 in-interface-list=DNS-FORCE protocol=tcp to-addresses=10.1.30.20 to-ports=53
 /ip service

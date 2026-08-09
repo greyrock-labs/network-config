@@ -63,10 +63,10 @@ room's CRS309. Full detail in `topology/greyrock-home.md`.
 | ------------------- | ------- | --------- | ---------- | ------ |
 | office-icx-8200     | access  | ICX 8200  | 10.1.0.11  | in production |
 | office-icx-7150     | access  | ICX 7150  | TBD        | reset, pending reconfig |
-| game-room-icx-8200  | access  | ICX 8200  | TBD        | reset, pending reconfig |
-| game-room-icx-7150  | access  | ICX 7150  | TBD        | reset, pending reconfig |
-| garage-icx-8200     | access  | ICX 8200  | TBD        | reset, pending reconfig |
-| garage-icx-7150     | access  | ICX 7150  | TBD        | reset, pending reconfig |
+| game-room-icx-8200  | access  | ICX 8200  | 10.1.0.14  | in production |
+| game-room-icx-7150  | access  | ICX 7150  | 10.1.0.15  | in production |
+| garage-icx-8200     | access  | ICX 8200  | 10.1.0.17  | in production |
+| garage-icx-7150     | access  | ICX 7150  | 10.1.0.18  | in production |
 
 A fleet renumber is in progress; ICX mgmt IPs get assigned as each box
 is reconfigured. Reconfig template: apply the box's existing

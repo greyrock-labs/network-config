@@ -28,12 +28,18 @@ chain validates against the root clients already trust.
 | `Ruckus Unleashed` | unleashed.internal.greyrock.io | DNS:unleashed.internal.greyrock.io, IP:10.1.10.7 | EC P-256 | 2026-07-22 | 2028-07-21 | `1A3760AFB5510B7E` | Ruckus Unleashed controller (10.1.10.7) |
 | `courtyard-porch-doorbell` | courtyard-porch-doorbell.internal.greyrock.io | DNS:courtyard-porch-doorbell.internal.greyrock.io, IP:10.1.10.96 | **RSA 2048** | 2026-07-23 | 2028-07-22 | `47158511E4DEEB01` | Reolink PoE doorbell (10.1.10.96, garage-icx-7150 port 1/1/1) — RSA: Reolink rejects EC |
 | `garage-camera-side-yard` | garage-camera-side-yard.internal.greyrock.io | DNS:garage-camera-side-yard.internal.greyrock.io, IP:10.1.10.133 | EC P-256 | 2026-07-23 | 2028-07-22 | `10A0056A0AB14050` | Hikvision camera (10.1.10.133) — signed off **root** (serves leaf-only, can't present the intermediate) |
+| `kvm-homeassistant` | kvm-homeassistant.internal.greyrock.io | DNS:kvm-homeassistant.internal.greyrock.io | **RSA 2048** | 2026-07-28 | 2028-07-27 | `10EF271B16B58749` | Supermicro IPMI/BMC — RSA: rejects EC; signed off **root** (serves leaf-only, can't present the intermediate) |
+| `kvm-codswallop` | kvm-codswallop.internal.greyrock.io | DNS:kvm-codswallop.internal.greyrock.io | EC P-256 | 2026-07-28 | 2028-07-27 | `54D3D57D17C70922` | JetKVM (modern, standard recipe — presents full chain) |
+| `kvm-kerfuffle` | kvm-kerfuffle.internal.greyrock.io | DNS:kvm-kerfuffle.internal.greyrock.io | EC P-256 | 2026-07-28 | 2028-07-27 | `F6BE606846646B` | JetKVM (modern, standard recipe — presents full chain) |
 
 SHA-256 fingerprints:
 - office-rb5009: `898e9f8693298d968f3dd89558ff58d5cedadfc3d7188f2f9f7d052b2226c0c1`
 - Ruckus Unleashed: `b04fa5ada98e94ab95316c475eac31ac2579103ae8c71355c2ba302cd35e7bde`
 - courtyard-porch-doorbell: `c215449a37c7618ecaa0abc5ee8e9335a7b70dd6589f76e7faee9ae1802276ed`
 - garage-camera-side-yard: `b3382546916505517db5abb3b614f2da83d999e0f8032aaf7ce65d21b2d81435`
+- kvm-homeassistant: `7c2569aac252850fdbad130f5401cc8dc9eac42ae1e888ed0b147d72e1e642f7`
+- kvm-codswallop: `7315bcaf6a9b82908c06a957e614039ee00c122806816ea60c4f470b8539ae6d`
+- kvm-kerfuffle: `ebbfa23839bab6127706cbc4e75a0a06286833b7c757996bb40291f4fe459843`
 
 ## Renewal
 

@@ -146,6 +146,14 @@ intermediate or a leaf.
 /certificate export-certificate "Grey Rock Root CA" type=pem
 ```
 
+The exported root cert lives on the workstation at:
+
+```
+~/Documents/Grey Rock/cert_export_Grey Rock Root CA.crt
+```
+
+Use that path for `-CAfile` in openssl verification commands.
+
 ---
 
 ## Renewal

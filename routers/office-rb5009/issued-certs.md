@@ -31,6 +31,7 @@ chain validates against the root clients already trust.
 | `kvm-homeassistant` | kvm-homeassistant.internal.greyrock.io | DNS:kvm-homeassistant.internal.greyrock.io | **RSA 2048** | 2026-07-28 | 2028-07-27 | `10EF271B16B58749` | Supermicro IPMI/BMC — RSA: rejects EC; signed off **root** (serves leaf-only, can't present the intermediate) |
 | `kvm-codswallop` | kvm-codswallop.internal.greyrock.io | DNS:kvm-codswallop.internal.greyrock.io | EC P-256 | 2026-07-28 | 2028-07-27 | `54D3D57D17C70922` | JetKVM (modern, standard recipe — presents full chain) |
 | `kvm-kerfuffle` | kvm-kerfuffle.internal.greyrock.io | DNS:kvm-kerfuffle.internal.greyrock.io | EC P-256 | 2026-07-28 | 2028-07-27 | `F6BE606846646B` | JetKVM (modern, standard recipe — presents full chain) |
+| `garage-camera-todd` | garage-camera-todd.internal.greyrock.io | DNS:garage-camera-todd.internal.greyrock.io, IP:10.1.10.66 | EC P-256 | 2026-07-31 | 2028-07-30 | `53973909E3635469` | Hikvision camera (10.1.10.66) — signed off **root** (serves leaf-only, can't present the intermediate) |
 
 SHA-256 fingerprints:
 - office-rb5009: `898e9f8693298d968f3dd89558ff58d5cedadfc3d7188f2f9f7d052b2226c0c1`
@@ -40,6 +41,7 @@ SHA-256 fingerprints:
 - kvm-homeassistant: `7c2569aac252850fdbad130f5401cc8dc9eac42ae1e888ed0b147d72e1e642f7`
 - kvm-codswallop: `7315bcaf6a9b82908c06a957e614039ee00c122806816ea60c4f470b8539ae6d`
 - kvm-kerfuffle: `ebbfa23839bab6127706cbc4e75a0a06286833b7c757996bb40291f4fe459843`
+- garage-camera-todd: `ce0b613fbfde0a36bc3f7f3cf9569eafe971350ff554555440c2846467fd0ca4`
 
 ## Renewal
 

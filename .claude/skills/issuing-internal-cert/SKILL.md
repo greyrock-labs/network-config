@@ -44,6 +44,21 @@ after any CA rebuild so these stay current.
 - **RSA key encoding.** OpenSSL 3.x `openssl rsa` emits PKCS#8
   (`BEGIN PRIVATE KEY`) by default; add **`-traditional`** for the PKCS#1
   (`BEGIN RSA PRIVATE KEY`) form old appliances expect.
+- **Hikvision — serves leaf-only; accepts EC.** Cert Management has two
+  slots: *Server/Client Certificate* (the leaf it serves) and *CA
+  Certificate*. The CA slot is a **client-trust store, not chain-serving** —
+  importing the intermediate there does NOT add it to the served chain, and
+  `s_client -showcerts` still shows one block → `21 unable to verify`. Fix:
+  **sign the leaf directly off the root** (below).
+
+- **Leaf-only devices → sign off the ROOT.** If a device serves only its leaf
+  and can't present the intermediate, a leaf signed off the intermediate
+  fails `21 unable to verify the first certificate` (clients trust the root,
+  not the intermediate). Reissue with `ca="Grey Rock Root CA"` instead of the
+  intermediate; the leaf-only chain then validates against the root. Verify
+  the served issuer: `s_client -showcerts` → leaf `i:` line reads
+  `CN=Grey Rock Root CA`. In this case `server.crt` is the **leaf alone** (no
+  intermediate to bundle).
 
 ## Guardrails (the things that bite)
 

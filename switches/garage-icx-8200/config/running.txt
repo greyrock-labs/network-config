@@ -1,0 +1,141 @@
+Current configuration:
+!
+ver 10.0.10g_cd6T253
+!
+stack unit 1
+  module 1 icx8200-c08zp-port-management-module
+  module 2 icx8200-2-sfp-plus-port-50g-module
+  stack-port ethernet 1/2/1
+  stack-port ethernet 1/2/2
+!
+!
+!
+
+!
+!
+global-stp
+!
+!
+vlan 1 name DEFAULT-VLAN by port
+ spanning-tree
+!
+vlan 10 name Internal by port
+ tagged ethe 1/1/1 to 1/1/5 ethe 1/2/1 to 1/2/2
+!
+vlan 20 name Servers by port
+ tagged ethe 1/2/1 to 1/2/2
+!
+vlan 4000 name Guest by port
+ tagged ethe 1/1/1 to 1/1/5 ethe 1/2/1 to 1/2/2
+!
+!
+!
+!
+!
+!
+ip route 0.0.0.0/0 10.1.0.1
+!
+!
+clock summer-time
+clock timezone us Eastern
+hostname garage-icx-8200
+!
+!
+ntp
+ server time1.internal.greyrock.io
+ server time2.internal.greyrock.io
+ server time3.internal.greyrock.io
+ server time4.internal.greyrock.io
+!
+!
+manager registrar
+!
+!
+!
+!
+!
+!
+!
+interface management 1
+!
+interface ethernet 1/1/1
+ port-name Garage-Rear-AP
+ stp-bpdu-guard
+ broadcast limit 500
+!
+interface ethernet 1/1/2
+ port-name Garage-Side-AP
+ stp-bpdu-guard
+ broadcast limit 500
+!
+interface ethernet 1/1/3
+ port-name Side-Drive-AP
+ stp-bpdu-guard
+ broadcast limit 500
+!
+interface ethernet 1/1/4
+ port-name Garage-AP
+ stp-bpdu-guard
+ broadcast limit 500
+!
+interface ethernet 1/1/5
+ port-name Kitchen-AP
+ stp-bpdu-guard
+ broadcast limit 500
+!
+interface ethernet 1/2/1
+ port-name Garage-7150
+!
+interface ethernet 1/2/2
+ port-name GameRoom-8200
+!
+interface ve 1
+ ip address 10.1.0.10 255.255.255.0
+ ipv6 enable
+ ipv6 address autoconfig
+!
+!
+
+!
+!
+
+
+
+!
+!
+!
+!
+username admin password 1 <REDACTED-PASSWORD-HASH>
+!
+aaa authentication login default local
+!
+aaa authentication web-server default local
+!
+ip dhcp-client disable
+!
+logging host 10.1.10.7 udp-port 6514
+!
+
+
+!
+
+
+!
+
+
+!
+snmp-server community 2 <REDACTED-SNMP-COMMUNITY> ro
+!
+cli timeout 0
+!
+banner motd ^C
+Greyrock Labs - garage-icx-8200 - Authorised access only
+!
+
+
+!
+
+
+!
+
+end

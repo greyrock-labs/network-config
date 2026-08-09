@@ -1,0 +1,40 @@
+# 2026-07-17 12:30:44 by RouterOS 7.23
+# software id = 4RMC-F2FX
+#
+# model = CRS309-1G-8S+
+# serial number = HD60848KFNQ
+/interface bridge
+add admin-mac=18:FD:74:B2:D0:6F auto-mac=no comment=defconf name=bridge
+/interface list
+add name=WAN
+add name=LAN
+/interface bridge port
+add bridge=bridge comment=defconf interface=ether1
+add bridge=bridge comment=defconf interface=sfp-sfpplus1
+add bridge=bridge comment=defconf interface=sfp-sfpplus2
+add bridge=bridge comment=defconf interface=sfp-sfpplus3
+add bridge=bridge comment=defconf interface=sfp-sfpplus4
+add bridge=bridge comment=defconf interface=sfp-sfpplus5
+add bridge=bridge comment=defconf interface=sfp-sfpplus6
+add bridge=bridge comment=defconf interface=sfp-sfpplus7
+add bridge=bridge comment=defconf interface=sfp-sfpplus8
+/interface list member
+add interface=ether1 list=WAN
+add interface=sfp-sfpplus1 list=LAN
+add interface=sfp-sfpplus2 list=LAN
+add interface=sfp-sfpplus3 list=LAN
+add interface=sfp-sfpplus4 list=LAN
+add interface=sfp-sfpplus5 list=LAN
+add interface=sfp-sfpplus6 list=LAN
+add interface=sfp-sfpplus7 list=LAN
+add interface=sfp-sfpplus8 list=LAN
+/ip address
+add address=10.1.0.10/24 comment=defconf interface=sfp-sfpplus1 network=10.1.0.0
+/ip dns
+set servers=10.1.0.1
+/ip route
+add disabled=no dst-address=0.0.0.0/0 gateway=10.1.0.1
+/system clock
+set time-zone-name=America/New_York
+/system identity
+set name=office-crs309

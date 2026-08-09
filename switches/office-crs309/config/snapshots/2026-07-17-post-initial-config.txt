@@ -1,0 +1,39 @@
+# 2026-07-17 13:09:34 by RouterOS 7.23
+# software id = 4RMC-F2FX
+#
+# model = CRS309-1G-8S+
+# serial number = HD60848KFNQ
+/interface bridge
+add admin-mac=18:FD:74:B2:D0:6F auto-mac=no comment=defconf name=bridge vlan-filtering=yes
+/interface bridge port
+add bridge=bridge comment=mgmt interface=ether1
+add bridge=bridge comment="to office-rb5009 (spine uplink)" interface=sfp-sfpplus1
+add bridge=bridge comment="to game-room-crs309 (spine downlink)" interface=sfp-sfpplus2
+add bridge=bridge comment="to office-icx-8200" interface=sfp-sfpplus3
+add bridge=bridge comment="to office-icx-7150" interface=sfp-sfpplus4
+add bridge=bridge comment=unused interface=sfp-sfpplus5
+add bridge=bridge comment=unused interface=sfp-sfpplus6
+add bridge=bridge comment=unused interface=sfp-sfpplus7
+add bridge=bridge comment=unused interface=sfp-sfpplus8
+/interface bridge vlan
+add bridge=bridge untagged=ether1,sfp-sfpplus1,sfp-sfpplus2,sfp-sfpplus3,sfp-sfpplus4,sfp-sfpplus5,sfp-sfpplus6,sfp-sfpplus7,sfp-sfpplus8 vlan-ids=1
+add bridge=bridge tagged=sfp-sfpplus1,sfp-sfpplus2,sfp-sfpplus3,sfp-sfpplus4,sfp-sfpplus5,sfp-sfpplus6,sfp-sfpplus7,sfp-sfpplus8 vlan-ids=10
+add bridge=bridge tagged=sfp-sfpplus1,sfp-sfpplus2,sfp-sfpplus3,sfp-sfpplus4,sfp-sfpplus5,sfp-sfpplus6,sfp-sfpplus7,sfp-sfpplus8 vlan-ids=20
+add bridge=bridge tagged=sfp-sfpplus1,sfp-sfpplus2,sfp-sfpplus3,sfp-sfpplus4,sfp-sfpplus5,sfp-sfpplus6,sfp-sfpplus7,sfp-sfpplus8 vlan-ids=4000
+/ip address
+add address=10.1.0.10/24 interface=bridge network=10.1.0.0
+/ip dns
+set servers=10.1.0.1
+/ip route
+add disabled=no dst-address=0.0.0.0/0 gateway=10.1.0.1
+/system clock
+set time-zone-name=America/New_York
+/system identity
+set name=office-crs309
+/system ntp client
+set enabled=yes
+/system ntp client servers
+add address=time1.internal.greyrock.io
+add address=time2.internal.greyrock.io
+add address=time3.internal.greyrock.io
+add address=time4.internal.greyrock.io

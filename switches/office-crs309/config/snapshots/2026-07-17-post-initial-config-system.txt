@@ -1,0 +1,46 @@
+# /interface bridge port print detail
+Flags: X - DISABLED, I - INACTIVE; D - DYNAMIC; H - HW-OFFLOAD; Y - MANAGED
+ 0   H  ;;; mgmt
+        interface=ether1 bridge=bridge priority=0x80 edge=auto point-to-point=auto learn=auto horizon=none hw=yes auto-isolate=no restricted-role=no restricted-tcn=no pvid=1 frame-types=admit-all ingress-filtering=yes
+        unknown-unicast-flood=yes unknown-multicast-flood=yes broadcast-flood=yes tag-stacking=no bpdu-guard=no trusted=no trusted-ra=no trusted-dhcpv6=no mvrp-registrar-state=normal mvrp-applicant-state=normal-participant
+        multicast-router=temporary-query fast-leave=no
+
+ 1   H  ;;; to office-rb5009 (spine uplink)
+        interface=sfp-sfpplus1 bridge=bridge priority=0x80 edge=auto point-to-point=auto learn=auto horizon=none hw=yes auto-isolate=no restricted-role=no restricted-tcn=no pvid=1 frame-types=admit-all
+        ingress-filtering=yes unknown-unicast-flood=yes unknown-multicast-flood=yes broadcast-flood=yes tag-stacking=no bpdu-guard=no trusted=no trusted-ra=no trusted-dhcpv6=no mvrp-registrar-state=normal
+        mvrp-applicant-state=normal-participant multicast-router=temporary-query fast-leave=no
+
+ 2 I H  ;;; to game-room-crs309 (spine downlink)
+        interface=sfp-sfpplus2 bridge=bridge priority=0x80 edge=auto point-to-point=auto learn=auto horizon=none hw=yes auto-isolate=no restricted-role=no restricted-tcn=no pvid=1 frame-types=admit-all
+        ingress-filtering=yes unknown-unicast-flood=yes unknown-multicast-flood=yes broadcast-flood=yes tag-stacking=no bpdu-guard=no trusted=no trusted-ra=no trusted-dhcpv6=no mvrp-registrar-state=normal
+        mvrp-applicant-state=normal-participant multicast-router=temporary-query fast-leave=no
+
+ 3 I H  ;;; to office-icx-8200
+        interface=sfp-sfpplus3 bridge=bridge priority=0x80 edge=auto point-to-point=auto learn=auto horizon=none hw=yes auto-isolate=no restricted-role=no restricted-tcn=no pvid=1 frame-types=admit-all
+        ingress-filtering=yes unknown-unicast-flood=yes unknown-multicast-flood=yes broadcast-flood=yes tag-stacking=no bpdu-guard=no trusted=no trusted-ra=no trusted-dhcpv6=no mvrp-registrar-state=normal
+        mvrp-applicant-state=normal-participant multicast-router=temporary-query fast-leave=no
+
+ 4 I H  ;;; to office-icx-7150
+        interface=sfp-sfpplus4 bridge=bridge priority=0x80 edge=auto point-to-point=auto learn=auto horizon=none hw=yes auto-isolate=no restricted-role=no restricted-tcn=no pvid=1 frame-types=admit-all
+        ingress-filtering=yes unknown-unicast-flood=yes unknown-multicast-flood=yes broadcast-flood=yes tag-stacking=no bpdu-guard=no trusted=no trusted-ra=no trusted-dhcpv6=no mvrp-registrar-state=normal
+        mvrp-applicant-state=normal-participant multicast-router=temporary-query fast-leave=no
+
+ 5 I H  ;;; unused
+        interface=sfp-sfpplus5 bridge=bridge priority=0x80 edge=auto point-to-point=auto learn=auto horizon=none hw=yes auto-isolate=no restricted-role=no restricted-tcn=no pvid=1 frame-types=admit-all
+        ingress-filtering=yes unknown-unicast-flood=yes unknown-multicast-flood=yes broadcast-flood=yes tag-stacking=no bpdu-guard=no trusted=no trusted-ra=no trusted-dhcpv6=no mvrp-registrar-state=normal
+        mvrp-applicant-state=normal-participant multicast-router=temporary-query fast-leave=no
+
+ 6 I H  ;;; unused
+        interface=sfp-sfpplus6 bridge=bridge priority=0x80 edge=auto point-to-point=auto learn=auto horizon=none hw=yes auto-isolate=no restricted-role=no restricted-tcn=no pvid=1 frame-types=admit-all
+        ingress-filtering=yes unknown-unicast-flood=yes unknown-multicast-flood=yes broadcast-flood=yes tag-stacking=no bpdu-guard=no trusted=no trusted-ra=no trusted-dhcpv6=no mvrp-registrar-state=normal
+        mvrp-applicant-state=normal-participant multicast-router=temporary-query fast-leave=no
+
+ 7 I H  ;;; unused
+        interface=sfp-sfpplus7 bridge=bridge priority=0x80 edge=auto point-to-point=auto learn=auto horizon=none hw=yes auto-isolate=no restricted-role=no restricted-tcn=no pvid=1 frame-types=admit-all
+        ingress-filtering=yes unknown-unicast-flood=yes unknown-multicast-flood=yes broadcast-flood=yes tag-stacking=no bpdu-guard=no trusted=no trusted-ra=no trusted-dhcpv6=no mvrp-registrar-state=normal
+        mvrp-applicant-state=normal-participant multicast-router=temporary-query fast-leave=no
+
+ 8 I H  ;;; unused
+        interface=sfp-sfpplus8 bridge=bridge priority=0x80 edge=auto point-to-point=auto learn=auto horizon=none hw=yes auto-isolate=no restricted-role=no restricted-tcn=no pvid=1 frame-types=admit-all
+        ingress-filtering=yes unknown-unicast-flood=yes unknown-multicast-flood=yes broadcast-flood=yes tag-stacking=no bpdu-guard=no trusted=no trusted-ra=no trusted-dhcpv6=no mvrp-registrar-state=normal
+        mvrp-applicant-state=normal-participant multicast-router=temporary-query fast-leave=no

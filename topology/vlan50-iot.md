@@ -13,6 +13,14 @@ clients on VLAN 10 expire their whole service list on a ~179-second
 cycle. Moving it to its own segment that the mDNS repeater does not
 touch contains the pollution.
 
+## Scope
+
+This is a quarantine segment for individual offenders, not a general
+IoT segment. A device earns a place here by demonstrating a specific
+problem. The IoT WiFi SSID lives on VLAN 10 and stays there; smart-home
+gear in general has not misbehaved the way the inverter did. That is why
+VLAN 50 is wired-only and is not tagged on any AP port.
+
 ## Addressing
 
 | Field | Value |

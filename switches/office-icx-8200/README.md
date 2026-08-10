@@ -41,6 +41,7 @@
 | 1       | mgmt    | native   | all (untagged)         |
 | 10      | Internal| trusted  | 1/1/5, 1/1/6, 1/1/7, 1/2/2 |
 | 20      | Servers | infra    | 1/2/2 tagged; 1/1/7, 1/1/8 untagged |
+| 50      | IoT     | IoT      | 1/2/2 tagged           |
 | 4000    | Guest   | guest    | 1/1/5, 1/1/6, 1/2/2 |
 
 ## Port map
@@ -68,6 +69,12 @@
 See `/changes/`. Live config in `config/running.txt`. Snapshots in
 `config/snapshots/`.
 
+- 2026-08-09 — VLAN 10 querier: `multicast active` + `multicast6
+  active` under `vlan 10`. This switch queries VLAN 10 (IGMP + MLD)
+  for the whole L2 domain; see
+  `changes/2026-08-09-vlan10-querier-restore.md`. Captured in
+  `2026-08-10-post-vlan50.txt`.
+
 - `2026-07-17-post-topology-change.txt` — `/show running-config` after
   reconfiguring for the Mikrotik-backbone topology. Mgmt IP changed
   from 10.1.0.14 → 10.1.0.11. Port 1/2/1 (former downlink to
@@ -86,3 +93,4 @@ See `/changes/`. Live config in `config/running.txt`. Snapshots in
   demoting VLAN 10 from `multicast active` / `multicast6 active` to
   passive. The IGMP/MLD querier role moved to office-crs309
   (multicast-querier=yes on its bridge); this box now only snoops.
+- `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.

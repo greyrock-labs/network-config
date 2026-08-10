@@ -38,18 +38,21 @@
 | VLAN ID | Name    | Purpose  | Ports                        |
 | ------- | ------- | -------- | ---------------------------- |
 | 1       | mgmt    | native   | all (untagged)               |
-| 10      | Internal| trusted  | tagged 1/3/2; untagged 1/1/1, 1/1/2 |
+| 10      | Internal| trusted  | tagged 1/3/2; untagged 1/1/2 |
 | 20      | Servers | infra    | tagged 1/3/2                 |
+| 50      | IoT     | IoT      | tagged 1/3/2; untagged 1/1/1 |
 | 4000    | Guest   | guest    | tagged 1/3/2                 |
 
 Multicast: passive on VLAN 10 (both protocols); IPv4 flood-unregistered
-only on this platform. Querier is office-crs309.
+only on this platform. VLAN 10's querier is office-icx-8200; VLAN 1's is
+office-crs309. VLAN 50 carries no multicast config — see
+`topology/vlan50-iot.md`.
 
 ## Port map
 
 | Port  | Name            | What plugs in            | PoE | BPDU guard | Storm ctrl |
 | ----- | --------------- | ------------------------ | --- | ---------- | ---------- |
-| 1/1/1 | SolarEdge       | SolarEdge inverter bridge (VLAN 10 untagged) | yes | yes | 500 pps |
+| 1/1/1 | SolarEdge       | SolarEdge inverter bridge (VLAN 50 untagged) | yes | yes | 500 pps |
 | 1/1/2 | Zigbee          | Zigbee coordinator (VLAN 10 untagged) | yes | yes | 500 pps |
 | 1/1/3 | (none)          | unused (Z-Wave device removed 2026-07-18) | yes | no | off |
 | 1/1/4–1/1/12 | (none)    | unused                   | yes | no         | off        |
@@ -74,3 +77,4 @@ See `/changes/`. Live config in `config/running.txt`. Snapshots in
   moved to 1/3/2 (renamed GameRoom-CRS309, full trunk), 1/3/1 unused,
   Z-Wave port 1/1/3 returned to default (device gone), VLAN 1 STP
   priority → 36864.
+- `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.

@@ -42,6 +42,7 @@
 | 1       | mgmt    | native   | all (untagged)                            |
 | 10      | Internal| trusted  | tagged 1/3/2; untagged 1/1/8              |
 | 20      | Servers | infra    | tagged 1/3/2; untagged 1/1/1–1/1/7        |
+| 50      | IoT     | IoT      | tagged 1/3/2                              |
 | 4000    | Guest   | guest    | tagged 1/3/2                              |
 
 Multicast: passive on VLAN 10 (both protocols); IPv4 flood-unregistered
@@ -83,3 +84,4 @@ See `/changes/`. Live config in `config/running.txt`. Snapshots in
   1 STP priority → 36864. All eight device ports (NTP1–4,
   KVM-NAS/Kerfuffle/HASS, HASS) unchanged. This is the sixth and final
   ICX cut over to the spine.
+- `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.

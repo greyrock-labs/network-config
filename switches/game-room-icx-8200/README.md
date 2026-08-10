@@ -41,6 +41,7 @@
 | 1       | mgmt    | native   | all (untagged)           |
 | 10      | Internal| trusted  | tagged 1/1/7, 1/1/8, 1/2/2; untagged 1/1/1, 1/1/5 |
 | 20      | Servers | infra    | tagged 1/2/2             |
+| 50      | IoT     | IoT      | tagged 1/2/2             |
 | 4000    | Guest   | guest    | tagged 1/1/7, 1/1/8, 1/2/2 |
 
 ## Port map
@@ -73,3 +74,4 @@ See `/changes/`. Live config in `config/running.txt`. Snapshots in
   reconfiguring for the Mikrotik spine: mgmt IP → 10.1.0.14, port 1/2/1
   removed from VLANs and interface config, 1/2/2 renamed
   GameRoom-CRS309 (full trunk), VLAN 1 STP priority → 36864.
+- `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.

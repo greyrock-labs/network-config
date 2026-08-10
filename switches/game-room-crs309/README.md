@@ -53,6 +53,7 @@ Single bridge `bridge` with `vlan-filtering=yes` and hw-offload.
 | 1       | mgmt    | native   | all 9 ports untagged            |
 | 10      | Internal| trusted  | used SFP+ tagged                |
 | 20      | Servers | infra    | used SFP+ tagged                |
+| 50      | IoT     | IoT      | used SFP+ tagged                |
 | 4000    | Guest   | guest    | used SFP+ tagged                |
 
 Used SFP+ ports (carry all 4 VLANs): sfp-sfpplus1, sfp-sfpplus2,
@@ -90,3 +91,4 @@ is in `config/running.txt`.
 - `2026-07-17-post-initial-config-system.txt` — NTP / identity / routerboard state post-config
 - `2026-07-17-post-rstp-priority-jumbo.txt` — `/export` after STP priority 12288 and jumbo frames (all ports l2mtu=9092 mtu=9000).
 - `2026-07-17-post-igmp-mld-snooping.txt` — `/export` after IGMP/MLD snooping enabled, igmp-version=3 mld-version=2 (querier stays on office-crs309). `running.txt` reflects this state.
+- `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.

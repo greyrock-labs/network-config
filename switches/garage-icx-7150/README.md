@@ -41,6 +41,7 @@
 | 1       | mgmt    | native   | all (untagged)               |
 | 10      | Internal| trusted  | tagged 1/3/2; untagged 1/1/1–1/1/6 |
 | 20      | Servers | infra    | tagged 1/3/2                 |
+| 50      | IoT     | IoT      | tagged 1/3/2                 |
 | 4000    | Guest   | guest    | tagged 1/3/2                 |
 
 Multicast: passive on VLAN 10 (both protocols); IPv4 flood-unregistered
@@ -80,3 +81,4 @@ See `/changes/`. Live config in `config/running.txt`. Snapshots in
   moved to 1/3/2 (renamed Garage-CRS309, full trunk), 1/3/1 unused,
   VLAN 1 STP priority → 36864, and new port 1/1/5 Side-Yard-Rear
   (camera, VLAN 10 untagged) added same day.
+- `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.

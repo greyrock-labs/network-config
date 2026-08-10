@@ -56,6 +56,7 @@ Single bridge `bridge` with `vlan-filtering=yes` and hw-offload.
 | 1       | mgmt    | native   | all 9 ports untagged            |
 | 10      | Internal| trusted  | used SFP+ tagged                |
 | 20      | Servers | infra    | used SFP+ tagged                |
+| 50      | IoT     | IoT      | used SFP+ tagged                |
 | 4000    | Guest   | guest    | used SFP+ tagged                |
 
 Used SFP+ ports (carry all 4 VLANs): sfp-sfpplus1, sfp-sfpplus2,
@@ -82,3 +83,4 @@ is in `config/running.txt`.
 - `2026-07-17-post-igmp-mld-snooping-querier.txt` — `/export` after IGMP/MLD snooping enabled with multicast-querier=yes (this box is the domain querier), igmp-version=3 mld-version=2. `running.txt` reflects this state.
 - `2026-07-17-post-retrofit-vlan-rule.txt` — `/export` after VLAN policy retrofit (unused ports out of VLANs 10/20/4000).
 - `2026-07-17-post-port8-removal.txt` — `/export` after sfp-sfpplus8 removed from data VLANs (treated as unlabeled/unknown). `running.txt` reflects this state.
+- `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.

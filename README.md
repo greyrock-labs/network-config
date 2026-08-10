@@ -42,13 +42,17 @@ network-config/
 │       │   └── snapshots/
 ├── topology/                  # site topology, VLAN scheme, fleet templates
 │   ├── greyrock-home.md       # the network: spine, leaves, VLANs, addressing
-│   └── crs309-base-config.md  # CRS309 fleet template + apply-order + validation
+│   ├── crs309-base-config.md  # CRS309 fleet template + apply-order + validation
+│   └── vlan50-iot.md          # VLAN 50 (IoT): addressing, policy, per-device config
 ├── runbooks/                  # operational how-to guides
 │   ├── multicast-runbook.md   # how to inspect IGMP/MLD on both platforms
 │   └── ca-issuing-runbook.md  # issue an internal TLS cert from the Grey Rock CA
-├── changes/                   # dated prose notes for each meaningful change
-└── .claude/CLAUDE.md          # project-level context for Claude
+└── changes/                   # dated prose notes for each meaningful change
 ```
+
+Device-specific house rules live in that device's `README.md` — for
+example the DNS export rule for the router is in
+`routers/office-rb5009/README.md`.
 
 ## The fleet
 
@@ -81,10 +85,11 @@ room's CRS309. Full detail in `topology/greyrock-home.md`.
 | garage-icx-8200     | access  | ICX 8200  | 10.1.0.17  | in production |
 | garage-icx-7150     | access  | ICX 7150  | 10.1.0.18  | in production |
 
-All six ICX are now cut over to the Mikrotik spine — each has a single
-uplink to its room's CRS309 (no ICX-to-ICX links), leaf STP priority
-36864, and passive multicast. The fleet renumber that ran alongside the
-cutover is complete.
+All six ICX are on the Mikrotik spine — each has a single uplink to
+its room's CRS309 (no ICX-to-ICX links) and leaf STP priority 36864.
+Multicast: office-icx-8200 is the VLAN-10 querier (IGMP + MLD); the
+other five ICX are passive; office-crs309 queries VLAN 1. Full model
+in `runbooks/multicast-runbook.md`.
 
 ## Workflow per change
 

@@ -47,13 +47,11 @@
 
 Single bridge `bridge` with `vlan-filtering=yes` and hw-offload.
 
-Used SFP+ ports (carry all 4 VLANs): sfp-sfpplus1, sfp-sfpplus2,
-sfp-sfpplus3.
+Used SFP+ ports (VLAN 1 untagged + VLANs 10/20/50/4000 tagged):
+sfp-sfpplus1, sfp-sfpplus2, sfp-sfpplus3.
 
 Unused SFP+ ports (VLAN 1 only, no data VLANs): sfp-sfpplus4,
 sfp-sfpplus5, sfp-sfpplus6, sfp-sfpplus7, sfp-sfpplus8.
-
-ether1 is mgmt-only: VLAN 1 untagged, no data VLANs.
 
 ether1 is mgmt-only: VLAN 1 untagged, no data VLANs.
 
@@ -78,3 +76,4 @@ One thing the AI skipped on this box:
    recreate it, which would wipe the post-config state we just saved.
    Trade-off accepted: post-config is the durable record, pre-state
    is unrecoverable.
+- `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.

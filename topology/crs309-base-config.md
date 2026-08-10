@@ -31,11 +31,14 @@ per-switch fields below differ.
   `/interface ethernet set [find] l2mtu=9092 mtu=9000`
 - **IGMP/MLD snooping** — one knob covers both protocols:
   `igmp-snooping=yes igmp-version=3 mld-version=2` (versions match the
-  ICX fleet: IGMPv3 / MLDv2). Querier only on office-crs309
-  (`multicast-querier=yes`); the RouterOS IGMP querier always sources
-  0.0.0.0 (loses election to any real-IP querier — intentional handoff
-  when the RB5009 eventually queries). MLD querier sources the bridge's
-  IPv6 link-local.
+  ICX fleet: IGMPv3 / MLDv2). Querier flag only on office-crs309
+  (`multicast-querier=yes`), and it covers **VLAN 1 only**: a RouterOS
+  bridge querier sends untagged queries into the PVID VLAN and cannot
+  query tagged VLANs. VLAN 10's querier is office-icx-8200
+  (`multicast active` / `multicast6 active`) — see
+  `runbooks/multicast-runbook.md`. The RouterOS IGMP querier sources
+  0.0.0.0 (loses election to any real-IP querier); MLD querier sources
+  the bridge's IPv6 link-local.
 - **Unregistered multicast floods** — per-port
   `unknown-multicast-flood=yes` (default, untouched) matches the ICX
   `flood-unregistered` posture. `fast-leave` stays off everywhere (all

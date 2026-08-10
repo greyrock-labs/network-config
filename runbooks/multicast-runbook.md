@@ -7,9 +7,21 @@ remembers nothing.
 ## The design in 30 seconds
 
 - All switches snoop IGMP (IPv4) and MLD (IPv6) at **IGMPv3 / MLDv2**.
-- **office-crs309 is the one querier** for both protocols
-  (`multicast-querier=yes` on its bridge). Everything else — the other
-  two CRS309s and every ICX — is passive: it snoops, it never queries.
+- **Two queriers, split by VLAN.** A RouterOS bridge querier sends its
+  queries untagged into the bridge's PVID VLAN only — it cannot
+  originate queries in tagged VLANs (documented RouterOS behavior:
+  help.mikrotik.com, "Bridge IGMP/MLD snooping"). So:
+  - **VLAN 1 querier: office-crs309** (`multicast-querier=yes` on its
+    bridge; queries source 0.0.0.0 / the bridge link-local).
+  - **VLAN 10 querier: office-icx-8200** (`multicast active` +
+    `multicast6 active` under `vlan 10`; queries source its mgmt IP
+    10.1.0.11 / its link-local. A real-IP querier wins any election).
+- Every other switch is passive on every VLAN: it snoops, it never
+  queries.
+- **VLANs 20 and 4000 are unqueried on purpose.** Snooping entries
+  there are transient (join → age out → flood), which is the intended
+  posture: 20 has no snooping-sensitive workload, and guest 4000 gets
+  no querier or switch-CPU presence as a policy decision.
 - Unregistered groups **flood** everywhere (CRS: per-port
   `unknown-multicast-flood=yes`; ICX: `ip/ipv6 multicast
   flood-unregistered`). `fast-leave` is off everywhere.
@@ -41,23 +53,29 @@ Overall state — snooping on? versions? querier flag?
 /interface bridge print
 ```
 Look for: `igmp-snooping=yes igmp-version=3 mld-version=2`, and
-`multicast-querier=yes` on office-crs309 only.
+`multicast-querier=yes` on office-crs309 only (that flag covers
+VLAN 1 only — see the design section).
 
 Who is the elected querier, seen from this box?
 ```
 /interface bridge monitor bridge once
 ```
-Healthy on game-room/garage: `igmp-querier: sfp-sfpplus1 0.0.0.0` and
-`mld-querier: sfp-sfpplus1 fe80::...` (both via the port facing the
-office). The port column tells you where queries enter — follow it
-switch to switch to find any rogue querier's physical location.
+Healthy on game-room/garage: `igmp-querier: sfp-sfpplus1 10.1.0.11`
+(office-icx-8200, the VLAN-10 querier — the monitor shows one elected
+querier and a real-IP querier displaces the 0.0.0.0 VLAN-1 one) and
+`mld-querier: sfp-sfpplus1 fe80::...` (office-crs309's bridge
+link-local), both via the port facing the office. The port column
+tells you where queries enter — follow it switch to switch to find
+any rogue querier's physical location.
 
 What groups are being tracked, per VLAN, per port?
 ```
 /interface bridge mdb print
 ```
-This is the ground truth. Healthy: entries on VLANs 1/10/20/4000,
-including `ff02::fb` on VLAN 10 (Matter/mDNS). Entries age out at
+This is the ground truth. Healthy: entries on VLANs 1 and 10,
+including `ff02::fb` on VLAN 10 (Matter/mDNS). VLAN 20/4000 entries
+are transient — they appear on joins and age out unrefreshed because
+those VLANs have no querier, by design. Entries age out at
 `membership-interval` (4m20s) if not refreshed — groups persisting past
 that proves the whole query/report loop works. Groups disappearing when
 devices go quiet is snooping working, not a fault.
@@ -77,7 +95,10 @@ FastIron syntax drifts between releases — if a command complains, use
 Config side (what's enabled) — in `show running-config`, per VLAN:
 `multicast passive` / `multicast6 passive`, `multicast version 3`, and
 global `ipv6 multicast version 2`, `ip multicast flood-unregistered`.
-Passive = snooping without querying, which is correct for every ICX.
+Passive = snooping without querying, which is correct for every ICX
+except office-icx-8200: that one runs `multicast active` +
+`multicast6 active` on VLAN 10 because it is the VLAN-10 querier for
+the whole L2 domain.
 
 IPv4 snooping state and learned groups:
 ```
@@ -123,6 +144,15 @@ doesn't.
 Matter/HomeKit devices respond right after you interact with them, then
 go "No Response" a few minutes later, then recover when poked: that's a
 membership aging out and not being re-queried. Check (in order): does
-office-crs309 still have `multicast-querier=yes`; do downstream boxes
-see the querier in `monitor bridge once`; is the device's group in the
-`mdb print` on the switch it hangs off.
+office-icx-8200 show `vlan cfg active` in `show ip multicast vlan 10`
+AND `show ipv6 multicast vlan 10` (the MLD half matters most — Matter
+lives on `ff02::fb`); do downstream boxes see `igmp-querier` with a
+real IP (10.1.0.11) in `monitor bridge once`; is the device's group in
+the `mdb print` on the switch it hangs off.
+
+One more signature, learned the hard way: mDNS entries visibly
+appearing/disappearing in a browser app while HomeKit works fine is
+usually client-side (macOS/iOS sleep-proxy handoffs, dark-wake naps,
+and unicast-assist TTL clamping), not the network. Verify multicast
+delivery with `ping6 ff02::fb%en0`-style probes before touching switch
+config.

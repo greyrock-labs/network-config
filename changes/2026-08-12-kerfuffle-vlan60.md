@@ -52,25 +52,16 @@ kerfuffle — the address is set on the host. If it is ever moved to DHCP,
 note the pool is `.20–.254` and `.10`–`.13` are the named cameras, so a
 reservation below the pool (e.g. `10.1.60.2`) is the clean slot.
 
-## Policy note — this is a hole in the camera quarantine
+## Design note — kerfuffle is multi-homed by design
 
-VLAN 60's design is one-way isolation: cameras are reachable from
-everywhere and can initiate nothing except NTP to `10.1.20.16–19`. That
-policy is enforced on office-rb5009's forward chain, matching
-`in-interface=vlan60`.
+VLAN 60's isolation rules govern what the *cameras* may initiate. They
+were never meant to keep the NVR off the segment: Scrypted reaching the
+cameras is why the segment exists, and it had that access through the
+router before this change. Tagging the port changed the path, not the
+permission.
 
-Kerfuffle is now on VLAN 60 *and* VLANs 10 and 20, and as a k8s node it
-runs with `net.ipv4.ip_forward=1`. A camera that sets a static route via
-kerfuffle's VLAN 60 address reaches VLAN 10/20 without its packets ever
-arriving on the router's `vlan60` interface — so the
-`cameras: drop VLAN 60 to internal` rule never matches them. The quarantine
-holds against the cameras' default configuration and not against a camera
-that has been tampered with.
-
-This was accepted as the cost of keeping video off the router. If it
-needs closing later, the options are a host firewall on kerfuffle
-rejecting forwarded traffic in from `vlan60`, or `net.ipv4.conf.vlan60.forwarding=0`
-on the host. Neither is configured today.
+Kerfuffle now sits on VLANs 10, 20 and 60 at once, which is the ordinary
+shape for an NVR that serves a camera VLAN and is reached from the LAN.
 
 ## Verified
 

@@ -60,6 +60,7 @@ VLAN 1 is native / mgmt on every switch port.
 | 10 | Internal | Trusted LAN traffic |
 | 20 | Servers | Server/infra segment |
 | 50 | IoT | Devices kept off the trusted LAN — see `vlan50-iot.md` |
+| 60 | Cameras | Garage camera fleet — see `vlan60-cameras.md` |
 | 4000 | Guest | Guest WiFi (APs tag this) |
 
 Default gateway on the access switches is `10.1.0.1`, on office-rb5009.

@@ -45,7 +45,7 @@ Everything the UDM does today moves here:
   it — that places the VLAN id in the host portion and collapses the
   ULAs onto the same `/64`).
 
-  VLANs 4000 (guest) and 50 (IoT) are IPv4-only: no ULA, no PD carve.
+  VLANs 4000 (guest), 50 (IoT), and 60 (Cameras) are IPv4-only: no ULA, no PD carve.
 
   There is no IPv6 DNS server on this network, so the router carries no
   `/ipv6 nd` override — ND runs at RouterOS defaults.
@@ -56,13 +56,25 @@ Everything the UDM does today moves here:
   Spectrum delegated prefix lands via PD on the ether1 dhcp-client;
   VLAN interfaces pull addresses from that pool.
 - **mDNS** — native repeater (`/ip dns mdns-repeat-ifaces`) reflecting
-  Bonjour/Matter discovery between VLANs. Active interfaces:
-  `vlan10,vlan20,bridge`. VLAN 4000 (guest) is excluded so guest clients
-  cannot probe the smart-home fleet; VLAN 50 (IoT) is excluded to keep
-  misbehaving devices' mDNS off the trusted LAN — see
-  `topology/vlan50-iot.md`.
-- **VPN** — none configured. A back-to-home WireGuard tunnel and the
-  matching `/ip cloud` config are a planned task.
+  Bonjour/Matter/ONVIF discovery between VLANs. Active interfaces:
+  `vlan10,vlan20,bridge,vlan60`. VLAN 4000 (guest) is excluded so guest
+  clients cannot probe the smart-home fleet; VLAN 50 (IoT) is excluded
+  to keep misbehaving devices' mDNS off the trusted LAN — see
+  `topology/vlan50-iot.md`. VLAN 60 (Cameras) is included so the camera
+  fleet's Bonjour/ONVIF/RTSP advertisements reach the trusted LAN (and
+  the trusted LAN's services reflect back); cameras live behind a
+  routed firewall and the mDNS repeater operates at a separate layer
+  from that — see `topology/vlan60-cameras.md`.
+- **VPN** — MikroTik Back-to-Home WireGuard, deployed 2026-07-22 and
+  running. `/interface wireguard back-to-home-vpn` plus `/ip cloud
+  back-to-home-vpn=enabled` and a `todds-iphone` peer
+  (`allow-lan=yes`). See
+  `changes/2026-07-22-office-rb5009-back-to-home-vpn-and-ntp.md`.
+
+  `/ip cloud print` renders a full WireGuard *client* config including
+  a private key. That field is print-only — `/export` never emits it —
+  and must never be pasted into this repo. The peer's public key in
+  `running.txt` is a public key and is committed deliberately.
 
 ## Physical
 
@@ -82,6 +94,7 @@ Everything the UDM does today moves here:
 | 20   | Servers  | 10.1.20.0/24    | 10.1.20.1 |
 | 30   | Container | 10.1.30.0/24   | 10.1.30.1 (ctrld resolver at 10.1.30.20) |
 | 50   | IoT      | 10.1.50.0/24    | 10.1.50.1 |
+| 60   | Cameras  | 10.1.60.0/24    | 10.1.60.1 |
 | 4000 | Guest    | 192.168.23.0/24 | 192.168.23.1 |
 
 ## DNS export rule
@@ -110,3 +123,29 @@ See `/changes/`. Live config in `config/running.txt`. Snapshots in
   SolarEdge reservation at 10.1.50.10, `solaredge` DNS record, `LAN` +
   `DNS-FORCE` membership. Excluded from `mdns-repeat-ifaces`.
   See `changes/2026-08-10-vlan50-iot.md`.
+- `2026-08-12-post-vlan60.txt` — `/export` after adding VLAN 60 (Cameras):
+  `vlan60` interface, 10.1.60.1/24, `dhcp-vlan60` + `vlan60-cameras`
+  pool, three named-camera reservations (`garage-camera-todd` at
+  10.1.60.11, `garage-camera-andy` at 10.1.60.12, `garage-camera-side-yard`
+  at 10.1.60.10), three DNS A records retargeted to the new addresses,
+  VLAN 10 reservations + DNS records for the same three cameras removed,
+  and the five-rule firewall block (`cameras: allow vlan60 DNS to
+  ctrld` × UDP/TCP, `cameras: allow vlan60 to NTP servers`, `cameras:
+  drop VLAN 60 to internal`, `cameras: drop VLAN 60 to WAN`) inserted
+  immediately after the VLAN 4000 rules. Both drop rules carry
+  `connection-state=new` so they don't catch the cameras' own replies
+  to inbound traffic from other VLANs — without it the segment looks
+  unreachable until the fix lands. `vlan60` joined both `LAN` (for
+  input-chain DHCP) and `DNS-FORCE` (the dst-nat is paired with the
+  explicit DNS-accept rules). `mdns-repeat-ifaces` expanded to
+  `vlan10,vlan20,bridge,vlan60` so cameras' ONVIF/Bonjour discovery
+  reaches the trusted LAN. VLAN 10 leases + DNS records for the three
+  named cameras removed at the same time. See
+  `changes/2026-08-12-vlan60-cameras.md` and `topology/vlan60-cameras.md`.
+- `2026-08-12-add-reolink-courtyard.txt` — `/export` after adding
+  `courtyard-porch-doorbell` (Reolink, `EC:71:DB:9B:DE:A9`) on
+  `dhcp-vlan60` at `10.1.60.13`. New static reservation +
+  `courtyard-porch-doorbell.internal.greyrock.io` A record; the
+  dynamic lease at `10.1.60.251` removed so the static binds cleanly
+  on next DHCP cycle. See `changes/2026-08-12-add-reolink-courtyard.md`
+  and `topology/vlan60-cameras.md` (reservations table).

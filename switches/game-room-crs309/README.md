@@ -92,3 +92,4 @@ is in `config/running.txt`.
 - `2026-07-17-post-rstp-priority-jumbo.txt` — `/export` after STP priority 12288 and jumbo frames (all ports l2mtu=9092 mtu=9000).
 - `2026-07-17-post-igmp-mld-snooping.txt` — `/export` after IGMP/MLD snooping enabled, igmp-version=3 mld-version=2 (querier stays on office-crs309). `running.txt` reflects this state.
 - `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.
+- `2026-08-12-post-vlan60.txt` — capture after adding VLAN 60 (Cameras): tagged on `sfp-sfpplus1-4`. See `changes/2026-08-12-vlan60-cameras.md` and `topology/vlan60-cameras.md`.

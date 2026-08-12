@@ -77,3 +77,4 @@ One thing the AI skipped on this box:
    Trade-off accepted: post-config is the durable record, pre-state
    is unrecoverable.
 - `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.
+- `2026-08-12-post-vlan60.txt` — capture after adding VLAN 60 (Cameras): tagged on `sfp-sfpplus1-3` (`sfp-sfpplus4-8` unused, not tagged). See `changes/2026-08-12-vlan60-cameras.md` and `topology/vlan60-cameras.md`.

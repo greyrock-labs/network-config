@@ -1,4 +1,4 @@
-# 2026-08-12 12:01:16 by RouterOS 7.23.3
+# 2026-08-12 11:34:42 by RouterOS 7.23.3
 # software id = JA79-0IXE
 #
 # model = RB5009UG+S+
@@ -200,7 +200,6 @@ add address=10.1.50.10 comment="SolarEdge Inverter" mac-address=84:D6:C5:11:38:8
 add address=10.1.60.10 comment="Garage Camera - Side Yard" mac-address=08:CC:81:9A:FD:4F server=dhcp-vlan60
 add address=10.1.60.11 comment="Garage Camera - Todd" mac-address=74:3F:C2:E7:EB:78 server=dhcp-vlan60
 add address=10.1.60.12 comment="Garage Camera - Andy" mac-address=74:3F:C2:E7:EB:73 server=dhcp-vlan60
-add address=10.1.60.13 comment="Courtyard Porch Doorbell" mac-address=EC:71:DB:9B:DE:A9 server=dhcp-vlan60
 /ip dhcp-server network
 add address=10.1.0.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.0.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
 add address=10.1.10.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.10.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
@@ -252,7 +251,6 @@ add address=10.1.50.10 name=solaredge.internal.greyrock.io type=A
 add address=10.1.60.10 name=garage-camera-side-yard.internal.greyrock.io type=A
 add address=10.1.60.11 name=garage-camera-todd.internal.greyrock.io type=A
 add address=10.1.60.12 name=garage-camera-andy.internal.greyrock.io type=A
-add address=10.1.60.13 name=courtyard-porch-doorbell.internal.greyrock.io type=A
 /ip firewall address-list
 add address=10.1.0.0/16 list=internal
 /ip firewall filter

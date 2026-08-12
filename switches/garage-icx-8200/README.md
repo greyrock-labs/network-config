@@ -81,3 +81,4 @@ See `/changes/`. Live config in `config/running.txt`. Snapshots in
   removed from VLANs and interface config, 1/2/2 renamed Garage-CRS309
   (full trunk), VLAN 1 STP priority → 36864, DNS added to match fleet.
 - `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.
+- `2026-08-12-post-vlan60.txt` — capture after adding VLAN 60 (Cameras): tagged on uplink `1/2/2`. See `changes/2026-08-12-vlan60-cameras.md` and `topology/vlan60-cameras.md`.

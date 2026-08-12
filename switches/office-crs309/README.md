@@ -84,3 +84,4 @@ is in `config/running.txt`.
 - `2026-07-17-post-retrofit-vlan-rule.txt` — `/export` after VLAN policy retrofit (unused ports out of VLANs 10/20/4000).
 - `2026-07-17-post-port8-removal.txt` — `/export` after sfp-sfpplus8 removed from data VLANs (treated as unlabeled/unknown). `running.txt` reflects this state.
 - `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.
+- `2026-08-12-post-vlan60.txt` — capture after adding VLAN 60 (Cameras): tagged on `sfp-sfpplus1-4`. See `changes/2026-08-12-vlan60-cameras.md` and `topology/vlan60-cameras.md`.

@@ -85,3 +85,4 @@ See `/changes/`. Live config in `config/running.txt`. Snapshots in
   KVM-NAS/Kerfuffle/HASS, HASS) unchanged. This is the sixth and final
   ICX cut over to the spine.
 - `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.
+- `2026-08-12-post-vlan60.txt` — capture after adding VLAN 60 (Cameras): tagged on uplink `1/3/2`. See `changes/2026-08-12-vlan60-cameras.md` and `topology/vlan60-cameras.md`.

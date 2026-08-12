@@ -78,3 +78,4 @@ See `/changes/`. Live config in `config/running.txt`. Snapshots in
   Z-Wave port 1/1/3 returned to default (device gone), VLAN 1 STP
   priority → 36864.
 - `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.
+- `2026-08-12-post-vlan60.txt` — capture after adding VLAN 60 (Cameras): tagged on uplink `1/3/2`. See `changes/2026-08-12-vlan60-cameras.md` and `topology/vlan60-cameras.md`.

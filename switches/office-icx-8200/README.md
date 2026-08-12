@@ -94,3 +94,4 @@ See `/changes/`. Live config in `config/running.txt`. Snapshots in
   passive. The IGMP/MLD querier role moved to office-crs309
   (multicast-querier=yes on its bridge); this box now only snoops.
 - `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.
+- `2026-08-12-post-vlan60.txt` — capture after adding VLAN 60 (Cameras): tagged on uplink `1/2/2`. See `changes/2026-08-12-vlan60-cameras.md` and `topology/vlan60-cameras.md`.

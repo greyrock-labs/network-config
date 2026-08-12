@@ -42,6 +42,7 @@
 | 10      | Internal| trusted  | 1/1/5, 1/1/6, 1/1/7, 1/2/2 |
 | 20      | Servers | infra    | 1/2/2 tagged; 1/1/7, 1/1/8 untagged |
 | 50      | IoT     | IoT      | 1/2/2 tagged           |
+| 60      | Cameras | cameras  | 1/1/7, 1/2/2           |
 | 4000    | Guest   | guest    | 1/1/5, 1/1/6, 1/2/2 |
 
 ## Port map
@@ -51,7 +52,7 @@
 | 1/1/1 | (none)          | unused (UH-AP moved off) | yes | no        | off        |
 | 1/1/5 | Office-AP       | AP                     | yes | yes        | 500 pps    |
 | 1/1/6 | UH-AP           | upstairs hallway AP    | yes | yes        | 500 pps    |
-| 1/1/7 | Kerfuffle       | server (VLAN 20 untagged) | yes | yes        | 500 pps  |
+| 1/1/7 | Kerfuffle       | k8s node (VLAN 20 untagged; VLANs 10, 60 tagged) | yes | yes | 500 pps  |
 | 1/1/8 | NAS             | server (VLAN 20 untagged) | yes | yes        | 500 pps  |
 | 1/2/1 | (none)          | unused (former downlink) | no  | no       | off        |
 | 1/2/2 | Office-CRS309   | uplink to office-crs309  | no  | no         | off        |
@@ -95,3 +96,4 @@ See `/changes/`. Live config in `config/running.txt`. Snapshots in
   (multicast-querier=yes on its bridge); this box now only snoops.
 - `2026-08-10-post-vlan50.txt` — capture after adding VLAN 50 (IoT). See `changes/2026-08-10-vlan50-iot.md`.
 - `2026-08-12-post-vlan60.txt` — capture after adding VLAN 60 (Cameras): tagged on uplink `1/2/2`. See `changes/2026-08-12-vlan60-cameras.md` and `topology/vlan60-cameras.md`.
+- `2026-08-12-post-kerfuffle-vlan60.txt` — capture after tagging VLAN 60 on `1/1/7` (Kerfuffle) so Scrypted reaches the camera segment over L2 instead of routing through office-rb5009. See `changes/2026-08-12-kerfuffle-vlan60.md`.

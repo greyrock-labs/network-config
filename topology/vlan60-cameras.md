@@ -38,6 +38,12 @@ extending VLAN 60 to that switch (and accepting that the segment grows
 beyond "the garage") or building a parallel segment there — not a
 decision to make pre-emptively.
 
+The segment has one non-camera member: `kerfuffle` (k8s node,
+office-icx-8200 `1/1/7`), tagged into VLAN 60 on 2026-08-12 so Scrypted
+pulls camera RTSP over L2 on the access switch instead of hairpinning
+every stream through office-rb5009. It is a *consumer* of the segment,
+not a tenant of it — see `changes/2026-08-12-kerfuffle-vlan60.md`.
+
 VLAN 60 is IPv4 only, like VLAN 50. No ULA, no PD carve.
 
 ## Addressing
@@ -254,7 +260,7 @@ camera SSID).
 
 | Switch | Uplink | VLAN 60 members |
 | --- | --- | --- |
-| office-icx-8200 | 1/2/2 | tagged 1/2/2 |
+| office-icx-8200 | 1/2/2 | tagged 1/2/2, 1/1/7 (kerfuffle) |
 | office-icx-7150 | 1/3/2 | tagged 1/3/2 |
 | game-room-icx-8200 | 1/2/2 | tagged 1/2/2 |
 | game-room-icx-7150 | 1/3/2 | tagged 1/3/2 |

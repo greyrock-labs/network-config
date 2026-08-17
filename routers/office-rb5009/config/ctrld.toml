@@ -5,15 +5,19 @@
     port = 53
 
   [listener.0.policy]
-    name = "Split Horizon - greyrock.io to router"
+    name = "Split Horizon - internal DNS to router"
     rules = [
         {"greyrock.io" = ["upstream.1"]},
         {"*.greyrock.io" = ["upstream.1"]},
+        {"10.in-addr.arpa" = ["upstream.1"]},
+        {"*.10.in-addr.arpa" = ["upstream.1"]},
     ]
     networks = [
         {"network.0" = ["upstream.0"]},
         {"network.1" = ["upstream.2"]},
         {"network.2" = ["upstream.3"]},
+        {"network.3" = ["upstream.0"]},
+        {"network.4" = ["upstream.0"]},
     ]
 
 [network]
@@ -29,6 +33,14 @@
   [network.2]
     cidrs = ["192.168.23.0/24"]
     name = "Guest"
+
+  [network.3]
+    cidrs = ["10.1.50.0/24"]
+    name = "IoT"
+
+  [network.4]
+    cidrs = ["10.1.60.0/24"]
+    name = "Cameras"
 
 [upstream]
 

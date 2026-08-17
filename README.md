@@ -45,8 +45,7 @@ network-config/
 │   ├── crs309-base-config.md  # CRS309 fleet template + apply-order + validation
 │   └── vlan50-iot.md          # VLAN 50 (IoT): addressing, policy, per-device config
 ├── runbooks/                  # operational how-to guides
-│   ├── multicast-runbook.md   # how to inspect IGMP/MLD on both platforms
-│   └── ca-issuing-runbook.md  # issue an internal TLS cert from the Grey Rock CA
+│   └── multicast-runbook.md   # how to inspect IGMP/MLD on both platforms
 └── changes/                   # dated prose notes for each meaningful change
 ```
 

@@ -1,4 +1,4 @@
-# 2026-08-17 11:49:08 by RouterOS 7.23.3
+# 2026-08-17 11:44:16 by RouterOS 7.23.3
 # software id = JA79-0IXE
 #
 # model = RB5009UG+S+
@@ -285,8 +285,7 @@ add action=dst-nat chain=dstnat dst-port=53 in-interface-list=DNS-FORCE protocol
 set telnet disabled=yes
 set www disabled=yes
 set reverse-proxy disabled=yes
-set www-ssl address=10.1.0.0/24,10.1.10.0/24,10.1.20.0/24 certificate=office-rb5009 disabled=no
-set api-ssl certificate=office-rb5009
+set www-ssl address=10.1.0.0/24,10.1.10.0/24,10.1.20.0/24 disabled=no
 /ipv6 address
 add address=fdc0:ffee:215:1::1 interface=bridge
 add address=fdc0:ffee:215:a::1 interface=vlan10

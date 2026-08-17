@@ -190,10 +190,7 @@ Two of these (todd at `10.1.10.66`, andy at `10.1.10.68`) had existing
 bind cleanly on next DHCP cycle — same pattern as the original
 2026-07-31 change. `garage-camera-side-yard` and the Reolink had no
 prior reservation; their entries are new. The DNS A records follow the
-cameras to their new addresses (TTL 1d). No
-cert work this time: the existing `garage-camera-*` certs have the
-old VLAN 10 IP in their SAN, so they need re-issuing once the new
-addresses are live. That is a follow-up; not in scope here.
+cameras to their new addresses (TTL 1d).
 
 ## Device configuration
 
@@ -326,8 +323,6 @@ notices (each drops for a few seconds and returns on 10.1.60.x).
 5. **garage-icx-7150 — uplink tag.**
 6. **garage-icx-7150 — port move.** All six cameras drop for a few
    seconds and return on 10.1.60.x.
-7. **Certs (follow-up, not blocking)** — re-issue the three named
-   cameras' TLS certs with the new VLAN 60 IP in their SANs.
 
 ### Per-device commands
 

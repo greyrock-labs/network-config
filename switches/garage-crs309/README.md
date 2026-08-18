@@ -24,7 +24,7 @@
 | ------------ | ----- |
 | Mgmt IP      | 10.1.0.30/24 |
 | Mgmt VLAN    | 1 (native, untagged on mgmt port) |
-| Default GW   | 10.1.0.1 (office-rb5009) |
+| Default GW   | 10.1.0.1 (firewalla) |
 | OOB access?  | serial console (9600 8N1) |
 | Mgmt access? | MAC-Winbox / SSH on mgmt IP |
 | Local users  | admin (default, change after first login) |

@@ -28,10 +28,10 @@ VLAN 50 is wired-only and is not tagged on any AP port.
 | VLAN ID | 50 |
 | Name | IoT |
 | Subnet | 10.1.50.0/24 |
-| Gateway | 10.1.50.1 (office-rb5009, `vlan50`) |
+| Gateway | 10.1.50.1 (firewalla, VLAN 50) |
 | DHCP pool | 10.1.50.20 – 10.1.50.254 |
 | Lease time | 8h |
-| DHCP DNS | 10.1.30.20 (ctrld container) |
+| DHCP DNS | gateway (Firewalla, via dnsbooster) |
 | DHCP domain | internal.greyrock.io |
 | DHCP NTP | 10.1.20.16–19 |
 | IPv6 | none — IPv4 only |

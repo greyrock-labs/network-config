@@ -53,10 +53,10 @@ VLAN 60 is IPv4 only, like VLAN 50. No ULA, no PD carve.
 | VLAN ID | 60 |
 | Name | Cameras |
 | Subnet | 10.1.60.0/24 |
-| Gateway | 10.1.60.1 (office-rb5009, `vlan60`) |
+| Gateway | 10.1.60.1 (firewalla, VLAN 60) |
 | DHCP pool | 10.1.60.20 – 10.1.60.254 |
 | Lease time | 8h |
-| DHCP DNS | 10.1.30.20 (ctrld container) — moot, see Policy |
+| DHCP DNS | gateway (Firewalla, via dnsbooster) — moot, see Policy |
 | DHCP NTP | 10.1.20.16, .17, .18, .19 |
 | IPv6 | none — IPv4 only |
 

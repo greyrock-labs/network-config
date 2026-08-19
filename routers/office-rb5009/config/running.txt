@@ -1,4 +1,4 @@
-# 2026-08-17 11:49:08 by RouterOS 7.23.3
+# 2026-08-19 14:02:46 by RouterOS 7.23.3
 # software id = JA79-0IXE
 #
 # model = RB5009UG+S+
@@ -39,6 +39,7 @@ add name=vlan20-servers ranges=10.1.20.20-10.1.20.254
 add name=vlan4000-guest ranges=192.168.23.20-192.168.23.254
 add name=vlan50-iot ranges=10.1.50.20-10.1.50.254
 add name=vlan60-cameras ranges=10.1.60.20-10.1.60.254
+add name=fake-isp ranges=100.64.0.2-100.64.0.254
 /ip dhcp-server
 add address-pool=vlan10-internal interface=vlan10 lease-script=":local zone \"internal.greyrock.io\"\
     \n:local tag \"dhcp-dns\"\
@@ -121,6 +122,8 @@ add address-pool=vlan1-mgmt interface=bridge lease-script=":local zone \"interna
     \n}" lease-time=8h name=dhcp-vlan1
 add address-pool=vlan50-iot interface=vlan50 lease-time=8h name=dhcp-vlan50
 add address-pool=vlan60-cameras interface=vlan60 lease-time=8h name=dhcp-vlan60
+# Interface not running
+add address-pool=fake-isp interface=ether7 lease-time=1h name=dhcp-fake-isp
 /routing bgp instance
 add as=64513 disabled=no name=greyrock
 /user group
@@ -141,7 +144,6 @@ add bridge=bridge comment=defconf interface=ether3
 add bridge=bridge comment=defconf interface=ether4
 add bridge=bridge comment=defconf interface=ether5
 add bridge=bridge comment=defconf interface=ether6
-add bridge=bridge comment=defconf interface=ether7
 add bridge=bridge comment=defconf interface=ether8
 add bridge=bridge comment=defconf interface=sfp-sfpplus1
 add bridge=bridge interface=veth1 pvid=30
@@ -151,6 +153,7 @@ set discover-interface-list=LAN
 add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=10
 add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=20
 add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=4000
+# ether7 not a bridge port
 add bridge=bridge untagged=ether2,ether3,ether4,ether5,ether6,ether7,ether8,sfp-sfpplus1 vlan-ids=1
 add bridge=bridge tagged=bridge untagged=veth1 vlan-ids=30
 add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=50
@@ -178,6 +181,7 @@ add address=192.168.23.1/24 interface=vlan4000 network=192.168.23.0
 add address=10.1.30.1/24 interface=vlan30 network=10.1.30.0
 add address=10.1.50.1/24 interface=vlan50 network=10.1.50.0
 add address=10.1.60.1/24 interface=vlan60 network=10.1.60.0
+add address=100.64.0.1/24 interface=ether7 network=100.64.0.0
 /ip cloud
 set back-to-home-vpn=enabled
 /ip cloud back-to-home-user
@@ -201,15 +205,25 @@ add address=10.1.60.10 comment="Garage Camera - Side Yard" mac-address=08:CC:81:
 add address=10.1.60.11 comment="Garage Camera - Todd" mac-address=74:3F:C2:E7:EB:78 server=dhcp-vlan60
 add address=10.1.60.12 comment="Garage Camera - Andy" mac-address=74:3F:C2:E7:EB:73 server=dhcp-vlan60
 add address=10.1.60.13 comment="Courtyard Porch Doorbell" mac-address=EC:71:DB:9B:DE:A9 server=dhcp-vlan60
+add address=10.1.0.13 comment="Office R770" mac-address=5C:83:6C:3A:F3:80 server=dhcp-vlan1
+add address=10.1.0.14 comment="Upstairs Hallway R770" mac-address=5C:83:6C:3B:10:90 server=dhcp-vlan1
+add address=10.1.0.23 comment="Game Room R770" mac-address=5C:83:6C:3B:0E:D0 server=dhcp-vlan1
+add address=10.1.0.33 comment="Garage R650" mac-address=80:03:84:2E:DF:60 server=dhcp-vlan1
+add address=10.1.0.34 comment="Garage Rear Driveway T750SE" mac-address=80:03:84:21:78:70 server=dhcp-vlan1
+add address=10.1.0.35 comment="Garage Side Yard T750SE" mac-address=80:03:84:21:79:10 server=dhcp-vlan1
+add address=10.1.0.36 comment="Garage Side Driveway T750SE" mac-address=5C:DF:89:01:5D:D0 server=dhcp-vlan1
+add address=10.1.0.37 comment="Kitchen R770" mac-address=00:33:58:2B:0B:E0 server=dhcp-vlan1
 /ip dhcp-server network
 add address=10.1.0.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.0.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
 add address=10.1.10.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.10.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
 add address=10.1.20.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.20.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
 add address=10.1.50.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.50.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
 add address=10.1.60.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.60.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
+add address=100.64.0.0/24 dns-server=9.9.9.9,149.112.112.112 gateway=100.64.0.1
 add address=192.168.23.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=192.168.23.1
 /ip dns
-set allow-remote-requests=yes doh-max-concurrent-queries=100 doh-max-server-connections=100 max-concurrent-queries=200 max-concurrent-tcp-sessions=200 mdns-repeat-ifaces=vlan10,vlan20,bridge,vlan60 servers=9.9.9.9,149.112.112.112,2620:fe::fe,2620:fe::9 verify-doh-cert=yes
+set allow-remote-requests=yes doh-max-concurrent-queries=100 doh-max-server-connections=100 max-concurrent-queries=200 max-concurrent-tcp-sessions=200 mdns-repeat-ifaces=\
+    vlan10,vlan20,bridge,vlan60 servers=9.9.9.9,149.112.112.112,2620:fe::fe,2620:fe::9 verify-doh-cert=yes
 /ip dns static
 # --- Hand-maintained infra records only. ---
 # Per the DNS export rule in routers/office-rb5009/README.md, dynamic
@@ -236,7 +250,6 @@ add address=10.1.0.35 name=side-yard-t750se.internal.greyrock.io type=A
 add address=10.1.0.36 name=side-driveway-t750se.internal.greyrock.io type=A
 add address=10.1.0.37 name=kitchen-r770.internal.greyrock.io type=A
 add address=10.1.25.2 name=k8s.internal.greyrock.io type=A
-add address=10.1.10.3 name=home.internal.greyrock.io type=A
 add address=10.1.10.7 name=unleashed.internal.greyrock.io type=A
 add address=10.1.10.74 name=bambu-a1-printer.internal.greyrock.io type=A
 add address=10.1.20.10 name=kerfuffle.internal.greyrock.io type=A
@@ -248,6 +261,7 @@ add address=10.1.20.16 name=time1.internal.greyrock.io type=A
 add address=10.1.20.17 name=time2.internal.greyrock.io type=A
 add address=10.1.20.18 name=time3.internal.greyrock.io type=A
 add address=10.1.20.19 name=time4.internal.greyrock.io type=A
+add address=10.1.10.3 name=home.internal.greyrock.io type=A
 add address=10.1.50.10 name=solaredge.internal.greyrock.io type=A
 add address=10.1.60.10 name=garage-camera-side-yard.internal.greyrock.io type=A
 add address=10.1.60.11 name=garage-camera-todd.internal.greyrock.io type=A
@@ -281,11 +295,12 @@ add action=accept chain=dstnat comment="kerfuffle: exempt from DNS-FORCE" dst-po
 add action=accept chain=dstnat comment="kerfuffle: exempt from DNS-FORCE" dst-port=53 protocol=tcp src-address=10.1.20.10
 add action=dst-nat chain=dstnat comment="force internal DNS" dst-port=53 in-interface-list=DNS-FORCE protocol=udp to-addresses=10.1.30.20 to-ports=53
 add action=dst-nat chain=dstnat dst-port=53 in-interface-list=DNS-FORCE protocol=tcp to-addresses=10.1.30.20 to-ports=53
+add action=masquerade chain=srcnat comment="fake ISP: masquerade to real WAN" out-interface-list=WAN src-address=100.64.0.0/24
 /ip service
 set telnet disabled=yes
 set www disabled=yes
-set reverse-proxy disabled=yes
 set www-ssl address=10.1.0.0/24,10.1.10.0/24,10.1.20.0/24 certificate=office-rb5009 disabled=no
+set reverse-proxy disabled=yes
 set api-ssl certificate=office-rb5009
 /ipv6 address
 add address=fdc0:ffee:215:1::1 interface=bridge

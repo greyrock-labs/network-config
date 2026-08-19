@@ -1,4 +1,4 @@
-# 2026-08-18 09:55:54 by RouterOS 7.23
+# 2026-08-19 13:54:25 by RouterOS 7.23
 # software id = 4RMC-F2FX
 #
 # model = CRS309-1G-8S+
@@ -17,7 +17,7 @@ set [ find default-name=sfp-sfpplus7 ] l2mtu=9092 mtu=9000
 set [ find default-name=sfp-sfpplus8 ] l2mtu=9092 mtu=9000
 /interface bridge port
 add bridge=bridge comment=mgmt interface=ether1
-add bridge=bridge comment="to firewalla (spine uplink)" interface=sfp-sfpplus1
+add bridge=bridge comment="to office-rb5009 (spine uplink)" interface=sfp-sfpplus1
 add bridge=bridge comment="to game-room-crs309 (spine downlink)" interface=sfp-sfpplus2
 add bridge=bridge comment="to office-icx-8200" interface=sfp-sfpplus3
 add bridge=bridge comment="to office-icx-7150" interface=sfp-sfpplus4

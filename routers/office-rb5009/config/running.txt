@@ -1,4 +1,4 @@
-# 2026-08-19 14:02:46 by RouterOS 7.23.3
+# 2026-08-19 16:57:37 by RouterOS 7.24
 # software id = JA79-0IXE
 #
 # model = RB5009UG+S+
@@ -244,7 +244,6 @@ add address=10.1.0.23 name=game-room-r770.internal.greyrock.io type=A
 add address=10.1.0.30 name=garage-crs309.internal.greyrock.io type=A
 add address=10.1.0.31 name=garage-icx-8200.internal.greyrock.io type=A
 add address=10.1.0.32 name=garage-icx-7150.internal.greyrock.io type=A
-add address=10.1.0.33 name=garage-r650.internal.greyrock.io type=A
 add address=10.1.0.34 name=rear-driveway-t750se.internal.greyrock.io type=A
 add address=10.1.0.35 name=side-yard-t750se.internal.greyrock.io type=A
 add address=10.1.0.36 name=side-driveway-t750se.internal.greyrock.io type=A
@@ -262,6 +261,7 @@ add address=10.1.20.17 name=time2.internal.greyrock.io type=A
 add address=10.1.20.18 name=time3.internal.greyrock.io type=A
 add address=10.1.20.19 name=time4.internal.greyrock.io type=A
 add address=10.1.10.3 name=home.internal.greyrock.io type=A
+add address=10.1.0.33 name=garage-r650.internal.greyrock.io type=A
 add address=10.1.50.10 name=solaredge.internal.greyrock.io type=A
 add address=10.1.60.10 name=garage-camera-side-yard.internal.greyrock.io type=A
 add address=10.1.60.11 name=garage-camera-todd.internal.greyrock.io type=A
@@ -299,7 +299,7 @@ add action=masquerade chain=srcnat comment="fake ISP: masquerade to real WAN" ou
 /ip service
 set telnet disabled=yes
 set www disabled=yes
-set www-ssl address=10.1.0.0/24,10.1.10.0/24,10.1.20.0/24 certificate=office-rb5009 disabled=no
+set www-ssl available-from=10.1.0.0/24,10.1.10.0/24,10.1.20.0/24 certificate=office-rb5009 disabled=no
 set reverse-proxy disabled=yes
 set api-ssl certificate=office-rb5009
 /ipv6 address

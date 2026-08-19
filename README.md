@@ -50,20 +50,20 @@ network-config/
 ```
 
 Device-specific house rules live in that device's `README.md` — for
-example the router's segment and feature config is in
-`routers/firewalla/README.md`.
+example the DNS export rule for the router is in
+`routers/office-rb5009/README.md`.
 
 ## The fleet
 
-Topology: `firewalla → office-crs309 → game-room-crs309 →
+Topology: `office-rb5009 → office-crs309 → game-room-crs309 →
 garage-crs309` (10G SFP+ spine); each room's ICX pair are leaves of the
 room's CRS309. Full detail in `topology/greyrock-home.md`.
 
-### Router (Firewalla)
+### Router (MikroTik, RouterOS)
 
 | Hostname       | Role                                     | Model   | Mgmt IP    | Status |
 | -------------- | ---------------------------------------- | ------- | ---------- | ------ |
-| firewalla      | gateway, L3 routing, DHCP, DNS, NGFW     | Gold Pro | — (app-managed) | in production |
+| office-rb5009  | gateway, L3 routing, DHCP, DNS, firewall, eBGP to k8s | RB5009  | 10.1.0.1   | in production |
 
 ### Spine (MikroTik, RouterOS)
 

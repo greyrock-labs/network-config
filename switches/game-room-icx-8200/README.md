@@ -22,7 +22,7 @@
 | ------------ | ----- |
 | Mgmt IP      | 10.1.0.21/24 (static, on ve 1 / VLAN 1) |
 | Mgmt VLAN    | 1 (native) |
-| Default GW   | 10.1.0.1 (firewalla) |
+| Default GW   | 10.1.0.1 |
 | OOB access?  | serial console |
 | SSH enabled? | yes |
 | DHCP client  | disabled |

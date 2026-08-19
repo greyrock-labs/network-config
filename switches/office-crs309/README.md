@@ -24,7 +24,7 @@
 | ------------ | ----- |
 | Mgmt IP      | 10.1.0.10/24 (on bridge) |
 | Mgmt VLAN    | 1 (native, untagged on mgmt port) |
-| Default GW   | 10.1.0.1 (firewalla) |
+| Default GW   | 10.1.0.1 (office-rb5009) |
 | OOB access?  | serial console (9600 8N1) |
 | Mgmt access? | MAC-Winbox / SSH on mgmt IP |
 | Local users  | admin (password changed from default) |
@@ -35,7 +35,7 @@
 ## Physical
 
 - **Uplinks:**
-  - sfp-sfpplus1 → firewalla (spine uplink, 10G)
+  - sfp-sfpplus1 → office-rb5009 (spine uplink, 10G)
   - sfp-sfpplus2 → game-room-crs309 (spine downlink, 10G)
 - **Downlinks:**
   - sfp-sfpplus3 → office-icx-8200 (10G)

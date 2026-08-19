@@ -6,23 +6,23 @@
 
 The home network is a two-tier design:
 
-- **Backbone (Mikrotik):** the Firewalla router and three CRS309s
+- **Backbone (Mikrotik):** the office-rb5009 router and three CRS309s
   form an SFP+ daisy chain spanning the office, game room, and garage.
 - **Access (Ruckus ICX):** each room has two ICX switches. Each ICX
   uplinks to the CRS309 in its room via a single SFP+.
 
 ```
-                        (Mikrotik spine, SFP+ daisy chain)
+                       (Mikrotik spine, SFP+ daisy chain)
 
-  firewalla --SFP+--> office-crs309 --SFP+--> game-room-crs309 --SFP+--> garage-crs309
-                       | SFP+                | SFP+                  | SFP+
-                       v                     v                       v
+  office-rb5009 --SFP+--> office-crs309 --SFP+--> game-room-crs309 --SFP+--> garage-crs309
+                      | SFP+                | SFP+                  | SFP+
+                      v                     v                       v
 
-                  office-icx-8200      game-room-icx-8200        garage-icx-8200
-                  office-icx-7150      game-room-icx-7150        garage-icx-7150
+                 office-icx-8200      game-room-icx-8200        garage-icx-8200
+                 office-icx-7150      game-room-icx-7150        garage-icx-7150
 ```
 
-The Firewalla has no leaves. Every ICX is a leaf of the CRS309 in its room.
+The office-rb5009 has no leaves. Every ICX is a leaf of the CRS309 in its room.
 
 ## Devices
 
@@ -30,7 +30,7 @@ The Firewalla has no leaves. Every ICX is a leaf of the CRS309 in its room.
 
 | Hostname            | Model           | Location  | Mgmt IP |
 | ------------------- | --------------- | --------- | ------- |
-| firewalla           | Firewalla Gold Pro | game room | — (app-managed) |
+| office-rb5009       | RB5009          | office    | TBD     |
 | office-crs309       | CRS309-1G-8S+   | office    | TBD     |
 | game-room-crs309    | CRS309-1G-8S+   | game room | TBD     |
 | garage-crs309       | CRS309-1G-8S+   | garage    | TBD     |
@@ -63,7 +63,7 @@ VLAN 1 is native / mgmt on every switch port.
 | 60 | Cameras | Garage camera fleet — see `vlan60-cameras.md` |
 | 4000 | Guest | Guest WiFi (APs tag this) |
 
-Default gateway on the access switches is `10.1.0.1`, on firewalla.
+Default gateway on the access switches is `10.1.0.1`, on office-rb5009.
 
 ## APs and their switch ports
 

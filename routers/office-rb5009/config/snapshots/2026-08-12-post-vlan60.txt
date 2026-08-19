@@ -1,0 +1,349 @@
+# 2026-08-12 11:34:42 by RouterOS 7.23.3
+# software id = JA79-0IXE
+#
+# model = RB5009UG+S+
+# serial number = HMM0BDDPJAM
+/interface bridge
+add admin-mac=D0:EA:11:C7:4F:C3 auto-mac=no comment=defconf name=bridge vlan-filtering=yes
+/interface ethernet
+set [ find default-name=ether1 ] l2mtu=1514
+set [ find default-name=ether2 ] l2mtu=1514
+set [ find default-name=ether3 ] l2mtu=1514
+set [ find default-name=ether4 ] l2mtu=1514
+set [ find default-name=ether5 ] l2mtu=1514
+set [ find default-name=ether6 ] l2mtu=1514
+set [ find default-name=ether7 ] l2mtu=1514
+set [ find default-name=ether8 ] l2mtu=1514
+set [ find default-name=sfp-sfpplus1 ] l2mtu=1514
+/interface veth
+add address=10.1.30.20/24 container-mac-address=68:6D:32:B5:48:B1 dhcp=no gateway=10.1.30.1 gateway6="" mac-address=68:6D:32:B5:48:B0 name=veth1
+/interface wireguard
+add comment=back-to-home-vpn listen-port=61606 mtu=1420 name=back-to-home-vpn
+/interface vlan
+add interface=bridge name=vlan10 vlan-id=10
+add interface=bridge name=vlan20 vlan-id=20
+add interface=bridge name=vlan30 vlan-id=30
+add interface=bridge name=vlan50 vlan-id=50
+add interface=bridge name=vlan60 vlan-id=60
+add interface=bridge name=vlan4000 vlan-id=4000
+/disk
+set usb1 media-interface=bridge media-sharing=yes smb-sharing=yes
+/interface list
+add comment=defconf name=WAN
+add comment=defconf name=LAN
+add name=DNS-FORCE
+/ip pool
+add name=vlan1-mgmt ranges=10.1.0.240-10.1.0.254
+add name=vlan10-internal ranges=10.1.10.20-10.1.10.254
+add name=vlan20-servers ranges=10.1.20.20-10.1.20.254
+add name=vlan4000-guest ranges=192.168.23.20-192.168.23.254
+add name=vlan50-iot ranges=10.1.50.20-10.1.50.254
+add name=vlan60-cameras ranges=10.1.60.20-10.1.60.254
+/ip dhcp-server
+add address-pool=vlan10-internal interface=vlan10 lease-script=":local zone \"internal.greyrock.io\"\
+    \n:local tag \"dhcp-dns\"\
+    \n:local ip \$leaseActIP\
+    \n:local mac \$leaseActMAC\
+    \n\
+    \n:if (\$leaseBound = \"1\") do={\
+    \n  :if ([:len [/ip dhcp-server lease find where address=\$ip dynamic=no]] = 0) do={\
+    \n    :if ([:len [/ip dns static find where comment=\$tag address=\$ip]] > 0) do={\
+    \n      :return\
+    \n    }\
+    \n    :local hn \$\"lease-hostname\"\
+    \n    :if ([:len \$hn] = 0) do={ :set hn \"host\" }\
+    \n    :local clean (\$hn . \".\" . \$zone)\
+    \n    :local sfx ([:pick \$mac 9 11] . [:pick \$mac 12 14] . [:pick \$mac 15 17])\
+    \n    :local suffixed (\$hn . \"-\" . \$sfx . \".\" . \$zone)\
+    \n    :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n    :if ([:len [/ip dns static find where comment=\$tag name=\$clean]] = 0) do={\
+    \n      /ip dns static add name=\$clean address=\$ip comment=\$tag ttl=5m\
+    \n    } else={\
+    \n      :foreach r in=[/ip dns static find where comment=\$tag name=\$suffixed] do={ /ip dns static remove \$r }\
+    \n      /ip dns static add name=\$suffixed address=\$ip comment=\$tag ttl=5m\
+    \n    }\
+    \n  }\
+    \n} else={\
+    \n  :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n}" lease-time=8h name=dhcp-vlan10
+add address-pool=vlan20-servers interface=vlan20 lease-script=":local zone \"internal.greyrock.io\"\
+    \n:local tag \"dhcp-dns\"\
+    \n:local ip \$leaseActIP\
+    \n:local mac \$leaseActMAC\
+    \n\
+    \n:if (\$leaseBound = \"1\") do={\
+    \n  :if ([:len [/ip dhcp-server lease find where address=\$ip dynamic=no]] = 0) do={\
+    \n    :if ([:len [/ip dns static find where comment=\$tag address=\$ip]] > 0) do={\
+    \n      :return\
+    \n    }\
+    \n    :local hn \$\"lease-hostname\"\
+    \n    :if ([:len \$hn] = 0) do={ :set hn \"host\" }\
+    \n    :local clean (\$hn . \".\" . \$zone)\
+    \n    :local sfx ([:pick \$mac 9 11] . [:pick \$mac 12 14] . [:pick \$mac 15 17])\
+    \n    :local suffixed (\$hn . \"-\" . \$sfx . \".\" . \$zone)\
+    \n    :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n    :if ([:len [/ip dns static find where comment=\$tag name=\$clean]] = 0) do={\
+    \n      /ip dns static add name=\$clean address=\$ip comment=\$tag ttl=5m\
+    \n    } else={\
+    \n      :foreach r in=[/ip dns static find where comment=\$tag name=\$suffixed] do={ /ip dns static remove \$r }\
+    \n      /ip dns static add name=\$suffixed address=\$ip comment=\$tag ttl=5m\
+    \n    }\
+    \n  }\
+    \n} else={\
+    \n  :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n}" lease-time=8h name=dhcp-vlan20
+add address-pool=vlan4000-guest interface=vlan4000 lease-time=2h name=dhcp-vlan4000
+add address-pool=vlan1-mgmt interface=bridge lease-script=":local zone \"internal.greyrock.io\"\
+    \n:local tag \"dhcp-dns\"\
+    \n:local ip \$leaseActIP\
+    \n:local mac \$leaseActMAC\
+    \n\
+    \n:if (\$leaseBound = \"1\") do={\
+    \n  :if ([:len [/ip dhcp-server lease find where address=\$ip dynamic=no]] = 0) do={\
+    \n    :if ([:len [/ip dns static find where comment=\$tag address=\$ip]] > 0) do={\
+    \n      :return\
+    \n    }\
+    \n    :local hn \$\"lease-hostname\"\
+    \n    :if ([:len \$hn] = 0) do={ :set hn \"host\" }\
+    \n    :local clean (\$hn . \".\" . \$zone)\
+    \n    :local sfx ([:pick \$mac 9 11] . [:pick \$mac 12 14] . [:pick \$mac 15 17])\
+    \n    :local suffixed (\$hn . \"-\" . \$sfx . \".\" . \$zone)\
+    \n    :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n    :if ([:len [/ip dns static find where comment=\$tag name=\$clean]] = 0) do={\
+    \n      /ip dns static add name=\$clean address=\$ip comment=\$tag ttl=5m\
+    \n    } else={\
+    \n      :foreach r in=[/ip dns static find where comment=\$tag name=\$suffixed] do={ /ip dns static remove \$r }\
+    \n      /ip dns static add name=\$suffixed address=\$ip comment=\$tag ttl=5m\
+    \n    }\
+    \n  }\
+    \n} else={\
+    \n  :foreach r in=[/ip dns static find where comment=\$tag address=\$ip] do={ /ip dns static remove \$r }\
+    \n}" lease-time=8h name=dhcp-vlan1
+add address-pool=vlan50-iot interface=vlan50 lease-time=8h name=dhcp-vlan50
+add address-pool=vlan60-cameras interface=vlan60 lease-time=8h name=dhcp-vlan60
+/routing bgp instance
+add as=64513 disabled=no name=greyrock
+/user group
+add comment="External DNS" name=externaldns policy=read,write,api,rest-api,!local,!telnet,!ssh,!ftp,!reboot,!policy,!test,!winbox,!password,!web,!sniff,!sensitive,!romon
+/certificate settings
+set builtin-trust-store=all
+/container
+add cmd="" interface=veth1 layer-dir="" logging=yes mountlists=ctrld_config name=ctrld remote-image=controldns/ctrld root-dir=/usb1/ctrld-root start-on-boot=yes
+/container config
+set registry-url=https://registry-1.docker.io tmpdir=/usb1/pull
+/container mounts
+add dst=/etc/controld list=ctrld_config src=/usb1/ctrld
+/disk settings
+set auto-media-interface=bridge auto-media-sharing=yes auto-smb-sharing=yes
+/interface bridge port
+add bridge=bridge comment=defconf interface=ether2
+add bridge=bridge comment=defconf interface=ether3
+add bridge=bridge comment=defconf interface=ether4
+add bridge=bridge comment=defconf interface=ether5
+add bridge=bridge comment=defconf interface=ether6
+add bridge=bridge comment=defconf interface=ether7
+add bridge=bridge comment=defconf interface=ether8
+add bridge=bridge comment=defconf interface=sfp-sfpplus1
+add bridge=bridge interface=veth1 pvid=30
+/ip neighbor discovery-settings
+set discover-interface-list=LAN
+/interface bridge vlan
+add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=10
+add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=20
+add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=4000
+add bridge=bridge untagged=ether2,ether3,ether4,ether5,ether6,ether7,ether8,sfp-sfpplus1 vlan-ids=1
+add bridge=bridge tagged=bridge untagged=veth1 vlan-ids=30
+add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=50
+add bridge=bridge tagged=bridge,sfp-sfpplus1 vlan-ids=60
+/interface list member
+add comment=defconf interface=bridge list=LAN
+add comment=defconf interface=ether1 list=WAN
+add interface=vlan10 list=LAN
+add interface=vlan20 list=LAN
+add interface=vlan4000 list=LAN
+add interface=bridge list=DNS-FORCE
+add interface=vlan10 list=DNS-FORCE
+add interface=vlan20 list=DNS-FORCE
+add interface=vlan30 list=LAN
+add interface=vlan4000 list=DNS-FORCE
+add interface=vlan50 list=LAN
+add interface=vlan50 list=DNS-FORCE
+add interface=vlan60 list=LAN
+add interface=vlan60 list=DNS-FORCE
+/ip address
+add address=10.1.0.1/24 interface=bridge network=10.1.0.0
+add address=10.1.10.1/24 interface=vlan10 network=10.1.10.0
+add address=10.1.20.1/24 interface=vlan20 network=10.1.20.0
+add address=192.168.23.1/24 interface=vlan4000 network=192.168.23.0
+add address=10.1.30.1/24 interface=vlan30 network=10.1.30.0
+add address=10.1.50.1/24 interface=vlan50 network=10.1.50.0
+add address=10.1.60.1/24 interface=vlan60 network=10.1.60.0
+/ip cloud
+set back-to-home-vpn=enabled
+/ip cloud back-to-home-user
+add allow-lan=yes name=todds-iphone public-key="I2CPUsdTt5Pxux+K142Y11Rqv1mWR5YYiI6015JZiT4="
+/ip dhcp-client
+add comment=defconf interface=ether1 name=client1 use-peer-dns=no
+/ip dhcp-server lease
+add address=10.1.10.74 comment="Bambu A1 Printer" mac-address=30:30:F9:09:00:54 server=dhcp-vlan10
+add address=10.1.10.3 comment="Home Assistant" mac-address=3C:EC:EF:57:EB:26 server=dhcp-vlan10
+add address=10.1.20.10 comment="K8S - Kerfuffle" mac-address=98:B7:85:23:30:20 server=dhcp-vlan20
+add address=10.1.20.11 comment="KVM - Kerfuffle" mac-address=30:52:53:04:F9:63 server=dhcp-vlan20
+add address=10.1.20.12 comment="NAS - codswallop" mac-address=98:B7:85:24:AE:CD server=dhcp-vlan20
+add address=10.1.20.13 comment="KVM - codswallop" mac-address=30:52:53:07:55:73 server=dhcp-vlan20
+add address=10.1.20.14 comment="KVM - Home Assistant" mac-address=3C:EC:EF:5A:E2:B2 server=dhcp-vlan20
+add address=10.1.20.16 comment=NTP1 mac-address=4E:90:51:6F:5B:40 server=dhcp-vlan20
+add address=10.1.20.17 comment=NTP2 mac-address=26:04:78:04:B1:70 server=dhcp-vlan20
+add address=10.1.20.18 comment=NTP3 mac-address=66:E4:B1:63:37:1B server=dhcp-vlan20
+add address=10.1.20.19 comment=NTP4 mac-address=CA:87:EA:8C:48:A2 server=dhcp-vlan20
+add address=10.1.50.10 comment="SolarEdge Inverter" mac-address=84:D6:C5:11:38:8B server=dhcp-vlan50
+add address=10.1.60.10 comment="Garage Camera - Side Yard" mac-address=08:CC:81:9A:FD:4F server=dhcp-vlan60
+add address=10.1.60.11 comment="Garage Camera - Todd" mac-address=74:3F:C2:E7:EB:78 server=dhcp-vlan60
+add address=10.1.60.12 comment="Garage Camera - Andy" mac-address=74:3F:C2:E7:EB:73 server=dhcp-vlan60
+/ip dhcp-server network
+add address=10.1.0.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.0.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
+add address=10.1.10.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.10.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
+add address=10.1.20.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.20.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
+add address=10.1.50.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.50.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
+add address=10.1.60.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=10.1.60.1 ntp-server=10.1.20.16,10.1.20.17,10.1.20.18,10.1.20.19
+add address=192.168.23.0/24 dns-server=10.1.30.20 domain=internal.greyrock.io gateway=192.168.23.1
+/ip dns
+set allow-remote-requests=yes doh-max-concurrent-queries=100 doh-max-server-connections=100 max-concurrent-queries=200 max-concurrent-tcp-sessions=200 mdns-repeat-ifaces=vlan10,vlan20,bridge,vlan60 servers=9.9.9.9,149.112.112.112,2620:fe::fe,2620:fe::9 verify-doh-cert=yes
+/ip dns static
+# --- Hand-maintained infra records only. ---
+# Per the DNS export rule in routers/office-rb5009/README.md, dynamic
+# /ip dns static records are stripped from this saved config: external-dns
+# A/CNAME + their paired TXT registry records (k8s cluster), and
+# DHCP-lease-script entries (comment=dhcp-dns, ttl=5m). Only records backing
+# static reservations / infra are kept below.
+add address=10.1.0.1 name=office-rb5009.internal.greyrock.io type=A
+add address=10.1.0.10 name=office-crs309.internal.greyrock.io type=A
+add address=10.1.0.11 name=office-icx-8200.internal.greyrock.io type=A
+add address=10.1.0.12 name=office-icx-7150.internal.greyrock.io type=A
+add address=10.1.0.13 name=office-r770.internal.greyrock.io type=A
+add address=10.1.0.14 name=upstairs-hallway-r770.internal.greyrock.io type=A
+add address=10.1.0.20 name=game-room-crs309.internal.greyrock.io type=A
+add address=10.1.0.21 name=game-room-icx-8200.internal.greyrock.io type=A
+add address=10.1.0.22 name=game-room-icx-7150.internal.greyrock.io type=A
+add address=10.1.0.23 name=game-room-r770.internal.greyrock.io type=A
+add address=10.1.0.30 name=garage-crs309.internal.greyrock.io type=A
+add address=10.1.0.31 name=garage-icx-8200.internal.greyrock.io type=A
+add address=10.1.0.32 name=garage-icx-7150.internal.greyrock.io type=A
+add address=10.1.0.33 name=garage-r650.internal.greyrock.io type=A
+add address=10.1.0.34 name=rear-driveway-t750se.internal.greyrock.io type=A
+add address=10.1.0.35 name=side-yard-t750se.internal.greyrock.io type=A
+add address=10.1.0.36 name=side-driveway-t750se.internal.greyrock.io type=A
+add address=10.1.0.37 name=kitchen-r770.internal.greyrock.io type=A
+add address=10.1.25.2 name=k8s.internal.greyrock.io type=A
+add address=10.1.10.3 name=home.internal.greyrock.io type=A
+add address=10.1.10.7 name=unleashed.internal.greyrock.io type=A
+add address=10.1.10.74 name=bambu-a1-printer.internal.greyrock.io type=A
+add address=10.1.20.10 name=kerfuffle.internal.greyrock.io type=A
+add address=10.1.20.11 name=kvm-kerfuffle.internal.greyrock.io type=A
+add address=10.1.20.12 name=codswallop.internal.greyrock.io type=A
+add address=10.1.20.13 name=kvm-codswallop.internal.greyrock.io type=A
+add address=10.1.20.14 name=kvm-homeassistant.internal.greyrock.io type=A
+add address=10.1.20.16 name=time1.internal.greyrock.io type=A
+add address=10.1.20.17 name=time2.internal.greyrock.io type=A
+add address=10.1.20.18 name=time3.internal.greyrock.io type=A
+add address=10.1.20.19 name=time4.internal.greyrock.io type=A
+add address=10.1.50.10 name=solaredge.internal.greyrock.io type=A
+add address=10.1.60.10 name=garage-camera-side-yard.internal.greyrock.io type=A
+add address=10.1.60.11 name=garage-camera-todd.internal.greyrock.io type=A
+add address=10.1.60.12 name=garage-camera-andy.internal.greyrock.io type=A
+/ip firewall address-list
+add address=10.1.0.0/16 list=internal
+/ip firewall filter
+add action=accept chain=forward comment="guest DNS: allow vlan4000 to ctrld container" dst-address=10.1.30.20 dst-port=53 in-interface=vlan4000 protocol=udp
+add action=accept chain=forward comment="guest DNS: allow vlan4000 to ctrld container" dst-address=10.1.30.20 dst-port=53 in-interface=vlan4000 protocol=tcp
+add action=drop chain=forward comment="guest isolation: drop VLAN 4000 to internal" dst-address-list=internal in-interface=vlan4000
+add action=accept chain=forward comment="cameras: allow vlan60 DNS to ctrld" dst-address=10.1.30.20 dst-port=53 in-interface=vlan60 protocol=udp
+add action=accept chain=forward comment="cameras: allow vlan60 DNS to ctrld" dst-address=10.1.30.20 dst-port=53 in-interface=vlan60 protocol=tcp
+add action=accept chain=forward comment="cameras: allow vlan60 to NTP servers" dst-address=10.1.20.16/30 dst-port=123 in-interface=vlan60 protocol=udp
+add action=drop chain=forward comment="cameras: drop VLAN 60 to internal" connection-state=new dst-address-list=internal in-interface=vlan60
+add action=drop chain=forward comment="cameras: drop VLAN 60 to WAN" connection-state=new in-interface=vlan60 out-interface-list=WAN
+add action=accept chain=input comment="defconf: accept established,related,untracked" connection-state=established,related,untracked
+add action=drop chain=input comment="defconf: drop invalid" connection-state=invalid
+add action=accept chain=input comment="defconf: accept ICMP" protocol=icmp
+add action=accept chain=input comment="defconf: accept to local loopback (for CAPsMAN)" dst-address=127.0.0.1
+add action=drop chain=input comment="defconf: drop all not coming from LAN" in-interface-list=!LAN
+add action=accept chain=forward comment="defconf: accept in ipsec policy" ipsec-policy=in,ipsec
+add action=accept chain=forward comment="defconf: accept out ipsec policy" ipsec-policy=out,ipsec
+add action=fasttrack-connection chain=forward comment="defconf: fasttrack" connection-state=established,related
+add action=accept chain=forward comment="defconf: accept established,related, untracked" connection-state=established,related,untracked
+add action=drop chain=forward comment="defconf: drop invalid" connection-state=invalid
+add action=drop chain=forward comment="defconf: drop all from WAN not DSTNATed" connection-nat-state=!dstnat connection-state=new in-interface-list=WAN
+/ip firewall nat
+add action=masquerade chain=srcnat comment="defconf: masquerade" ipsec-policy=out,none out-interface-list=WAN
+add action=accept chain=dstnat comment="kerfuffle: exempt from DNS-FORCE" dst-port=53 protocol=udp src-address=10.1.20.10
+add action=accept chain=dstnat comment="kerfuffle: exempt from DNS-FORCE" dst-port=53 protocol=tcp src-address=10.1.20.10
+add action=dst-nat chain=dstnat comment="force internal DNS" dst-port=53 in-interface-list=DNS-FORCE protocol=udp to-addresses=10.1.30.20 to-ports=53
+add action=dst-nat chain=dstnat dst-port=53 in-interface-list=DNS-FORCE protocol=tcp to-addresses=10.1.30.20 to-ports=53
+/ip service
+set telnet disabled=yes
+set www disabled=yes
+set reverse-proxy disabled=yes
+set www-ssl address=10.1.0.0/24,10.1.10.0/24,10.1.20.0/24 certificate=office-rb5009 disabled=no
+set api-ssl certificate=office-rb5009
+/ipv6 address
+add address=fdc0:ffee:215:1::1 interface=bridge
+add address=fdc0:ffee:215:a::1 interface=vlan10
+add address=fdc0:ffee:215:14::1 interface=vlan20
+add from-pool=spectrum-v6 interface=bridge
+add address=0:0:0:1:: from-pool=spectrum-v6 interface=vlan10
+add address=0:0:0:2:: from-pool=spectrum-v6 interface=vlan20
+add address=fdc0:ffee:215:1e::1 interface=vlan30
+add address=0:0:0:3:: from-pool=spectrum-v6 interface=vlan30
+/ipv6 dhcp-client
+add add-default-route=yes interface=ether1 pool-name=spectrum-v6 pool-prefix-length=64 prefix-hint=::/56 request=address,prefix use-peer-dns=no
+/ipv6 firewall address-list
+add address=::/128 comment="defconf: unspecified address" list=bad_ipv6
+add address=::1/128 comment="defconf: lo" list=bad_ipv6
+add address=fec0::/10 comment="defconf: site-local" list=bad_ipv6
+add address=::ffff:0.0.0.0/96 comment="defconf: ipv4-mapped" list=bad_ipv6
+add address=::/96 comment="defconf: ipv4 compat" list=bad_ipv6
+add address=100::/64 comment="defconf: discard only " list=bad_ipv6
+add address=2001:db8::/32 comment="defconf: documentation" list=bad_ipv6
+add address=2001:10::/28 comment="defconf: ORCHID" list=bad_ipv6
+add address=3ffe::/16 comment="defconf: 6bone" list=bad_ipv6
+/ipv6 firewall filter
+add action=accept chain=input comment="defconf: accept established,related,untracked" connection-state=established,related,untracked
+add action=drop chain=input comment="defconf: drop invalid" connection-state=invalid
+add action=accept chain=input comment="defconf: accept ICMPv6" protocol=icmpv6
+add action=accept chain=input comment="defconf: accept UDP traceroute" dst-port=33434-33534 protocol=udp
+add action=accept chain=input comment="defconf: accept DHCPv6-Client prefix delegation." dst-port=546 protocol=udp src-address=fe80::/10
+add action=accept chain=input comment="defconf: accept IKE" dst-port=500,4500 protocol=udp
+add action=accept chain=input comment="defconf: accept ipsec AH" protocol=ipsec-ah
+add action=accept chain=input comment="defconf: accept ipsec ESP" protocol=ipsec-esp
+add action=accept chain=input comment="defconf: accept all that matches ipsec policy" ipsec-policy=in,ipsec
+add action=drop chain=input comment="defconf: drop everything else not coming from LAN" in-interface-list=!LAN
+add action=fasttrack-connection chain=forward comment="defconf: fasttrack6" connection-state=established,related
+add action=accept chain=forward comment="defconf: accept established,related,untracked" connection-state=established,related,untracked
+add action=drop chain=forward comment="defconf: drop invalid" connection-state=invalid
+add action=drop chain=forward comment="defconf: drop packets with bad src ipv6" src-address-list=bad_ipv6
+add action=drop chain=forward comment="defconf: drop packets with bad dst ipv6" dst-address-list=bad_ipv6
+add action=drop chain=forward comment="defconf: rfc4890 drop hop-limit=1" hop-limit=equal:1 protocol=icmpv6
+add action=accept chain=forward comment="defconf: accept ICMPv6" protocol=icmpv6
+add action=accept chain=forward comment="defconf: accept HIP" protocol=139
+add action=accept chain=forward comment="defconf: accept IKE" dst-port=500,4500 protocol=udp
+add action=accept chain=forward comment="defconf: accept ipsec AH" protocol=ipsec-ah
+add action=accept chain=forward comment="defconf: accept ipsec ESP" protocol=ipsec-esp
+add action=accept chain=forward comment="defconf: accept all that matches ipsec policy" ipsec-policy=in,ipsec
+add action=drop chain=forward comment="defconf: drop everything else not coming from LAN" in-interface-list=!LAN
+/routing bgp connection
+add connect=yes disabled=no instance=greyrock listen=yes local.address=10.1.20.1 .role=ebgp name=k8s-kerfuffle remote.address=10.1.20.10 .as=64514
+/system clock
+set time-zone-name=America/New_York
+/system identity
+set name=office-rb5009
+/system ntp client
+set enabled=yes
+/system ntp client servers
+add address=time1.internal.greyrock.io
+add address=time2.internal.greyrock.io
+add address=time3.internal.greyrock.io
+add address=time4.internal.greyrock.io
+/tool mac-server
+set allowed-interface-list=LAN
+/tool mac-server mac-winbox
+set allowed-interface-list=LAN

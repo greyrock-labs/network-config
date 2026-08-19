@@ -16,7 +16,7 @@ per-switch fields below differ.
 | Multicast querier  | yes (IGMP + MLD)             | no                           | no                           |
 | Used SFP+ ports    | 1, 2, 3, 4                   | 1, 2, 3, 4                   | 1, 2, 3                      |
 | Unused SFP+ ports  | 5, 6, 7, 8                   | 5, 6, 7, 8                   | 4, 5, 6, 7, 8                |
-| Port 1 neighbor    | `firewalla` (upstream)       | `office-crs309` (upstream)   | `game-room-crs309` (upstream)|
+| Port 1 neighbor    | `office-rb5009` (upstream)   | `office-crs309` (upstream)   | `game-room-crs309` (upstream)|
 | Port 2 neighbor    | `game-room-crs309` (downstream)| `garage-crs309` (downstream)| `garage-icx-8200`            |
 | Port 3 neighbor    | `office-icx-8200`            | `game-room-icx-8200`         | `garage-icx-7150`            |
 | Port 4 neighbor    | `office-icx-7150`            | `game-room-icx-7150`         | unused                       |

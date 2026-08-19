@@ -39,8 +39,9 @@ remembers nothing.
   other devices*. On office-crs309 they read `none` when everything is
   healthy. Validate the querier from a downstream switch.
 - A 0.0.0.0-sourced querier loses the election to any real-IP querier.
-  So when a router starts querying, it takes over automatically. If a
-  mystery querier appears, that's what happened — trace it (below).
+  So when a router (e.g. the RB5009) starts querying, it takes over
+  automatically. If a mystery querier appears, that's what happened —
+  trace it (below).
 - Packet addresses: queries go to `224.0.0.1`, membership reports go to
   `224.0.0.22` (IGMPv3). Reports to 224.0.0.22 are normal chatter, not
   the mDNS repeater.

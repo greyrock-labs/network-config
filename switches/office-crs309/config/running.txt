@@ -1,4 +1,4 @@
-# 2026-08-19 13:54:25 by RouterOS 7.23
+# 2026-08-20 09:51:17 by RouterOS 7.24
 # software id = 4RMC-F2FX
 #
 # model = CRS309-1G-8S+

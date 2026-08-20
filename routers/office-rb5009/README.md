@@ -118,6 +118,12 @@ this so the next reader of the capture knows records were removed.
 See `/changes/`. Live config in `config/running.txt`. Snapshots in
 `config/snapshots/`.
 
+- `2026-08-20-bootimus-dns.txt` — `/export` after adding
+  `bootimus.internal.greyrock.io -> 10.1.20.2` (vlan20 static range,
+  below the DHCP pool — no reservation needed). One DNS A record
+  appended to the hand-maintained infra block in `/ip dns static`.
+  See `changes/2026-08-20-bootimus-dns.md`.
+
 - `2026-08-10-post-vlan50.txt` — `/export` after adding VLAN 50 (IoT):
   `vlan50` interface, 10.1.50.1/24, `dhcp-vlan50` + `vlan50-iot` pool,
   SolarEdge reservation at 10.1.50.10, `solaredge` DNS record, `LAN` +
